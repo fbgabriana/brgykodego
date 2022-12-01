@@ -5,7 +5,7 @@ const mysql = require("mysql");
 const querystring = require("node:querystring");
 
 const port = 9000;
-const hostname = "localhost";
+const hostname = "brgykodego.gov.ph.test";
 
 const callback = err => { if (err) throw(err); }
 
