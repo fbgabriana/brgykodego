@@ -1,0 +1,28 @@
+{
+	"name": "nodepages",
+	"version": "0.0.1",
+	"description": "",
+	"homepage": "https://fbgabriana.github.io/nodepages",
+	"main": "src/app.js",
+	"scripts": {
+		"start": "clear && nodemon",
+		"sitedb": "node src/sitedb.js",
+		"clean": "rm -rf node_modules package-lock.json",
+		"create-user": "mysql -u root < src/sql/create-user.sql",
+		"create-tables": "cat src/sql/create-tables.sql src/sql/populate-tables.sql src/sql/samplebulletin.sql | mysql -u root",
+		"remove-user": "mysql -u root < src/sql/remove-user.sql",
+		"setup": "npm run create-user && npm run create-tables && npm install && npm run sitedb create && npm test",
+		"remove": "test -d node_modules && npm run sitedb remove && npm run remove-user && npm run clean || echo Nothing to do.",
+		"test": "node src/nodetest.js"
+	},
+	"author": "github.com/fbgabriana",
+	"license": "ISC",
+	"dependencies": {
+		"file-api": "^0.10.4",
+		"mime-types": "^2.1.35",
+		"mysql": "^2.18.1"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.20"
+	}
+}

@@ -1,0 +1,179 @@
+/* Typography */
+
+article {
+	font-size: 1rem;
+}
+article h1 {
+	text-align: center;
+	margin: 0 0 0.71em 0;
+	font-size: 1.73em;
+	opacity: 0.85;
+	font-style: italic;
+}
+article h2 {
+	margin: 0;
+	font-size: 1.35em;
+	opacity: 0.75;
+}
+article .subheading{
+	font-size: 1rem;
+	font-weight: normal;
+	font-style: italic;
+	margin-bottom: 1.5em;
+}
+article .source{
+	margin-bottom: 1.5em;
+}
+article .news-date{
+	margin-bottom: 1em;
+	opacity: 0.6;
+}
+article h3 {
+	margin: 1em 0 0 0;
+	font-size: 1.17em;
+}
+article>p {
+	margin: 0.5em 0;
+	line-height: 1.5em;
+	text-indent: 2.5em;
+}
+article>p:first-of-type {
+	text-indent: 0;
+}
+article>p:first-of-type::first-letter {
+	float: left;
+	font-weight: bold;
+	opacity: 0.75;
+}
+article>p:first-of-type>span:first-child {
+	font-variant: small-caps;
+	font-size-adjust: 0.48;
+	font-size: 1.25rem;
+	letter-spacing: 0.15em;
+}
+article .article-list h3 {
+	margin: 1.5em 0 0 0;
+	font-size: 1.17em;
+	line-height: 1.25em;
+}
+article .article-list p {
+	text-indent: 2.5em;
+	line-height: 1.5em;
+}
+article ul {
+	margin: 1em 0;
+	padding: 0 4em;
+}
+article li {
+	line-height: 1.5em;
+	margin: 0.5em 0;
+	padding: 0;
+}
+article figure {
+	font-size: 0.833333em;
+}
+article figure.fullwidth {
+	margin: 1.5em 0;
+	width: 100%;
+}
+article figure.halfwidth {
+	margin: 1.5em 4em;
+	width: calc(100% - 8em);
+}
+article figure.smallwidth {
+	max-width: min(240px, 45%);
+}
+article figure.left {
+	float: left;
+	margin: 0.5em 1.5em 0.5em 0;
+}
+article figure.right {
+	float: right;
+	margin: 0.5em 1em;
+}
+article figure img {
+	display: block;
+	width: 100%;
+	height: auto;
+	background-color: hsl(34, 13.3333%, 87.5000%);
+	border-radius: 4px;
+}
+article figure img[src=""] {
+	min-width: 240px;
+	min-height: 180px;
+}
+article figure figcaption {
+	margin-top: 0.25em;
+	text-align: center;
+}
+article table {
+	border-collapse: collapse;
+	font-size: 1em;
+	margin: 0.5em 0;
+}
+article table th,
+article table td {
+	border: 1px solid gray;
+	text-align: center;
+	padding: 0.2em;
+}
+article table th {
+	white-space: nowrap;
+}
+article table tr th:first-child {
+	font-weight: normal;
+	font-style: italic;
+}
+article table tr:first-child th {
+	font-weight: bold;
+	font-style: normal;
+}
+article div.table-container {
+	display: flex;
+	flex-direction: column;
+}
+article div.table-container table+p {
+	text-align: right;
+	font-size: 85%;
+}
+article form.post {
+	margin: 1em 0;
+	display: grid;
+	grid-template-columns: 5em 1fr;
+	grid-gap: 0.5em;
+	max-width: 34em;
+}
+article form.post label {
+	text-align: right;
+	padding-top: 0.25em;
+}
+article form.post input {
+	min-height: 1.5em;
+}
+article form.post input[type="file"] {
+	border: none;
+	outline: none;
+}
+article form.post button {
+	min-height: 2em;
+	padding: 0 2.5em;
+	border-radius: 0.25em;
+}
+article form.post input,
+article form.post textarea {
+	font-size: smaller;
+	font-family: inherit;
+	line-height: 1.8em;
+	border-radius: 0.25em;
+}
+article blockquote {
+	box-sizing: border-box;
+	margin: 2em;
+	padding-left: 2em;
+	line-height: 1.5em;
+}
+article blockquote p {
+	text-indent: 2em;
+	margin: 0;
+}
+

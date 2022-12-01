@@ -1,0 +1,145 @@
+@media screen {
+
+	@font-face {
+		font-family: "Roboto";
+		src: url("../woff/screen/Roboto-Regular.woff") format("woff");
+		font-weight: normal;
+		font-style: normal;
+	    font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Roboto";
+		src: url("../woff/screen/Roboto-Bold.woff") format("woff");
+		font-weight: bold;
+		font-style: normal;
+	    font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Roboto";
+		src: url("../woff/screen/Roboto-BoldItalic.woff") format("woff");
+		font-weight: bold;
+		font-style: italic;
+	    font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Roboto";
+		src: url("../woff/screen/Roboto-Italic.woff") format("woff");
+		font-weight: normal;
+		font-style: italic;
+	    font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Carlito";
+		src: url("../woff/screen/Carlito-Regular.woff") format("woff");
+		font-weight: normal;
+		font-style: normal;
+	    font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Carlito";
+		src: url("../woff/screen/Carlito-Bold.woff") format("woff");
+		font-weight: bold;
+		font-style: normal;
+	    font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Carlito";
+		src: url("../woff/screen/Carlito-BoldItalic.woff") format("woff");
+		font-weight: bold;
+		font-style: italic;
+	    font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Carlito";
+		src: url("../woff/screen/Carlito-Italic.woff") format("woff");
+		font-weight: normal;
+		font-style: italic;
+	    font-display: swap;
+	}
+
+	body {
+		font-family: "Roboto", "sans-serif";
+	}
+}
+
+@media print {
+
+	@font-face {
+		font-family: "Playfair Display";
+		src: url("../woff/print/PlayfairDisplay.woff") format("woff");
+		font-weight: normal;
+		font-style: normal;
+	    font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Playfair Display";
+		src: url("../woff/print/PlayfairDisplayB.woff") format("woff");
+		font-weight: bold;
+		font-style: normal;
+	    font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Playfair Display";
+		src: url("../woff/print/PlayfairDisplayBI.woff") format("woff");
+		font-weight: bold;
+		font-style: italic;
+	    font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Playfair Display";
+		src: url("../woff/print/PlayfairDisplayI.woff") format("woff");
+		font-weight: normal;
+		font-style: italic;
+	    font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Tinos";
+		src: url("../woff/screen/Tinos-Regular.woff") format("woff");
+		font-weight: normal;
+		font-style: normal;
+	    font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Tinos";
+		src: url("../woff/screen/Tinos-Bold.woff") format("woff");
+		font-weight: bold;
+		font-style: normal;
+	    font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Tinos";
+		src: url("../woff/screen/Tinos-BoldItalic.woff") format("woff");
+		font-weight: bold;
+		font-style: italic;
+	    font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Tinos";
+		src: url("../woff/screen/Tinos-Italic.woff") format("woff");
+		font-weight: normal;
+		font-style: italic;
+	    font-display: swap;
+	}
+
+	body {
+		font-family: "Tinos", "Droid Serif", "serif";
+	}
+
+	body article h1 {
+		font-family: "Playfair Display", "Tinos", "Droid Serif", "serif";
+	}
+}

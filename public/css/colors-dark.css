@@ -1,0 +1,108 @@
+:root { color-scheme: dark }
+
+body {
+	background-color: hsl(0, 0%, 14%);
+	color: hsl(30, 22.5%, 50.000%);
+}
+body>header {
+	background-color: hsl(%sql:brgy_hue:hue_primary%, 58.3333%, 8.000%);
+	background-image: linear-gradient(90deg, hsl(%sql:brgy_hue:hue_primary%, 50.000%, 4.000%) 0%, hsl(%sql:brgy_hue:hue_primary%, 50.000%, 12.000%) 80%, hsl(%sql:brgy_hue:hue_primary%, 66.6667%, 20.000%) 100%);
+}
+body>footer {
+	background-color: hsl(%sql:brgy_hue:hue_primary%, 50.0000%, 6.000%);
+	background-image: linear-gradient(90deg, hsl(%sql:brgy_hue:hue_primary%, 50.000%, 4.000%) 0%, hsl(%sql:brgy_hue:hue_primary%, 25.000%, 10.000%) 60%, hsl(%sql:brgy_hue:hue_primary%, 66.6667%, 15.000%) 120%);
+}
+body>aside {
+	background-color: hsl(0, 0%, 16%);
+}
+body>main {
+	background-color: inherit;
+}
+body>main>section {color: hsl(30, 12%, 60.000%)}
+body>main>aside   {color: hsl(30, 10%, 50.000%)}
+
+header h1 {
+	color: hsl(%sql:brgy_hue:hue_primary%, 10.000%, 64.000%);
+}
+header h1 .logo-lgu {
+	filter: drop-shadow(0 0 4px hsla(%sql:brgy_hue:hue_primary%, 50.000%, 50.000%, 0.5)) brightness(66.6667%);
+}
+header nav li a:link,
+header nav li a:visited {
+	background-color: hsl(%sql:brgy_hue:hue_primary%, 32.7500%, 12.5000%);
+	color: hsl(50, 33.3333%, 62.250%);
+}
+header nav li a:link:hover {
+	background-color: hsl(%sql:brgy_hue:hue_primary%, 25.0000%, 16.9488%);
+	color: hsl(50, 62.2222%, 67.500%);
+	box-shadow: 0 0 20px hsla(%sql:brgy_hue:hue_primary%, 50.0000%, 60.0000%, 0.25);
+}
+header nav li a:link:active {
+	color: hsl(60, 46.6667%, 30.000%);
+}
+header nav li a.current-page,
+header nav li a.current-section,
+header nav li a.current-section:hover {
+	background-color: hsl(%sql:brgy_hue:hue_primary%, 32.7500%, 12.000%);
+	box-shadow: 0 0 20px hsla(%sql:brgy_hue:hue_primary%, 40.0000%, 60.0000%, 0.25);
+	color: hsl(60, 75.000%, 48.000%);
+}
+footer p {
+	color: hsl(%sql:brgy_hue:hue_primary%, 20.000%, 40.000%);
+	text-shadow: 0 0 2px hsla(%sql:brgy_hue:hue_primary%, 20.0000%, 10.0000%, 0.5);
+}
+article h1 {
+	color: hsl(%sql:brgy_hue:hue_primary%, 20.000%, 66.6667%);
+}
+article a {
+	color: hsl(%sql:brgy_hue:hue_primary%, 35.0000%, 40.0000%);
+}
+article a:hover {
+	color: hsl(%sql:brgy_hue:hue_primary%, 35.0000%, 55.0000%);
+}
+article a:active {
+	color: hsl(%sql:brgy_hue:hue_primary%, 35.0000%, 50.0000%);
+}
+article figure img {
+	background-color: hsl(%sql:brgy_hue:hue_primary%, 13.3333%, 14.500%);
+}
+article table th {
+	background-color: hsl(%sql:brgy_hue:hue_primary%, 12.5000%, 14.500%);
+	color: hsl(%sql:brgy_hue:hue_primary%, 20.000%, 60.00%);
+}
+article table tr th:first-child {
+	background-color: hsl(%sql:brgy_hue:hue_primary%, 12.5000%, 11.200%);
+	color: hsl(%sql:brgy_hue:hue_primary%, 20.000%, 55.00%);
+}
+article table tr:first-child th {
+	background-color: hsl(%sql:brgy_hue:hue_primary%, 12.5000%, 14.500%);
+	color: hsl(%sql:brgy_hue:hue_primary%, 20.000%, 60.00%);
+}
+article table.table-row-striped tr:nth-child(even) td {
+	background: hsl(%sql:brgy_hue:hue_primary%, 0.000%, 12.500%);
+}
+article table.table-row-striped tr:nth-child(odd) td {
+	background: hsl(%sql:brgy_hue:hue_primary%, 0.000%, 10.000%);
+}
+article form input,
+article form textarea {
+	background-color: hsl(0, 0%, 9%);
+	color: hsl(%sql:brgy_hue:hue_primary%, 10%, 58.470%);
+	border: 1px solid hsl(%sql:brgy_hue:hue_primary%, 10%, 25.000%);
+}
+article form input:focus,
+article form textarea:focus {
+	outline: 1px solid hsl(%sql:brgy_hue:hue_primary%, 10%, 28.125%);
+}
+article form button {
+	background-color: hsl(0, 0%, 12.5%);
+	color: hsl(%sql:brgy_hue:hue_primary%, 10%, 60%);
+	border: 1px solid hsl(%sql:brgy_hue:hue_primary%, 10%, 28.125%);
+}
+article blockquote {
+	border-left: 2px solid hsl(%sql:brgy_hue:hue_primary%, 25%, 25%);
+}
+img {
+	filter: brightness(66.6667%) hue-rotate(-15deg);
+}
+

@@ -1,0 +1,107 @@
+.container-fluid {
+	width: 100%;
+}
+.row {
+	text-align: center;
+}
+.col {
+	display: inline-block;
+	max-width: 500px;
+	margin: 20px 5px;
+	vertical-align: text-top;
+}
+.office-info {
+	margin: 10px auto;
+}
+.locator-map {
+	margin: 10px auto;
+	width: 480px;
+	height: 360px;
+	border: 1px solid hsla(%sql:brgy_hue:hue_primary%, 10.0000%, 50.0000%, 0.5);
+	border-radius: 10px;
+}
+:root[data-colorscheme="dark"] .locator-map {
+	filter: grayscale(87.5%) invert(92%);
+}
+.header {
+	font-size: 35px;
+	margin-top: .5em;
+	color: hsla(%sql:brgy_hue:hue_primary%, 50.0000%, 50.0000%, 0.75);
+}
+.form-container {
+	width: 100%;
+	border: 2px solid hsla(%sql:brgy_hue:hue_primary%, 0%, 50.0000%, 0.6);
+	border-radius: 20px;
+	padding: 1em;
+}
+.field-group {
+	width: 100%;
+	position: relative;
+	padding-top: 15px;
+	margin: 0;
+	padding: 0;
+}
+.input-label {
+	display: block;
+	position: absolute;
+	top: 0;
+	font-size: .5em;
+	color: hsla(%sql:brgy_hue:hue_primary%, 0%, 50.0000%, 0.75);
+	text-transform: uppercase;
+	transition: 0.3s ease;
+}
+.input-field {
+	width: 100%;
+	outline: 0;
+	border: 0;
+	border-bottom: 2px solid rgba(128,128,128,0.4);
+	padding: 10px 0;
+	background: transparent;
+	font-size: 1.5em;
+	transition: 0.3 ease;
+	margin-top: .7em;
+}
+:root[data-colorscheme="light"] .input-field {
+	color: hsla(%sql:brgy_hue:hue_primary%, 80.0000%, 40.0000%, 0.8);
+}
+:root[data-colorscheme="dark"] .input-field {
+	color: hsla(%sql:brgy_hue:hue_primary%, 80.0000%, 60.0000%, 0.8);
+}
+
+.input-field::placeholder {
+	color: transparent;
+}
+.input-field:placeholder-shown ~ .input-label {
+	font-size: 1.3em;
+	top: 20px;
+}
+.input-field:focus {
+	border: 0;
+	border-bottom: 2px solid hsla(%sql:brgy_hue:hue_primary%, 50.0000%, 50.0000%, 0.8);
+	outline: 0;
+}
+.input-field:focus ~ .input-label {
+	display: block;
+	position: absolute;
+	top: 0;
+	font-size: 1em;
+	color: hsla(%sql:brgy_hue:hue_primary%, 75.0000%, 50.0000%, 0.75);
+}
+button {
+	text-align: right;
+	font-size: 18px;
+	color: white;
+	background: linear-gradient(90deg, hsl(%sql:brgy_hue:hue_primary%, 99%, 39%), hsl(%sql:brgy_hue:hue_primary%, 70%, 62%));
+	letter-spacing: 5px;
+	border-radius: 40px;
+	text-transform: uppercase;
+	text-decoration: none;
+	padding: 20px 30px;
+	border: 1px solid;
+	margin: 2em 0;
+	cursor: pointer;
+}
+:root[data-colorscheme="dark"] button {
+	background: linear-gradient(90deg, hsl(%sql:brgy_hue:hue_primary%, 66.6667%, 20%), hsl(%sql:brgy_hue:hue_primary%, 50%, 31%));
+}
+

@@ -1,0 +1,13 @@
+<!-- form -->
+<div>
+<p>You may contact us through this page.</p>
+<form method="post" action="/post">
+<label for="displayname">Name:</label>
+<input type="text" id="displayname" name="displayname" required="">
+<label for="message">Message:</label>
+<textarea rows="5" id="message" name="message" required=""></textarea>
+<label></label>
+<div><button type="submit">Send</button> <button type="reset">Clear</button></div>
+</form>
+</div>
+

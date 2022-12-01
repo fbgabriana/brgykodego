@@ -1,0 +1,97 @@
+@import "woff.css";
+@import "typography.css";
+
+@page {
+	margin: 0.8in;
+}
+
+/* Don't display the semantic tag labels */
+.semantic-tag-label {display: none;}
+
+/* Don't display interface elements */
+nav, #menubutton, .sectionlist {display: none;}
+#watch_colormode_checkbox, #watch_colormode_checkbox+label {display: none;}
+
+/* Specify color adjust */
+:root { print-color-adjust: economy; }
+
+/* Styles for document content */
+body {
+	margin: 0.2in;
+	font-size: 12pt;
+}
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+/* The header */
+header h1 {
+	text-align: center;
+	margin: 0 0 0.5em 0;
+}
+header h1 a {
+	text-decoration: inherit;
+	color: inherit;
+}
+header h1 a img {
+	vertical-align: text-top;
+	margin-top: 0;
+	height: 1.25em;
+}
+
+/* The main content */
+main article {
+	margin: 0;
+	max-width: 40em;
+}
+
+/* The right sidebar */
+aside div.boxinfo:first-of-type {
+	margin-top: 20px;
+}
+
+/* The footer */
+footer>p {
+	margin: 0;
+	height: 45pt;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: smaller;
+}
+
+aside div.boxinfo {
+	display: inline-block;
+	box-sizing: border-box;
+	margin: 10px auto;
+	border: 1pt solid #c0c0c0;
+	padding: 1em;
+	background-color: #f0f0f0;
+	font-size: 1rem;
+	box-shadow: 1px 1px 2px #909090;
+}
+aside div.boxinfo p {
+	margin: 0;
+	padding: 0;
+}
+
+/* Print-specific Typography */
+
+article>p:first-of-type::first-letter {
+	font-size: 3.8rem;
+	line-height: 2rem;
+	margin: 0.1em 0.05em -0.1em -0.1em;
+}
+article table th,
+article table td {
+	border: 0.5pt solid gray;
+}
+article table tr th:first-child {
+	border-left: 1pt solid gray;
+}
+article hr.page-break {
+	visibility: hidden;
+	page-break-after: always;
+}
+

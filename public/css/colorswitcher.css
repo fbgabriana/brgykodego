@@ -1,0 +1,36 @@
+/* Style the colorswitcher_checkbox to look like an ON/OFF toggle */
+/* Uses pure CSS. Feel free to add images if you want */
+
+input.colorswitcher {
+	display: none;
+}
+
+label.colorswitcher {
+	margin-top: 2.5px;
+	font-size: 10px;
+	user-select: none;
+}
+
+label.colorswitcher::before {
+	display: inline-block;
+	box-sizing: border-box;
+	width: 19.4164px;
+	height: 12px;
+	padding: 1px;
+	border-radius: 6px;
+	margin: 0 2px 0 4px;
+	vertical-align: text-top;
+}
+
+label.colorswitcher[data-colorscheme="light"]::before {
+	background: linear-gradient(90deg, hsl(0, 0%, 70%) 0%, hsl(0, 0%, 70%) 40%, rgba(128,128,128,0.5) 60%);
+	content: url("");
+	text-align: left;
+}
+
+label.colorswitcher[data-colorscheme="dark"]::before {
+	background: linear-gradient(270deg, hsl(0, 0%, 40%) 0%, hsl(0, 0%, 40%) 40%, rgba(64,64,64,0.5) 60%);
+	content: url("");
+	text-align: right;
+}
+
