@@ -11,7 +11,7 @@ An interactive barangay **content management system**. The Group 4 Capstone Proj
 Setup instructions:
 
 1. Download and extract the source.
-1. Make sure the commands `npm` and `mysql` are in your path
-1. On the terminal, go to the project folder and do `npm run setup`
-1. Once setup completes, start it anytime by running `npm start`
+1. Make sure the commands `npm` and `mysql` are in your path.
+1. On the terminal, go to the project folder and do `npm run setup`.
+1. Once setup completes, start it anytime by running `npm start`.
 
