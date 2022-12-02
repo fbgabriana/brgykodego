@@ -2,7 +2,7 @@
 
 # Brgy KodeGo
 
-An interactive barangay content management system. The Group 4 Capstone Project.
+An interactive barangay **content management system**. The Group 4 Capstone Project.
 
 * [View the source](https://github.com/fbgabriana/brgykodego){:target="_projectsource"}
 
