@@ -6,5 +6,5 @@ An interactive barangay website. The Group 4 Capstone Project.
 
 ![BrgyKodego screenshot](screenshot.png)
 
-* [View the source](https://github.com/fbgabriana/brgykodego){:target="_blank"}
+* [View the source](https://github.com/fbgabriana/brgykodego){:target="_projectpage"}
 
