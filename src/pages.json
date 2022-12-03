@@ -1,7 +1,9 @@
 {
-"services": "Services",
-"contact": "Get in Touch",
-"about": "About Us",
-"login": "Login"
+	"services": "Services",
+	"contact": "Get in Touch",
+	"about": "About Us",
+	"login": "Login",
+	"form": "Form",
+	"thanks": "Thank you"
 }
 

@@ -1,7 +1,8 @@
 <!-- form -->
 <div>
 <p>You may contact us through this page.</p>
-<form method="post" action="/post">
+<form class="post" id="post" name="post" method="post" action="post">
+<input type="hidden" id="redirect" name="redirect" value="thanks">
 <label for="displayname">Name:</label>
 <input type="text" id="displayname" name="displayname" required="">
 <label for="message">Message:</label>

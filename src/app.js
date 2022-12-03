@@ -32,20 +32,19 @@ sql.query("SELECT brgy_name, brgy_city, brgylogofilename, citylogofilename FROM 
 
 const server = http.createServer((req, res) => {
 
-	let search = "";
-	let pathArr = req.url.substring(1).split("?");
-	let filename = `${pathArr[0] || "home"}`;
+	const pathArr = req.url.substring(1).split("?");
+	let [ filename, q, search ] = [ pathArr[0] || "home", pathArr[1], "" ];
 	if (filename.indexOf(".") == -1) {
 		templateHTML = fs.existsSync(`public/css/pages/${filename}.css`) ? templateData.replace("%req:current-page%", filename) : templateData.replace(/^.*%req:current-page%.*$\n/mg, "");
+		const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
 		let content = "";
 		switch (filename) {
 		case "home":
-			let q = pathArr[1];
 			req.on("data", chunk => {search += chunk});
 			req.on("end", () => {
 				if (search) {
-					let formpost = querystring.parse(search);
-					formpost["bulletin_date_created"] = new Date().toISOString().slice(0, 19).replace('T', ' ');
+					const formpost = querystring.parse(search);
+					formpost["bulletin_date_created"] = now;
 					formpost["bulletin_classification_icon"] = ["project-update","news-update","waterservice","calamity"][formpost["bulletin_classification_id"] - 1];
 					formpost["bulletin_details"] = `<p>${formpost["bulletin_details"]}</p>`.replaceAll(/\n/g,"</p><p>");
 					sql.query(`INSERT INTO brgy_bulletin (
@@ -143,9 +142,17 @@ const server = http.createServer((req, res) => {
 			req.on("data", chunk => {search += chunk});
 			req.on("end", () => {
 				if (search) {
-					let formpost = querystring.parse(search);
-					formpost["logbook_datetime"] = new Date().toISOString().slice(0, 19).replace('T', ' ');
-					sql.query(`INSERT INTO logbook (logbook_displayname, logbook_message, logbook_datetime) VALUES ('${formpost["logbook_displayname"]}','${formpost["logbook_message"]}', '${formpost["logbook_datetime"]}')`, callback);
+					const formpost = querystring.parse(search);
+					formpost["logbook_datetime"] = now;
+					sql.query(`INSERT INTO logbook (
+						logbook_displayname,
+						logbook_message,
+						logbook_datetime
+					) VALUES (
+						'${formpost["logbook_displayname"]}',
+						'${formpost["logbook_message"]}',
+						'${formpost["logbook_datetime"]}'
+					)`, callback);
 				}
 				sql.query("SELECT logbook_displayname, logbook_message, logbook_datetime FROM logbook", (err, result, packet) => {
 					if (err) { console.log(err.message) }
@@ -183,20 +190,52 @@ const server = http.createServer((req, res) => {
 			});
 			break;
 		case "post":
+			sql.query("CREATE TABLE IF NOT EXISTS formdata( \
+				id INT UNIQUE NOT NULL AUTO_INCREMENT, \
+				formdata_query VARCHAR(1024) NOT NULL, \
+				formdata_datetime DATETIME NOT NULL, \
+				PRIMARY KEY(id))",
+			callback);
 			req.on("data", chunk => {search += chunk});
 			req.on("end", () => {
-				search = search || req.url.split("?")[1] || "";
-				let formpost = querystring.parse(search);
-				let displayresult = "<ul class=\"displayresult\">\n";
-				for (name in formpost) {
-					displayresult += `<li>${name}: ${formpost[name]}</li>\n`;
+				search = search || q;
+				if (search) {
+					const formpost = querystring.parse(search);
+
+					let displayresultHTML = "<ul class=\"displayresult\">\n";
+					let displayresultText = "";
+					for (name in formpost) {
+						if (name == "redirect") continue;
+						displayresultHTML += `<li>${name}: ${formpost[name]}</li>\n`;
+						displayresultText += `${name}: ${formpost[name]},\n`;
+					}
+					displayresultHTML += "</ul>";
+					displayresultText = displayresultText.replace(/\n$/, "");
+
+					formpost["posted"] = now;
+					sql.query(`INSERT INTO formdata (
+						formdata_query,
+						formdata_datetime
+					) VALUES (
+						'${displayresultText}',
+						'${formpost["posted"]}'
+					)`, callback);
+
+					if (redirect = formpost["redirect"]) {
+						q = search.replace(`redirect=${redirect}`, "").replace(/^&|&$/, "").replace(/&&/, "&");
+						res.writeHead(302, {"location": `${redirect}?${q}`});
+					} else {
+						content += `<h1>Thank you</h1>\n<p>We received your message.</p><p>You have entered:</p>\n${displayresultHTML}\n`;
+						content += `<div>\n<p>The information has been saved in our database.</p>\n<p><a class="goback" href="javascript:history.back()">[ Back to Previous Page ]</a></p>\n</div>`;
+						res.writeHead(200, {"Content-Type": "text/html"});
+						res.write(templateHTML.replace("<!-- content -->", content));
+					}
+					res.end();
+				} else {
+					res.writeHead(200, {"Content-Type": "text/html"});
+					res.write(templateHTML.replace("<!-- content -->", ""));
+					res.end();
 				}
-				displayresult += "</ul>";
-				res.writeHead(200, {"Content-Type": "text/html"});
-				content += `<h1>Thank you</h1>\n<p>You have entered:</p>\n${displayresult}\n`;
-				content += `<div>\n<p>The information has been saved in our database.</p>\n<p><a class="goback" href="javascript:history.back()">[ Back to Previous Page ]</a></p>\n</div>`;
-				res.write(templateHTML.replace("<!-- content -->", content));
-				res.end();
 			});
 			break;
 		default:
@@ -239,8 +278,10 @@ const server = http.createServer((req, res) => {
 					res.message = `<p>The following error occured at the server:</p><p>[${err.message}]</p>`;
 				}
 				content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1>${res.message}`;
-				res.write(templateHTML.replace("<!-- content -->", content));
-				res.end();
+				setTimeout( () => {
+					res.write(templateHTML.replace("<!-- content -->", content));
+					res.end();
+				}, 20);
 			} else {
 				let mimetype = mime.lookup(filename);
 				res.writeHead(200, {"Content-Type": mimetype});
