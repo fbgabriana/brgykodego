@@ -106,18 +106,14 @@ const addColorSwitcher = (selector) => {
 }
 
 const querystring = {
-	parse : (str, sep, eq) => {
-		if (str) {
-			let query = {};
-			let pairs = str.split(sep || "&");
-			for (let i = 0; i < pairs.length; i++) {
-				let pair = pairs[i].split(eq || "=");
-				query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
-			}
-			return query;
-		} else {
-			return null;
+	parse : (str="", sep="&", eq="=") => {
+		let query = Object.create(null);
+		let pairs = str ? str.split(sep) : [];
+		for (let i = 0; i < pairs.length; i++) {
+			let pair = pairs[i].split(eq);
+			query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
 		}
+		return query;
 	}
 }
 

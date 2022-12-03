@@ -1,10 +1,10 @@
 <!-- contact -->
 <script>
-const pathArr = location.href.substring(1).split("?");
-const formpost = querystring.parse(pathArr[1]);
-if (formpost) {
+const search = location.href.substring(1).split("?")[1];
+if (search) {
+	const formpost = querystring.parse(search);
 	let displayresultHTML = `<ul class="displayresult">`;
-	const label = {"fname":"First Name", "lname":"Last Name", "email":"Email Address", "contact":"Contact No.", "msg":"Message" };
+	const label = {"fullname":"Full name", "firstname":"First name", "lastname":"Last name", "email":"Email address", "tel":"Contact No.", "message":"Message"};
 	for (name in formpost) {
 		displayresultHTML += `<li>${label[name]}: ${formpost[name]}</li>`;
 	}
@@ -40,24 +40,24 @@ if (formpost) {
 				<form class="contact" action="post" method="post">
 				   <input type="hidden" name="redirect" value="contact">
 					<div class="field-group">
-					   <input type="text" name="fname" id="fname" class="input-field" placeholder="Enter First Name" autocomplete="off" required>
-					   <label for="fname" class="input-label">First Name</label>
+					   <input type="text" name="firstname" id="firstname" class="input-field" placeholder="Enter First Name" autocomplete="off" required>
+					   <label for="firstname" class="input-label">First Name</label>
 					</div>
 					<div class="field-group">
-					   <input type="text" name="lname" id="lname" class="input-field" placeholder="Enter Last Name" autocomplete="off" required>
-					   <label for="lname" class="input-label">Last Name</label>
+					   <input type="text" name="lastname" id="lastname" class="input-field" placeholder="Enter Last Name" autocomplete="off" required>
+					   <label for="lastname" class="input-label">Last Name</label>
 					</div>
 					<div class="field-group">
 					   <input type="email" name="email" id="email" class="input-field" placeholder="Enter Email" autocomplete="off" required>
 					   <label for="email" class="input-label">Email Address</label>
 					</div>
 					<div class="field-group">
-					   <input type="tel" name="contact" id="contact" class="input-field" placeholder="Enter Contact Number" autocomplete="off" required>
-					   <label for="contact" class="input-label">Contact no.</label>
+					   <input type="tel" name="tel" id="tel" class="input-field" placeholder="Enter Contact Number" autocomplete="off" required>
+					   <label for="tel" class="input-label">Contact no.</label>
 					</div>
 					<div class="field-group">
-					   <input type="text" name="msg" id="msg" class="input-field" placeholder="Please send us a message" autocomplete="off" required>
-					   <label for="msg" class="input-label">Message:</label>
+					   <input type="text" name="message" id="message" class="input-field" placeholder="Please send us a message" autocomplete="off" required>
+					   <label for="message" class="input-label">Message:</label>
 					</div>
 					<button type="submit">Confirm</button>
 				</form>

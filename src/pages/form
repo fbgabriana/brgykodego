@@ -4,8 +4,8 @@
 <form class="post" id="post" name="post" method="post" action="post">
 <input type="hidden" id="recipient" name="recipient" value="recipient@brgykodego.test">
 <input type="hidden" id="redirect" name="redirect" value="thanks">
-<label for="displayname">Name:</label>
-<input type="text" id="displayname" name="displayname" required="">
+<label for="fullname">Name:</label>
+<input type="text" id="fullname" name="fullname" required="">
 <label for="message">Message:</label>
 <textarea rows="5" id="message" name="message" required=""></textarea>
 <label></label>

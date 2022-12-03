@@ -1,18 +1,20 @@
 <!-- thanks -->
 <script>
-const pathArr = location.href.substring(1).split("?");
-const formpost = querystring.parse(pathArr[1]);
+const search = location.href.substring(1).split("?")[1];
+if (search) {
+	const formpost = querystring.parse(search);
+	let displayresultHTML = `<ul class="displayresult">`;
+	const label = {"fullname":"Full name", "firstname":"First name", "lastname":"Last name", "email":"Email", "tel":"Phone", "message":"Message"};
+	for (name in formpost) {
+		displayresultHTML += `<li>${label[name] || name.charAt(0).toUpperCase() + name.slice(1)}: ${formpost[name]}</li>`;
+	}
+	displayresultHTML += `</ul>`;
 
-let displayresultHTML = `<ul class="displayresult">\n`;
-for (name in formpost) {
-	displayresultHTML += `<li>${name}: ${formpost[name]}</li>\n`;
+	let content = "";
+	content += `<p class="received">We received your message.</p><p>You have entered:</p>${displayresultHTML}`;
+	content += `<div><p>The information has been saved in our database.</p></div>`;
+
+	document.write(`\n<div class="row"><div class="col">${content}</div></div>\n`);
 }
-displayresultHTML += "</ul>";
-
-let content = "";
-content += `<p>We received your message.</p><p>You have entered:</p>\n${displayresultHTML}\n`;
-content += `<div>\n<p>The information has been saved in our database.</p>\n`;
-
-document.write(content);
 </script>
 

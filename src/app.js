@@ -1,7 +1,7 @@
+const mysql = require("mysql");
 const http = require("http");
 const fs = require("fs");
 const mime = require("mime-types");
-const mysql = require("mysql");
 const querystring = require("node:querystring");
 
 const port = 9000;
