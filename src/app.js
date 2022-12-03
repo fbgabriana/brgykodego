@@ -12,11 +12,11 @@ const callback = err => { if (err) throw(err); }
 const sql = mysql.createConnection({
 	user: "nodepages",
 	host: "localhost",
-	password: "password"
-}, callback);
+	password: "password",
+	database: "barangay"
+});
 
 sql.connect(callback);
-sql.query("USE barangay", callback);
 
 const templatepath = "./public";
 let templateData = fs.readFileSync(`${templatepath}/template.html`).toString();
@@ -95,7 +95,7 @@ const server = http.createServer((req, res) => {
 				<script>history.replaceState(null,null,location.href)</script>\n`;
 					}
 						content += `				<!-- bulletin posts -->`;
-					for (row of result.reverse()) {
+					result.reverse().forEach(row => {
 						row.bulletin_date_created = new Date(row.bulletin_date_created - 60000 * row.bulletin_date_created.getTimezoneOffset());
 						row.bulletin_image = row.bulletin_image_filename ? `<img src="/content/bulletin/images/upload/${row.bulletin_image_filename}">` : "";
 						content += `
@@ -121,7 +121,7 @@ const server = http.createServer((req, res) => {
 						<div class="bulletin-post-footer-reactions"></div>
 					</div>
 				</div>`;
-					}
+					});
 						content += `\n				<!-- end bulletin posts -->`;
 					if (q != "post") {
 						content += `\n				<div class="newpost-anchor"><a href="/?post">[ New post ]</a></div>`;
@@ -170,14 +170,14 @@ const server = http.createServer((req, res) => {
 						<div><button type="submit">Send</button> <button type="reset">Clear</button></div>
 						</form>
 						<div class="logbook-posts">`
-						for (row of result.reverse()) {
+						result.reverse().forEach(row => {
 							row.logbook_datetime = new Date(row.logbook_datetime - 60000 * row.logbook_datetime.getTimezoneOffset());
 							content += `
 							<div class="logbook-post">
 								<div class="logbook-post-header"><div class="logbook-post-displayname">${row.logbook_displayname}</div><div class="logbook-post-date">${row.logbook_datetime.toLocaleString()}</div></div>
 								<div class="logbook-post-message"><p>${row.logbook_message.replaceAll(/\n/g,"</p><p>")}</p></div>
 							</div>`
-						}
+						});
 						content += `
 						<script>history.replaceState(null,null,location.href)</script>
 						</div>
@@ -203,7 +203,7 @@ const server = http.createServer((req, res) => {
 					let displayresultHTML = `<ul class="displayresult">\n`;
 					let displayresultText = q = "";
 					const formpost = querystring.parse(search);
-					for (name in formpost) {
+					for (const name in formpost) {
 						if (name == "recipient") continue;
 						if (name == "redirect") continue;
 						displayresultHTML += `<li>${name}: ${formpost[name]}</li>\n`;
