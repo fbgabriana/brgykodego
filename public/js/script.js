@@ -107,19 +107,23 @@ const addColorSwitcher = (selector) => {
 
 const querystring = {
 	parse : (str, sep, eq) => {
-		let query = {};
-		let pairs = str.split(sep || "&");
-		for (let i = 0; i < pairs.length; i++) {
-			let pair = pairs[i].split(eq || "=");
-			query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
+		if (str) {
+			let query = {};
+			let pairs = str.split(sep || "&");
+			for (let i = 0; i < pairs.length; i++) {
+				let pair = pairs[i].split(eq || "=");
+				query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
+			}
+			return query;
+		} else {
+			return null;
 		}
-		return query;
 	}
 }
 
-document.write = function(string) {
+document.write = function(markup) {
 	const scripts = document.getElementsByTagName("script");
-	scripts[scripts.length - 1].insertAdjacentHTML("beforebegin", string);
+	scripts[scripts.length - 1].insertAdjacentHTML("afterend", markup);
 }
 
 document.addEventListener("DOMContentLoaded", event => {

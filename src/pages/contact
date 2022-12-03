@@ -2,19 +2,20 @@
 <script>
 const pathArr = location.href.substring(1).split("?");
 const formpost = querystring.parse(pathArr[1]);
+if (formpost) {
+	let displayresultHTML = `<ul class="displayresult">`;
+	const label = {"fname":"First Name", "lname":"Last Name", "email":"Email Address", "contact":"Contact No.", "msg":"Message" };
+	for (name in formpost) {
+		displayresultHTML += `<li>${label[name]}: ${formpost[name]}</li>`;
+	}
+	displayresultHTML += `</ul>`;
 
-let displayresultHTML = `<ul class="displayresult">`;
-const label = {"fname":"First Name", "lname":"Last Name", "email":"Email Address", "contact":"Contact No.", "msg":"Message" };
-for (name in formpost) {
-	displayresultHTML += `<li>${label[name]}: ${formpost[name]}</li>`;
+	let content = "";
+	content += `<p class="received">We received your message.</p><p>You have entered:</p>${displayresultHTML}`;
+	content += `<div><p>The information has been saved in our database.</p></div>`;
+
+	document.write(`\n<div class="row"><div class="col">${content}</div></div>\n`);
 }
-displayresultHTML += "</ul>";
-
-let content = "";
-content += `<p class="received">We received your message.</p><p>You have entered:</p>${displayresultHTML}`;
-content += `<div><p>The information has been saved in our database.</p>`;
-
-document.write(`<div class="row"><div class="col">${content}</div></div>`);
 </script>
 
 	<div class="row">

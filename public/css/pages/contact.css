@@ -87,7 +87,7 @@
 	font-size: 1em;
 	color: hsla(%sql:brgy_hue:hue_primary%, 75.0000%, 50.0000%, 0.75);
 }
-ul {
+ul.displayresult {
 	text-align: left;
 	border: 2px solid hsla(%sql:brgy_hue:hue_primary%, 10.0000%, 50.0000%, 0.5);
 	border-radius: 20px;
