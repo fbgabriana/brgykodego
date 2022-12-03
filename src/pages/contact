@@ -1,4 +1,22 @@
 <!-- contact -->
+<script>
+const pathArr = location.href.substring(1).split("?");
+const formpost = querystring.parse(pathArr[1]);
+
+let displayresultHTML = `<ul class="displayresult">`;
+const label = {"fname":"First Name", "lname":"Last Name", "email":"Email Address", "contact":"Contact No.", "msg":"Message" };
+for (name in formpost) {
+	displayresultHTML += `<li>${label[name]}: ${formpost[name]}</li>`;
+}
+displayresultHTML += "</ul>";
+
+let content = "";
+content += `<p class="received">We received your message.</p><p>You have entered:</p>${displayresultHTML}`;
+content += `<div><p>The information has been saved in our database.</p>`;
+
+document.write(`<div class="row"><div class="col">${content}</div></div>`);
+</script>
+
 	<div class="row">
 		<div class="col">
 			<div class="office-info">
@@ -18,7 +36,8 @@
 		<div class="col">
 			<div class="form-container">
 				<div class="header">Send us a message!</div>
-				<form class="contact" action="/post" method="post">
+				<form class="contact" action="post" method="post">
+				   <input type="hidden" name="redirect" value="contact">
 					<div class="field-group">
 					   <input type="text" name="fname" id="fname" class="input-field" placeholder="Enter First Name" autocomplete="off" required>
 					   <label for="fname" class="input-label">First Name</label>
@@ -28,11 +47,11 @@
 					   <label for="lname" class="input-label">Last Name</label>
 					</div>
 					<div class="field-group">
-					   <input type="text" name="email" id="email" class="input-field" placeholder="Enter Email" autocomplete="off" required>
+					   <input type="email" name="email" id="email" class="input-field" placeholder="Enter Email" autocomplete="off" required>
 					   <label for="email" class="input-label">Email Address</label>
 					</div>
 					<div class="field-group">
-					   <input type="text" name="contact" id="contact" class="input-field" placeholder="Enter Contact Number" autocomplete="off" required>
+					   <input type="tel" name="contact" id="contact" class="input-field" placeholder="Enter Contact Number" autocomplete="off" required>
 					   <label for="contact" class="input-label">Contact no.</label>
 					</div>
 					<div class="field-group">
