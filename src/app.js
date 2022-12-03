@@ -200,17 +200,19 @@ const server = http.createServer((req, res) => {
 			req.on("end", () => {
 				search = search || q;
 				if (search) {
+					let displayresultHTML = `<ul class="displayresult">\n`;
+					let displayresultText = q = "";
 					const formpost = querystring.parse(search);
-
-					let displayresultHTML = "<ul class=\"displayresult\">\n";
-					let displayresultText = "";
 					for (name in formpost) {
+						if (name == "recipient") continue;
 						if (name == "redirect") continue;
 						displayresultHTML += `<li>${name}: ${formpost[name]}</li>\n`;
 						displayresultText += `${name}: ${formpost[name]},\n`;
+						q += `${name}=${formpost[name]}&`;
 					}
 					displayresultHTML += "</ul>";
 					displayresultText = displayresultText.replace(/\n$/, "");
+					q = q.replace(/&$/, "");
 
 					formpost["posted"] = now;
 					sql.query(`INSERT INTO formdata (
@@ -221,21 +223,21 @@ const server = http.createServer((req, res) => {
 						'${formpost["posted"]}'
 					)`, callback);
 
-					if (redirect = formpost["redirect"]) {
-						q = search.replace(`redirect=${redirect}`, "").replace(/^&|&$/, "").replace(/&&/, "&");
-						res.writeHead(302, {"location": `${redirect}?${q}`});
-					} else {
-						content += `<h1>Thank you</h1>\n<p>We received your message.</p><p>You have entered:</p>\n${displayresultHTML}\n`;
-						content += `<div>\n<p>The information has been saved in our database.</p>\n<p><a class="goback" href="javascript:history.back()">[ Back to Previous Page ]</a></p>\n</div>`;
-						res.writeHead(200, {"Content-Type": "text/html"});
-						res.write(templateHTML.replace("<!-- content -->", content));
+					content += `<h1>Thank you</h1>\n<p>We received your message.</p><p>You have entered:</p>\n${displayresultHTML}\n`;
+					content += `<div><p>The information has been saved in our database.</p></div>\n`;
+
+					if (recipient = formpost["recipient"]) {
+						// sendmail(recipient, content);
 					}
-					res.end();
-				} else {
-					res.writeHead(200, {"Content-Type": "text/html"});
-					res.write(templateHTML.replace("<!-- content -->", ""));
-					res.end();
+					if (redirect = formpost["redirect"]) {
+						res.writeHead(302, {"location": `${redirect}?${q}`});
+						return res.end();
+					}
+					content += `<div><p><a class="goback" href="javascript:history.back()">[ Back to Previous Page ]</a></p></div>`;
 				}
+				res.writeHead(200, {"Content-Type": "text/html"});
+				res.write(templateHTML.replace("<!-- content -->", content));
+				res.end();
 			});
 			break;
 		default:

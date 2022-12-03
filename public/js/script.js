@@ -105,6 +105,23 @@ const addColorSwitcher = (selector) => {
 	}
 }
 
+const querystring = {
+	parse : (str, sep, eq) => {
+		let query = {};
+		let pairs = str.split(sep || "&");
+		for (let i = 0; i < pairs.length; i++) {
+			let pair = pairs[i].split(eq || "=");
+			query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
+		}
+		return query;
+	}
+}
+
+document.write = function(string) {
+	const scripts = document.getElementsByTagName("script");
+	scripts[scripts.length - 1].insertAdjacentHTML("beforebegin", string);
+}
+
 document.addEventListener("DOMContentLoaded", event => {
 	document.querySelectorAll('img').forEach(function(img){
 		img.onerror = function() {this.style.display='none';};

@@ -1,2 +1,18 @@
 <!-- thanks -->
-<p>We received your message.</p>
+<script>
+const pathArr = location.href.substring(1).split("?");
+const formpost = querystring.parse(pathArr[1]);
+
+let displayresultHTML = `<ul class="displayresult">\n`;
+for (name in formpost) {
+	displayresultHTML += `<li>${name}: ${formpost[name]}</li>\n`;
+}
+displayresultHTML += "</ul>";
+
+let content = "";
+content += `<p>We received your message.</p><p>You have entered:</p>\n${displayresultHTML}\n`;
+content += `<div>\n<p>The information has been saved in our database.</p>\n`;
+
+document.write(content);
+</script>
+
