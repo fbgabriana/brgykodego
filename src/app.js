@@ -96,7 +96,7 @@ const server = http.createServer((req, res) => {
 					}
 						content += `				<!-- bulletin posts -->`;
 					result.reverse().forEach(row => {
-						row.bulletin_date_created = new Date(row.bulletin_date_created - 60000 * row.bulletin_date_created.getTimezoneOffset());
+						row.bulletin_date_created_localtime = new Date(row.bulletin_date_created - 60000 * row.bulletin_date_created.getTimezoneOffset());
 						row.bulletin_image = row.bulletin_image_filename ? `<img src="/content/bulletin/images/upload/${row.bulletin_image_filename}">` : "";
 						content += `
 				<!-- bulletin post ${row.bulletin_id} -->
@@ -106,7 +106,7 @@ const server = http.createServer((req, res) => {
 						<div class="bulletin-post-header-text">
 							<div class="bulletin-post-title">${row.bulletin_classification_title}</div>
 							<div class="bulletin-post-subtitle">${row.bulletin_classification_subtitle}</div>
-							<div class="bulletin-post-date">Posted: ${row.bulletin_date_created.toLocaleString()}</div>
+							<div class="bulletin-post-date">Posted: ${row.bulletin_date_created_localtime.toLocaleString()}</div>
 						</div>
 						<div class="bulletin-post-header-image"></div>
 					</div>
@@ -136,25 +136,25 @@ const server = http.createServer((req, res) => {
 				id INT UNIQUE NOT NULL AUTO_INCREMENT, \
 				logbook_displayname VARCHAR(1024) NOT NULL, \
 				logbook_message TEXT NOT NULL, \
-				logbook_datetime DATETIME NOT NULL, \
+				logbook_datetime_utc DATETIME NOT NULL, \
 				PRIMARY KEY(id))",
 			callback);
 			req.on("data", chunk => {search += chunk});
 			req.on("end", () => {
 				if (search) {
 					const formpost = querystring.parse(search);
-					formpost["logbook_datetime"] = now;
+					formpost["logbook_datetime_utc"] = now;
 					sql.query(`INSERT INTO logbook (
 						logbook_displayname,
 						logbook_message,
-						logbook_datetime
+						logbook_datetime_utc
 					) VALUES (
 						'${formpost["logbook_displayname"]}',
 						'${formpost["logbook_message"]}',
-						'${formpost["logbook_datetime"]}'
+						'${formpost["logbook_datetime_utc"]}'
 					)`, callback);
 				}
-				sql.query("SELECT logbook_displayname, logbook_message, logbook_datetime FROM logbook", (err, result, packet) => {
+				sql.query("SELECT logbook_displayname, logbook_message, logbook_datetime_utc FROM logbook", (err, result, packet) => {
 					if (err) { console.log(err.message) }
 					else {
 						content = `
@@ -171,10 +171,10 @@ const server = http.createServer((req, res) => {
 						</form>
 						<div class="logbook-posts">`
 						result.reverse().forEach(row => {
-							row.logbook_datetime = new Date(row.logbook_datetime - 60000 * row.logbook_datetime.getTimezoneOffset());
+							row.logbook_datetime_utc = new Date(row.logbook_datetime_utc - 60000 * row.logbook_datetime_utc.getTimezoneOffset());
 							content += `
 							<div class="logbook-post">
-								<div class="logbook-post-header"><div class="logbook-post-displayname">${row.logbook_displayname}</div><div class="logbook-post-date">${row.logbook_datetime.toLocaleString()}</div></div>
+								<div class="logbook-post-header"><div class="logbook-post-displayname">${row.logbook_displayname}</div><div class="logbook-post-date">${row.logbook_datetime_utc.toLocaleString()}</div></div>
 								<div class="logbook-post-message"><p>${row.logbook_message.replaceAll(/\n/g,"</p><p>")}</p></div>
 							</div>`
 						});
@@ -192,74 +192,76 @@ const server = http.createServer((req, res) => {
 		case "post":
 			sql.query("CREATE TABLE IF NOT EXISTS formdata( \
 				id INT UNIQUE NOT NULL AUTO_INCREMENT, \
+				formdata_referer VARCHAR(255) NOT NULL, \
 				formdata_query VARCHAR(1024) NOT NULL, \
-				formdata_datetime DATETIME NOT NULL, \
+				formdata_datetime_utc DATETIME NOT NULL, \
 				PRIMARY KEY(id))",
 			callback);
 			req.on("data", chunk => {search += chunk});
 			req.on("end", () => {
+				referer = req.headers.referer.replace(`${req.headers.origin}`,"");
 				search = search || q;
 				if (search) {
-					let displayresultHTML = `<ul class="displayresult">\n`;
 					let displayresultText = q = "";
+					let displayresultHTML = `<ul class="displayresult">\n`;
 					const formpost = querystring.parse(search);
 					for (const name in formpost) {
 						if (name == "recipient") continue;
 						if (name == "redirect") continue;
-						displayresultHTML += `<li>${name}: ${formpost[name]}</li>\n`;
-						displayresultText += `${name}: ${formpost[name]},\n`;
 						q += `${name}=${formpost[name]}&`;
+						displayresultText += `${name}: ${formpost[name]},\n`;
+						displayresultHTML += `<li>${name}: ${formpost[name]}</li>\n`;
 					}
 					displayresultHTML += "</ul>";
-					displayresultText = displayresultText.replace(/\n$/, "");
-					q = q.replace(/&$/, "");
+					displayresultText = displayresultText.trim();
+					q = q.replace(/&$/,"");
 
 					formpost["posted"] = now;
 					sql.query(`INSERT INTO formdata (
+						formdata_referer,
 						formdata_query,
-						formdata_datetime
+						formdata_datetime_utc
 					) VALUES (
+						'${referer}',
 						'${displayresultText}',
 						'${formpost["posted"]}'
 					)`, callback);
 
-					content += `<h1>Thank you</h1>\n<p>We received your message.</p><p>You have entered:</p>\n${displayresultHTML}\n`;
+					content += `<h1>Thank you</h1>\n<p class="received">We received your message.</p><p>You have entered:</p>\n${displayresultHTML}\n`;
 					content += `<div><p>The information has been saved in our database.</p></div>\n`;
 
 					if (recipient = formpost["recipient"]) {
 						// sendmail(recipient, content);
 					}
 					if (redirect = formpost["redirect"]) {
-						res.writeHead(302, {"location": `${redirect}?${q}`});
-						return res.end();
+						res.writeHead(302, {"Location": `${redirect}?${q}`});
+						return res.end(callback);
 					}
-					content += `<div><p><a class="goback" href="javascript:history.back()">[ Back to Previous Page ]</a></p></div>`;
+					content += `<div><p><a class="goback" href="${referer}" onclick="history.back()">[ Back to Previous Page ]</a></p></div>`;
 				}
 				res.writeHead(200, {"Content-Type": "text/html"});
 				res.write(templateHTML.replace("<!-- content -->", content));
-				res.end();
+				return res.end(callback);
 			});
 			break;
 		default:
-			sql.query(`SELECT title, content FROM pages WHERE id = '${filename}'`, (err, result) => {
-				if (err) {
+			sql.query(`SELECT title, content FROM pages WHERE id = '${filename}'`, (err, result, packet) => {
+				if (row = result[0]) {
+					content = `<h1>${row.title}</h1>\n${row.content}`;
+					res.writeHead(200, {"Content-Type": "text/html"});
+					res.write(templateHTML.replace("<!-- content -->", content));
+					res.end();
+				} else if (pack = packet[0]) {
+					content = `<h1>404 Not Found</h1><p>The resource '${req.url}' was not found on database '${pack.db}.${pack.table}'.</p>`;
+					res.writeHead(404, {"Content-Type": "text/html"});
+					res.write(templateHTML.replace("<!-- content -->", content));
+					res.end();
+				} else {
 					console.log(err.message);
 					content = `<h1>500 Server Error</h1><p>The following error occured at the server:</p><p>[${err.message}]</p>`;
 					res.writeHead(500, {"Content-Type": "text/html"});
 					res.write(templateHTML.replace("<!-- content -->", content));
 					res.end();
-				} else {
-					if (result[0]) {
-						content = `<h1>${result[0].title}</h1>\n${result[0].content}`;
-						res.writeHead(200, {"Content-Type": "text/html"});
-						res.write(templateHTML.replace("<!-- content -->", content));
-						res.end();
-					} else {
-						content = `<h1>404 Not Found</h1><p>The resource '${req.url}' was not found on this server.</p>`;
-						res.writeHead(404, {"Content-Type": "text/html"});
-						res.write(templateHTML.replace("<!-- content -->", content));
-						res.end();
-					}
 				}
 			});
 		}
