@@ -76,8 +76,8 @@ const addColorSwitcher = (selector) => {
 		selectorElement.appendChild(label_colorswitcher);
 		document.head.appendChild(meta_colorswitcher);
 
-		const menubtn = document.querySelector("#menubtn");
-		const favicon = document.querySelector("link[rel='icon']");
+		const menubtn = document.querySelector(`#menubtn`);
+		const favicon = document.querySelector(`link[rel="icon"]`);
 
 		const set_colorscheme = () => {
 			let colorscheme = media_colorswitcher.matches ^ checkbox_colorswitcher.checked ? "light" : "dark";
