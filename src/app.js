@@ -201,7 +201,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				);
 				req.on("data", chunk => {search += chunk});
 				req.on("end", () => {
-					referer = req.headers.referer.replace(`${req.headers.origin}`,"");
+					referer = req.headers.referer ? req.headers.referer.replace(`${req.headers.origin}`,"") : "";
 					search = search || q;
 					if (search) {
 						let displayresultText = q = "";
