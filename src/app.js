@@ -33,9 +33,9 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 
 	const server = http.createServer((req, res) => {
 		const pathArr = req.url.substring(1).split("?");
-
 		let [ filename, q, search ] = [ pathArr[0] || "home", pathArr[1], "" ];
 		let templateHTML = content;
+
 		if (filename.indexOf(".") == -1) {
 			templateHTML = fs.existsSync(`public/css/pages/${filename}.css`) ? templateHTML.replace("%req:current-page%", filename) : templateHTML.replace(/^.*%req:current-page%.*$\n/mg, "");
 			const now = new Date().toISOString().slice(0, 19).replace("T", " ");
