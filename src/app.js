@@ -5,7 +5,7 @@ const util = require("util");
 const mime = require("mime-types");
 const querystring = require("querystring");
 
-const port = 9000;
+const port = process.env.PORT || 9000;
 const hostname = "brgykodego.gov.ph.test";
 const publicpath = "./public";
 
