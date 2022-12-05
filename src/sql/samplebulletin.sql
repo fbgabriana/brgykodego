@@ -1,4 +1,3 @@
-USE barangay;
 REPLACE INTO brgy_bulletin (bulletin_id, bulletin_classification_id, bulletin_classification_icon, bulletin_classification_title, bulletin_classification_subtitle, bulletin_details, bulletin_image_filename,bulletin_date_created) VALUES (
 1000, 0, 'sample-post', 'bulletin classification title', 'bulletin classification subtitle','<p>bulletin details</p>','', '1970-01-01 00-00-00'
 );

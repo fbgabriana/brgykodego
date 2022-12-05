@@ -1,6 +1,3 @@
-CREATE database IF NOT EXISTS barangay;
-use barangay;
-
 DROP TABLE IF EXISTS brgy_info;
 CREATE TABLE IF NOT EXISTS brgy_info (
 id INT,

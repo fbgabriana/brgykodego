@@ -5,18 +5,15 @@ const callback = (err, result) => {
 	if (err) { console.log(err.message) }
 }
 
-const sql = mysql.createConnection({
-	user: "nodepages",
-	host: "localhost",
-	password: "password"
-}, callback);
+const sql = require("./db.js");
+const dbconfig = require("./db.config.js");
 
 switch (process.argv[2]) {
 case "create":
 
-	sql.connect(callback);
-	sql.query("CREATE DATABASE IF NOT EXISTS barangay", callback);
-	sql.query("USE barangay", callback);
+//	sql.connect(callback);
+//	sql.query(`CREATE DATABASE IF NOT EXISTS ${dbconfig.database}`, callback);
+//	sql.query(`USE ${dbconfig.database}`, callback);
 	sql.query("CREATE TABLE IF NOT EXISTS pages( \
 		id VARCHAR(16) UNIQUE NOT NULL, \
 		title VARCHAR(1024) NOT NULL, \
@@ -38,8 +35,8 @@ case "create":
 	break;
 
 case "remove":
-	sql.connect(callback);
-	sql.query("DROP DATABASE IF EXISTS barangay", callback);
+//	sql.connect(callback);
+//	sql.query(`DROP DATABASE IF EXISTS ${dbconfig.database}`, callback);
 	sql.end();
 	break;
 default:

@@ -7,18 +7,12 @@ const querystring = require("querystring");
 
 const port = process.env.PORT || 9000;
 const hostname = "0.0.0.0";
-const publicpath = "./public";
-
-const sql = mysql.createConnection({
-	user: "nodepages",
-	host: "localhost",
-	password: "password",
-	database: "barangay"
-});
+const sql = require("./db.js");
 
 sql.query = util.promisify(sql.query).bind(sql);
 fs.readFile = util.promisify(fs.readFile).bind(fs);
 
+const publicpath = "./public";
 fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 	return sql.query("SELECT brgy_name, brgy_city, brgylogofilename, citylogofilename FROM brgy_info").then(row => {
 		let brgy_info = row[0];
