@@ -158,7 +158,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							'${formpost["logbook_datetime_utc"]}'
 						)`);
 					}
-					sql.query("SELECT logbook_displayname, logbook_message, logbook_datetime_utc FROM logbook").then (result => {
+					sql.query("SELECT logbook_displayname, logbook_message, logbook_datetime_utc FROM logbook").then(result => {
 						content = `				<!-- begin logbook -->
 				<h1>Leave a Message</h1>
 				<p>Hello mga kabarangay. This is our online logbook. Feel free to leave a note to us.</p>
