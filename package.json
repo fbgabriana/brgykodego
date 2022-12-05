@@ -5,7 +5,7 @@
 	"homepage": "https://fbgabriana.github.io/nodepages",
 	"main": "src/app.js",
 	"scripts": {
-		"start": "clear && nodemon",
+		"start": "nodemon",
 		"pages": "node src/pages.js",
 		"clean": "rm -rf node_modules package-lock.json",
 		"create-user": "mysql -u root < src/sql/create-user.sql",

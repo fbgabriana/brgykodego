@@ -6,7 +6,7 @@ const mime = require("mime-types");
 const querystring = require("querystring");
 
 const port = process.env.PORT || 9000;
-const hostname = "brgykodego.gov.ph.test";
+const hostname = "0.0.0.0";
 const publicpath = "./public";
 
 const sql = mysql.createConnection({
