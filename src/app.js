@@ -3,7 +3,7 @@ const http = require("http");
 const fs = require("fs");
 const util = require("util");
 const mime = require("mime-types");
-const querystring = require("node:querystring");
+const querystring = require("querystring");
 
 const port = 9000;
 const hostname = "brgykodego.gov.ph.test";
@@ -31,7 +31,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 	});
 }).then(content => {
 
-	return server = http.createServer((req, res) => {
+	const server = http.createServer((req, res) => {
 		const pathArr = req.url.substring(1).split("?");
 
 		let [ filename, q, search ] = [ pathArr[0] || "home", pathArr[1], "" ];
