@@ -175,7 +175,7 @@ article hr.page-break {
 		box-shadow: none !important;
 	}
 	main {
-		height: calc(100vh - 40px - 81px);
+		height: calc(100vh - 40px - 80px);
 	}
 	main article {
 		padding: 4vw;
@@ -211,8 +211,8 @@ article hr.page-break {
 		header nav { margin-left: auto; }
 		header nav ul { margin: 0 20px 0 0; }
 
-		body>main {
-			overflow-y: auto;
+		main {
+			height: calc(100vh - 40px - 80px);
 		}
 	}
 }
