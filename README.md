@@ -4,6 +4,8 @@
 
 An interactive barangay **content management system**. The Group 4 Capstone Project.
 
+* [View the site](http://brgykodego.herokuapp.com/){:target="_projectpage"}
+
 * [View the source](https://github.com/fbgabriana/brgykodego){:target="_projectsource"}
 
 ![screenshot](screenshot.svg)
