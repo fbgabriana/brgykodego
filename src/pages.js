@@ -8,8 +8,8 @@ const callback = (err, result) => {
 const dbconfig = require("./db.config.js");
 
 const sql = mysql.createConnection({
-	user: dbconfig.username,
-	host: dbconfig.hostname,
+	user: dbconfig.user,
+	host: dbconfig.host,
 	password: dbconfig.password,
 	database: dbconfig.database
 });

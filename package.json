@@ -5,7 +5,7 @@
 	"homepage": "http://brgykodego.herokuapp.com/",
 	"main": "src/app.js",
 	"scripts": {
-		"start": "nodemon",
+		"start": "node src/clearscreen.js && nodemon",
 		"pages": "node src/pages.js",
 		"clean": "rm -rf node_modules package-lock.json",
 		"setup-database": "cat src/sql/create-database.sql src/sql/create-tables.sql src/sql/populate-tables.sql | mysql -u root",
@@ -20,6 +20,7 @@
 		"file-api": "^0.10.4",
 		"mime-types": "^2.1.35",
 		"mysql": "^2.18.1",
-		"nodemon": "^2.0.20"
+		"nodemon": "^2.0.20",
+		"parse-database-url": "^0.3.0"
 	}
 }

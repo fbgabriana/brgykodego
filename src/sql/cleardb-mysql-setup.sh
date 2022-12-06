@@ -4,3 +4,6 @@ mysql="mysql --host=us-cdbr-east-06.cleardb.net --user=b3586d55d10fcd --password
 $mysql < create-tables.sql
 $mysql < populate-tables.sql
 
+export DATABASE_URL="mysql://b3586d55d10fcd:58b7911c@us-cdbr-east-06.cleardb.net/heroku_59c42b4c871f3a7?reconnect=true"
+npm run pages
+
