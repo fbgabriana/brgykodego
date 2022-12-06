@@ -7,7 +7,15 @@ const querystring = require("querystring");
 
 const port = process.env.PORT || 9000;
 const hostname = "0.0.0.0";
-const sql = require("./db.js");
+
+const dbconfig = require("./db.config.js");
+
+const sql = mysql.createPool({
+	user: dbconfig.user,
+	host: dbconfig.host,
+	password: dbconfig.password,
+	database: dbconfig.database
+});
 
 sql.query = util.promisify(sql.query).bind(sql);
 fs.readFile = util.promisify(fs.readFile).bind(fs);
@@ -136,24 +144,24 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					logbook_message TEXT NOT NULL, \
 					logbook_datetime_utc DATETIME NOT NULL, \
 					PRIMARY KEY(id))",
-				);
-				req.on("data", chunk => {search += chunk});
-				req.on("end", () => {
-					if (search) {
-						const formpost = querystring.parse(search);
-						formpost["logbook_datetime_utc"] = now;
-						sql.query(`INSERT INTO logbook (
-							logbook_displayname,
-							logbook_message,
-							logbook_datetime_utc
-						) VALUES (
-							'${formpost["logbook_displayname"]}',
-							'${formpost["logbook_message"]}',
-							'${formpost["logbook_datetime_utc"]}'
-						)`);
-					}
-					sql.query("SELECT logbook_displayname, logbook_message, logbook_datetime_utc FROM logbook").then(result => {
-						content = `				<!-- begin logbook -->
+				).then(() => {
+					req.on("data", chunk => {search += chunk});
+					req.on("end", () => {
+						if (search) {
+							const formpost = querystring.parse(search);
+							formpost["logbook_datetime_utc"] = now;
+							sql.query(`INSERT INTO logbook (
+								logbook_displayname,
+								logbook_message,
+								logbook_datetime_utc
+							) VALUES (
+								'${formpost["logbook_displayname"]}',
+								'${formpost["logbook_message"]}',
+								'${formpost["logbook_datetime_utc"]}'
+							)`);
+						}
+						sql.query("SELECT logbook_displayname, logbook_message, logbook_datetime_utc FROM logbook").then(result => {
+							content = `				<!-- begin logbook -->
 				<h1>Leave a Message</h1>
 				<p>Hello mga kabarangay. This is our online logbook. Feel free to leave a note to us.</p>
 				<div class="logbook">
@@ -166,22 +174,23 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					<div><button type="submit">Send</button> <button type="reset">Clear</button></div>
 					</form>
 					<div class="logbook-posts">`
-						result.reverse().forEach(row => {
-							row.logbook_datetime_utc = new Date(row.logbook_datetime_utc - 60000 * row.logbook_datetime_utc.getTimezoneOffset());
-							content += `
+							result.reverse().forEach(row => {
+								row.logbook_datetime_utc = new Date(row.logbook_datetime_utc - 60000 * row.logbook_datetime_utc.getTimezoneOffset());
+								content += `
 						<div class="logbook-post">
 							<div class="logbook-post-header"><div class="logbook-post-displayname">${row.logbook_displayname}</div><div class="logbook-post-date">${row.logbook_datetime_utc.toLocaleString()}</div></div>
 							<div class="logbook-post-message"><p>${row.logbook_message.replaceAll(/\n/g,"</p><p>")}</p></div>
 						</div>`
 						});
-						content += `
+							content += `
 						<script>history.replaceState(null,null,location.href)</script>
 					</div>
 				</div>
 				<!-- end logbook -->`
-						res.writeHead(200, {"Content-Type": "text/html"});
-						res.write(templateHTML.replace("<!-- content -->", content));
-						res.end();
+							res.writeHead(200, {"Content-Type": "text/html"});
+							res.write(templateHTML.replace("<!-- content -->", content));
+							res.end();
+						});
 					});
 				});
 				break;
@@ -192,52 +201,53 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					formdata_query VARCHAR(1024) NOT NULL, \
 					formdata_datetime_utc DATETIME NOT NULL, \
 					PRIMARY KEY(id))",
-				);
-				req.on("data", chunk => {search += chunk});
-				req.on("end", () => {
-					referer = req.headers.referer ? req.headers.referer.replace(`${req.headers.origin}`,"") : "";
-					search = search || q;
-					if (search) {
-						let displayresultText = q = "";
-						let displayresultHTML = `<ul class="displayresult">\n`;
-						const formpost = querystring.parse(search);
-						for (const name in formpost) {
-							if (name == "recipient") continue;
-							if (name == "redirect") continue;
-							q += `${name}=${formpost[name]}&`;
-							displayresultText += `${name}: ${formpost[name]},\n`;
-							displayresultHTML += `<li>${name}: ${formpost[name]}</li>\n`;
-						}
-						displayresultHTML += "</ul>";
-						displayresultText = displayresultText.trim();
-						q = q.replace(/&$/,"");
+				).then(() => {
+					req.on("data", chunk => {search += chunk});
+					req.on("end", () => {
+						referer = req.headers.referer ? req.headers.referer.replace(`${req.headers.origin}`,"") : "";
+						search = search || q;
+						if (search) {
+							let displayresultText = q = "";
+							let displayresultHTML = `<ul class="displayresult">\n`;
+							const formpost = querystring.parse(search);
+							for (const name in formpost) {
+								if (name == "recipient") continue;
+								if (name == "redirect") continue;
+								q += `${name}=${formpost[name]}&`;
+								displayresultText += `${name}: ${formpost[name]},\n`;
+								displayresultHTML += `<li>${name}: ${formpost[name]}</li>\n`;
+							}
+							displayresultHTML += "</ul>";
+							displayresultText = displayresultText.trim();
+							q = q.replace(/&$/,"");
 
-						formpost["posted"] = now;
-						sql.query(`INSERT INTO formdata (
-							formdata_referer,
-							formdata_query,
-							formdata_datetime_utc
-						) VALUES (
-							'${referer}',
-							'${displayresultText}',
-							'${formpost["posted"]}'
-						)`);
+							formpost["posted"] = now;
+							sql.query(`INSERT INTO formdata (
+								formdata_referer,
+								formdata_query,
+								formdata_datetime_utc
+							) VALUES (
+								'${referer}',
+								'${displayresultText}',
+								'${formpost["posted"]}'
+							)`);
 
-						content += `<h1>Thank you</h1>\n<p class="received">We received your message.</p><p>You have entered:</p>\n${displayresultHTML}\n`;
-						content += `<div><p>The information has been saved in our database.</p></div>\n`;
+							content += `<h1>Thank you</h1>\n<p class="received">We received your message.</p><p>You have entered:</p>\n${displayresultHTML}\n`;
+							content += `<div><p>The information has been saved in our database.</p></div>\n`;
 
-						if (recipient = formpost["recipient"]) {
-							// sendmail(recipient, content);
+							if (recipient = formpost["recipient"]) {
+								// sendmail(recipient, content);
+							}
+							if (redirect = formpost["redirect"]) {
+								res.writeHead(302, {"Location": `${redirect}?${q}`});
+								return res.end();
+							}
+							content += `<div><p><a class="goback" href="${referer}" onclick="history.back()">[ Back to Previous Page ]</a></p></div>`;
 						}
-						if (redirect = formpost["redirect"]) {
-							res.writeHead(302, {"Location": `${redirect}?${q}`});
-							return res.end();
-						}
-						content += `<div><p><a class="goback" href="${referer}" onclick="history.back()">[ Back to Previous Page ]</a></p></div>`;
-					}
-					res.writeHead(200, {"Content-Type": "text/html"});
-					res.write(templateHTML.replace("<!-- content -->", content));
-					return res.end();
+						res.writeHead(200, {"Content-Type": "text/html"});
+						res.write(templateHTML.replace("<!-- content -->", content));
+						return res.end();
+					});
 				});
 				break;
 			default:

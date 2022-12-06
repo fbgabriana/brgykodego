@@ -8,11 +8,11 @@ const cleardb_config = {
 };
 
 //	mysql --localhost --user=nodepages --password=password --reconnect barangay
-const db_config = {
+const localdb_config = {
 	user: "nodepages",
 	host: "localhost",
 	password: "password",
 	database: "barangay"
 };
 
-module.exports = cleardb_config;
+module.exports = localdb_config;
