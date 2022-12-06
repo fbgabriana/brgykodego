@@ -319,6 +319,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 	}).listen(host.port, host.hostname, () => {
 		if (server.listening) {
 			const listening = server.address();
+			console.log(require("os").hostname());
 			console.log("\x1b[36m%s\x1b[0m",`[app] Development server running at ${listening.address} over ${listening.port}...`, "\x1b[0m");
 			console.log("\x1b[34m%s\x1b[0m",`[app] http://${host.hostname}:${host.port}\x1b[0m`, "\x1b[0m");
 		}
