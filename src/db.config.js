@@ -15,4 +15,4 @@ const localdb_config = {
 	database: "barangay"
 };
 
-module.exports = cleardb_config;
+module.exports = (process.env.HOME === "/app") ? cleardb_config : localdb_config;
