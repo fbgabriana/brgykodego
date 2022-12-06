@@ -15,4 +15,4 @@ const localdb_config = {
 	database: "barangay"
 };
 
-module.exports = localdb_config;
+module.exports = cleardb_config;
