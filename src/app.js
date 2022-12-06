@@ -73,7 +73,6 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						res.writeHead(200, {"Content-Type": "text/html"});
 						if (q == "post") {
 							content += `				<!-- add new bulletin post -->
-<!-- ${process.env.HOME} -->
 				<h1>New Bulletin Post</h1>
 				<div class="new-bulletin-form">
 				<form class="post" method="post">
@@ -99,7 +98,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				</div>
 				<script>history.replaceState(null,null,location.href)</script>\n`;
 						}
-							content += `				<!-- bulletin posts -->`;
+							content += `				<!-- bulletin posts ${process.env.HOME} -->`;
 						result.reverse().forEach(row => {
 							row.bulletin_date_created_localtime = new Date(row.bulletin_date_created - 60000 * row.bulletin_date_created.getTimezoneOffset());
 							row.bulletin_image = row.bulletin_image_filename ? `<img src="/content/bulletin/images/upload/${row.bulletin_image_filename}">` : "";
