@@ -30,6 +30,6 @@ for (let [id, title] of Object.entries(pages)) {
 	sql.query(`REPLACE INTO pages (id, title, content) VALUES ('${id}','${title}','${content}')`, callback);
 }
 
-console.log("Done.");
+console.log("Finishing...");
 sql.end();
 

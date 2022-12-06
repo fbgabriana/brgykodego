@@ -1,9 +1,22 @@
 #!/bin/sh
 
-mysql="mysql --host=us-cdbr-east-06.cleardb.net --user=b3586d55d10fcd --password=58b7911c --reconnect heroku_59c42b4c871f3a7"
+user=b3586d55d10fcd
+password=58b7911c
+host=us-cdbr-east-06.cleardb.net
+database=heroku_59c42b4c871f3a7
+
+{
+mysql="mysql --user=$user --password=$password --host=$host --reconnect $database"
+
+echo "Generating tables..."
 $mysql < create-tables.sql
+
+echo "Populating tables..."
 $mysql < populate-tables.sql
 
-export DATABASE_URL="mysql://b3586d55d10fcd:58b7911c@us-cdbr-east-06.cleardb.net/heroku_59c42b4c871f3a7?reconnect=true"
+echo "Creating pages..."
+export DATABASE_URL="mysql://$user:$password@$host/$database?reconnect=true"
 npm run pages
+
+} 2> /dev/null
 

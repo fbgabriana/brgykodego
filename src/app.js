@@ -322,6 +322,10 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 			console.log("\x1b[36m%s\x1b[0m",`[app] Development server running at ${listening.address} over ${listening.port}...`, "\x1b[0m");
 			console.log("\x1b[34m%s\x1b[0m",`[app] http://${host.hostname}:${host.port}\x1b[0m`, "\x1b[0m");
 		}
+	}).on("error", err => {
+		console.log(`\x1b[31m${err.message}\x1b[0m`);
+		process.exit(0);
 	});
+
 });
 
