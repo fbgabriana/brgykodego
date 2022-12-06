@@ -6,7 +6,7 @@ const mime = require("mime-types");
 const querystring = require("querystring");
 
 const host = (process.env.HOME === "/app") ? {
-	hostname: "0.0.0.0",
+	hostname: "brgykodego.herokuapp.com",
 	port: process.env.PORT
 }:{
 	hostname: "brgykodego.localhost",
