@@ -256,7 +256,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				});
 				break;
 			case "env":
-				content = `<pre>${JSON.stringify(process.env).replace(/","/g, `"\n`).replace(/":"/g,`="`).replace(/\n"/g, "\n").replace(/{"|}/g, `\n`)}</pre>`;
+				content = `<pre>\n${Object.keys(process.env).sort().map(key =>`${key}=${process.env[key]}`).join("\n")}\n</pre>`;
 				res.writeHead(200, {"Content-Type": "text/html"});
 				res.write(templateHTML.replace("<!-- content -->", content));
 				return res.end();
