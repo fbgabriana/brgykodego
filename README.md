@@ -1,6 +1,6 @@
 ## [fbgabriana.github.io](/ "Bamm's KodeGo Repository") / [brgykodego](/brgykodego/)
 
-# Brgy KodeGo
+# Barangay KodeGo
 
 An interactive barangay **content management system**. The Group 4 Capstone Project.
 
