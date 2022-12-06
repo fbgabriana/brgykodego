@@ -6,10 +6,12 @@ const mime = require("mime-types");
 const querystring = require("querystring");
 
 const host = (process.env.HOME === "/app") ? {
-	hostname: "brgykodego.herokuapp.com",
+	addr: "0.0.0.0",
+	name: "brgykodego.herokuapp.com",
 	port: process.env.PORT
 }:{
-	hostname: "brgykodego.localhost",
+	addr: "brgykodego.localhost",
+	name: "brgykodego.localhost",
 	port: "9000"
 };
 
@@ -316,11 +318,11 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				res.end();
 			});
 		}
-	}).listen(host.port, host.hostname, () => {
+	}).listen(host.port, host.addr, () => {
 		if (server.listening) {
 			const listening = server.address();
 			console.log("\x1b[36m%s\x1b[0m",`[app] Development server running at ${listening.address} over ${listening.port}...`, "\x1b[0m");
-			console.log("\x1b[34m%s\x1b[0m",`[app] http://${host.hostname}:${host.port}\x1b[0m`, "\x1b[0m");
+			console.log("\x1b[34m%s\x1b[0m",`[app] http://${host.name}:${host.port}\x1b[0m`, "\x1b[0m");
 		}
 	}).on("error", err => {
 		console.log(`\x1b[31m${err.message}\x1b[0m`);
