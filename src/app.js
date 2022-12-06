@@ -255,6 +255,12 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					});
 				});
 				break;
+			case "env":
+				content = `<pre>\n${JSON.stringify(process.env).replace(/","/g, `"\n`).replace(/":"/g,`="`).replace(/\n"/g, "\n").replace(/{"|}/g, `\n`)}\n</pre>`;
+				res.writeHead(200, {"Content-Type": "text/html"});
+				res.write(templateHTML.replace("<!-- content -->", content));
+				return res.end();
+				break;
 			default:
 				sql.query(`SELECT title, content FROM pages WHERE id = '${filename}'`, (err, result, packet) => {
 					if (row = result[0]) {
