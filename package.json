@@ -1,8 +1,8 @@
 {
 	"name": "nodepages",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "",
-	"homepage": "https://fbgabriana.github.io/nodepages",
+	"homepage": "http://brgykodego.herokuapp.com/",
 	"main": "src/app.js",
 	"scripts": {
 		"start": "nodemon",
