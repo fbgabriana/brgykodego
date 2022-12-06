@@ -1,0 +1,26 @@
+{
+	"name" : "Brgy KodeGo",
+	"short_name" : "BarKode",
+	"description" : "An interactive barangay content management system.",
+	"icons" : [
+		{
+			"src" : "/svg/favicon.svg",
+			"type" : "image/svg+xml",
+			"sizes" : "512x512",
+			"purpose" : "any"
+		},
+		{
+			"src" : "/favicon.ico",
+			"type" : "image/x-icon",
+			"sizes" : "48x48 32x32 16x16",
+			"purpose" : "any"
+		}
+	],
+	"shortcuts" : [
+		{
+			"name" : "Logbook",
+			"url" : "/logbook"
+		}
+	],
+	"display" : "browser"
+}
