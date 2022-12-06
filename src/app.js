@@ -16,8 +16,8 @@ const host = (process.env.HOME === "/app") ? {
 const dbconfig = require("./db.config.js");
 
 const sql = mysql.createPool({
-	user: dbconfig.user,
-	host: dbconfig.host,
+	user: dbconfig.username,
+	host: dbconfig.hostname,
 	password: dbconfig.password,
 	database: dbconfig.database
 });
