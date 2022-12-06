@@ -151,11 +151,11 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					PRIMARY KEY(id))",
 				).then(() => {
 					req.on("data", chunk => {search += chunk});
-					req.on("end", () => {
+					req.on("end", async () => {
 						if (search) {
 							const formpost = querystring.parse(search);
 							formpost["logbook_datetime_utc"] = now;
-							sql.query(`INSERT INTO logbook (
+							await sql.query(`INSERT INTO logbook (
 								logbook_displayname,
 								logbook_message,
 								logbook_datetime_utc
@@ -203,8 +203,8 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				sql.query("CREATE TABLE IF NOT EXISTS formdata( \
 					id INT UNIQUE NOT NULL AUTO_INCREMENT, \
 					formdata_referer VARCHAR(255) NOT NULL, \
-					formdata_query VARCHAR(1024) NOT NULL, \
 					formdata_datetime_utc DATETIME NOT NULL, \
+					formdata_query VARCHAR(1024) NOT NULL, \
 					PRIMARY KEY(id))",
 				).then(() => {
 					req.on("data", chunk => {search += chunk});
@@ -229,12 +229,12 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							formpost["posted"] = now;
 							sql.query(`INSERT INTO formdata (
 								formdata_referer,
-								formdata_query,
-								formdata_datetime_utc
+								formdata_datetime_utc,
+								formdata_query
 							) VALUES (
 								'${referer}',
-								'${displayresultText}',
-								'${formpost["posted"]}'
+								'${formpost["posted"]}',
+								'${displayresultText}'
 							)`);
 
 							content += `<h1>Thank you</h1>\n<p class="received">We received your message.</p><p>You have entered:</p>\n${displayresultHTML}\n`;

@@ -142,3 +142,6 @@ INSERT INTO brgy_hue (hue_id, hue_primary, hue_secondary, hue_tertiary) VALUES (
 0, "215", "0", "0"
 );
 
+DROP TABLE IF EXISTS logbook;
+DROP TABLE IF EXISTS formdata;
+
