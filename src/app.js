@@ -73,6 +73,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						res.writeHead(200, {"Content-Type": "text/html"});
 						if (q == "post") {
 							content += `				<!-- add new bulletin post -->
+<!-- ${process.env.HOME} -->
 				<h1>New Bulletin Post</h1>
 				<div class="new-bulletin-form">
 				<form class="post" method="post">
