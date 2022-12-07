@@ -1,5 +1,6 @@
 #!/bin/sh
 
+driver=mysql
 user=b3586d55d10fcd
 password=58b7911c
 host=us-cdbr-east-06.cleardb.net
@@ -15,7 +16,7 @@ echo "Populating tables..."
 $mysql < populate-tables.sql
 
 echo "Creating pages..."
-export DATABASE_URL="mysql://$user:$password@$host/$database?reconnect=true"
+export DATABASE_URL="$driver://$user:$password@$host/$database?reconnect=true"
 npm run pages
 
 } 2> /dev/null
