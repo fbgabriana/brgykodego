@@ -25,6 +25,8 @@ const sql = mysql.createPool({
 sql.query = util.promisify(sql.query).bind(sql);
 fs.readFile = util.promisify(fs.readFile).bind(fs);
 
+const appver = `${process.env.npm_package_name}-${process.env.npm_package_version}`;
+
 const publicpath = "./public";
 fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 	return sql.query("SELECT brgy_name, brgy_city, brgylogofilename, citylogofilename FROM brgy_info").then(row => {
