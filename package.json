@@ -5,14 +5,12 @@
 	"homepage": "http://brgykodego.herokuapp.com/",
 	"main": "src/app.js",
 	"scripts": {
-		"start": "node src/clearscreen.js && nodemon",
-		"pages": "node src/pages.js",
+		"prestart": "node src/clearscr.js",
+		"start": "nodemon",
+		"setup": "npm install && node src/setup.js && npm run test",
+		"remove": "sh src/remove.sh",
 		"clean": "rm -rf node_modules package-lock.json",
-		"setup-database": "cat src/sql/create-database.sql src/sql/create-tables.sql src/sql/populate-tables.sql | mysql -u root",
-		"setup": "npm run setup-database && npm install && npm run pages && npm test",
-		"remove-database": "mysql -u root < src/sql/remove-database.sql",
-		"remove": "test -d node_modules && npm run remove-database && npm run clean || echo Nothing to do.",
-		"test": "node src/nodetest.js"
+		"test": "node src/test.js"
 	},
 	"author": "github.com/fbgabriana",
 	"license": "ISC",

@@ -37,7 +37,10 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 		;
 	});
 }).then(content => {
-
+	return fs.readFile(`${publicpath}/sidebar.html`, "utf8").then(sidebar => {
+		return content.replace("<!-- sidebar -->", sidebar)
+	});
+}).then(content => {
 	const server = http.createServer((req, res) => {
 		const pathArr = req.url.substring(1).split("?");
 		let [ filename, q, search ] = [ pathArr[0] || "home", pathArr[1], "" ];

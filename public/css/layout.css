@@ -134,6 +134,30 @@ footer>p {
 	text-align: center;
 }
 
+/* The sidebar */
+aside .sidebar {
+	display: none;
+	overflow: auto;
+}
+aside .sidebar {
+	box-sizing: border-box;
+	padding: 20px;
+	font-size: 12px
+}
+aside .sidebar img.qrcode {
+	display: block;
+	width: 50%;
+	margin: 0 auto;
+}
+aside .sidebar ul {
+	margin: 0;
+	padding: 0 2em;
+}
+aside .sidebar li {
+	margin: 0.5em 0;
+}
+
+
 /* Screen-specific Typography */
 
 article>p:first-of-type::first-letter {
@@ -175,45 +199,45 @@ article hr.page-break {
 		box-shadow: none !important;
 	}
 	main {
-		height: calc(100vh - 40px - 80px);
+		height: calc(100vh - 40px - 81px);
 	}
 	main article {
 		padding: 4vw;
 	}
 }
 
-@media screen and (min-width: 600px ) {
+@media screen and (min-width: 854px ) {
 
-	@media screen and (min-width: 854px ) {
+	/* Code to define the grid */
+	body {
+		display: grid;
+		grid-template-areas:
+		"header header"
+		"aside   main "
+		"footer footer";
+		height: 100vh;
+		grid-template-columns: 27.5vw auto;
+		grid-template-rows: 80px auto 40px;
+	}
+	body>header {grid-area: header;}
+	body>footer {grid-area: footer;}
+	body>main   {grid-area: main;}
+	body>aside  {grid-area: aside;}
 
-		/* Code to define the grid */
-		body {
-			display: grid;
-			grid-template-areas:
-			"header header"
-			"aside   main "
-			"footer footer";
-			height: 100vh;
-			grid-template-columns: 27.5vw auto;
-			grid-template-rows: 80px auto 40px;
-		}
-		body>header {grid-area: header;}
-		body>footer {grid-area: footer;}
-		body>main   {grid-area: main;}
-		body>aside  {grid-area: aside;}
+	header {
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+	header h1 { margin-left: 20px; padding: 0}
+	header nav { margin-left: auto; }
+	header nav ul { margin: 0 20px 0 0; }
 
-		header {
-			flex-direction: row;
-			align-items: center;
-			justify-content: center;
-		}
-		header h1 { margin-left: 20px; padding: 0}
-		header nav { margin-left: auto; }
-		header nav ul { margin: 0 20px 0 0; }
-
-		main {
-			height: calc(100vh - 40px - 80px);
-		}
+	aside, main {
+		height: calc(100vh - 40px - 80px);
+	}
+	aside .sidebar {
+		display: block;
 	}
 }
 
