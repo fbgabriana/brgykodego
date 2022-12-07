@@ -144,10 +144,13 @@ aside .sidebar {
 	padding: 20px;
 	font-size: 12px
 }
-aside .sidebar img.qrcode {
-	display: block;
-	width: 50%;
+aside .sidebar figure.qrcode {
 	margin: 0 auto;
+	width: 50%;
+	text-align: center;
+}
+aside .sidebar figure.qrcode img {
+	width: 100%;
 }
 aside .sidebar ul {
 	margin: 0;

@@ -14,12 +14,12 @@ body>footer {
 }
 body>aside {
 	background-color: hsl(0, 0%, 90%);
+	color: inherit;
 }
 body>main {
 	background-color: inherit;
+	color: inherit;
 }
-body>main>section {color: #303030;}
-body>main>aside   {color: #404040;}
 
 header h1 {
 	color: hsl(%sql:brgy_hue:hue_primary%, 20.0000%, 80.0000%);
