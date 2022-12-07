@@ -1,6 +1,6 @@
 {
 	"name": "brgykodego",
-	"version": "0.4.1",
+	"version": "0.4.2",
 	"description": "",
 	"homepage": "http://brgykodego.herokuapp.com/",
 	"main": "src/app.js",
