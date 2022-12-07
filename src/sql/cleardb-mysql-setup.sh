@@ -20,3 +20,4 @@ export DATABASE_URL="$driver://$user:$password@$host/$database?reconnect=true"
 npm run pages
 
 }
+
