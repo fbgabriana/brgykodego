@@ -249,7 +249,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 								// sendmail(recipient, content);
 							}
 							if (redirect = formpost["redirect"]) {
-								res.writeHead(302, {"Location": `${redirect}?${q}`});
+								res.writeHead(307, {"Location": `${redirect}?${q}`});
 								return res.end();
 							}
 							content += `<div><p><a class="goback" href="${referer}" onclick="history.back()">[ Back to Previous Page ]</a></p></div>`;
@@ -264,17 +264,20 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				req.on("data", chunk => {search += chunk});
 				req.on("end", () => {
 					const pref = querystring.parse(search);
-					sql.query(`INSERT INTO brgy_colors_hsl (
+					sql.query(`REPLACE INTO brgy_colors_hsl (
 						hsl_id,
 						hsl_hue,
 						hsl_saturation,
 						hsl_lightness
 					) VALUES (
 						'0',
-						'${pref["hsl_hue"]}',
-						'${pref["hsl_saturation"]}',
-						'${pref["hsl_lightness"]}'
-					)`);
+						'${parseFloat(pref["hsl_hue"])}',
+						'${parseFloat(pref["hsl_saturation"])}',
+						'${parseFloat(pref["hsl_lightness"])}'
+					)`).then( result => {
+						res.writeHead(307, {"Location": `${req.headers.referer}`});
+						return res.end();
+					});
 				});
 				break;
 			case "env":
@@ -309,8 +312,8 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				let mimetype = mime.lookup(filename);
 				res.writeHead(200, {"Content-Type": mimetype});
 				if (mimetype == "text/css") {
-					sql.query("SELECT hue_primary FROM brgy_hue").then(row => {
-						content = content.toString().replace(/%sql:brgy_hue:hue_primary%/g, row[0].hue_primary);
+					sql.query("SELECT hsl_hue FROM brgy_colors_hsl").then(row => {
+						content = content.toString().replace(/%sql:brgy_hue:hue_primary%/g, row[0].hsl_hue);
 						res.write(content);
 						res.end();
 					});

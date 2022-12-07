@@ -129,32 +129,20 @@ credential_filename VARCHAR(255),
 PRIMARY KEY(worker_credentials_id)
 );
 
-DROP TABLE IF EXISTS brgy_hue;
-CREATE TABLE IF NOT EXISTS brgy_hue (
-hue_id INT,
-hue_primary VARCHAR(7),
-hue_secondary VARCHAR(7),
-hue_tertiary VARCHAR(7),
-PRIMARY KEY(hue_id)
-);
-
-INSERT INTO brgy_hue (hue_id, hue_primary, hue_secondary, hue_tertiary) VALUES (
-0, "215", "0", "0"
-);
-
 DROP TABLE IF EXISTS brgy_colors_hsl;
 CREATE TABLE IF NOT EXISTS brgy_colors_hsl (
 hsl_id INT,
-hsl_hue float(23),
-hsl_saturation float(23),
-hsl_lightness float(23),
+hsl_hue float(10,7),
+hsl_saturation float(10,7),
+hsl_lightness float(10,7),
 PRIMARY KEY(hsl_id)
 );
 
 INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness) VALUES (
-0, "215", "66.6667", "40"
+0, "215", "66.666666667", "40"
 );
 
+DROP TABLE IF EXISTS brgy_hue;
 DROP TABLE IF EXISTS logbook;
 DROP TABLE IF EXISTS formdata;
 

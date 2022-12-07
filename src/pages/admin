@@ -9,10 +9,17 @@ const handleColorHex = () => {
 	const hsl = rgbTOhsl(rgb);
 	console.log(rgb, hsl);
 
-	var xhr = new XMLHttpRequest();
-	xhr.open("POST", "/pref", true);
-	xhr.setRequestHeader("Content-Type", "application/json");
-	xhr.send(`hue=${hsl.h}`);
+	if (isNaN(hsl.h)) {
+		alert("Invalid input");
+	} else {
+		const xhr = new XMLHttpRequest();
+		xhr.open("POST", "/pref", true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.send(`hue_id=0&hsl_hue=${hsl.h}&hsl_saturation=${hsl.s}&hsl_lightness=${hsl.l}`);
+		setTimeout(() => {
+			location.reload(true);
+		}, 250);
+	}
 }
 const hexTOrgb = (hex) => {
 	let rgb = Object.create(null);
@@ -35,12 +42,13 @@ const hexTOrgb = (hex) => {
 const rgbTOhsl = rgb => {
 	let hsl = Object.create(null);
 	if (rgb.r !== undefined && rgb.g !== undefined && rgb.b !== undefined ) {
-		let [R,G,B] = [ rgb.r, rgb.g, rgb.b ]
+		let [R,G,B] = [ rgb.r / 255, rgb.g / 255, rgb.b / 255 ]
 		const M = Math.max(R, G, B);
 		const m = Math.min(R, G, B);
-		const L = (M + m) / 255 / 2;
-		const S = (M - m) / 255 / (1 - Math.abs(2*L - 1));
-		const H = Math.acos((R - G/2 - B/2) / Math.sqrt( R*R + G*G + B*B - R*G - R*B - G*B )) / Math.PI / 2;
+		const L = (M + m) / 2;
+		const S = (M - m) / (1 - Math.abs(2*L - 1));
+		const A = Math.acos((R - G/2 - B/2) / Math.sqrt( R*R + G*G + B*B - R*G - R*B - G*B )) / Math.PI / 2;
+		const H = B > G ? 1 - A : A;
 		const round = (num) => Math.round((num + Number.EPSILON) * 1000000) / 1000000;
 		hsl = {"h":round(H * 360),"s":round(S * 100),"l":round(L * 100)};
 		Object.setPrototypeOf(hsl, null);
