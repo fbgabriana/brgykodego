@@ -5,12 +5,12 @@
 <script>
 const handleColorHex = () => {
 	const colorhex = document.querySelector("#colorhex");
-	const rgb = hexTOrgb(colorhex.value);
-	const hsl = rgbTOhsl(rgb);
+	const rgb = HEXtoRGB(colorhex.value);
+	const hsl = RGBtoHSL(rgb);
 	console.log(rgb, hsl);
 
 	if (isNaN(hsl.h)) {
-		alert("Invalid input");
+		alert("Hue is undefined");
 	} else {
 		const xhr = new XMLHttpRequest();
 		xhr.open("POST", "/pref", true);
@@ -21,7 +21,7 @@ const handleColorHex = () => {
 		}, 250);
 	}
 }
-const hexTOrgb = (hex) => {
+const HEXtoRGB = (hex) => {
 	let rgb = Object.create(null);
 	if (hex[0] == "#") {
 		let [R,G,B] = [];
@@ -39,16 +39,16 @@ const hexTOrgb = (hex) => {
 	}
 	return rgb;
 }
-const rgbTOhsl = rgb => {
+const RGBtoHSL = rgb => {
 	let hsl = Object.create(null);
-	if (rgb.r !== undefined && rgb.g !== undefined && rgb.b !== undefined ) {
+	if (rgb.r !== rgb.u && rgb.g !== rgb.u && rgb.b !== rgb.u) {
 		let [R,G,B] = [ rgb.r / 255, rgb.g / 255, rgb.b / 255 ]
 		const M = Math.max(R, G, B);
 		const m = Math.min(R, G, B);
+		const U = Math.acos((R - G/2 - B/2) / Math.sqrt( R*R + G*G + B*B - R*G - R*B - G*B )) / Math.PI / 2;
 		const L = (M + m) / 2;
 		const S = (M - m) / (1 - Math.abs(2*L - 1));
-		const A = Math.acos((R - G/2 - B/2) / Math.sqrt( R*R + G*G + B*B - R*G - R*B - G*B )) / Math.PI / 2;
-		const H = B > G ? 1 - A : A;
+		const H = (B > G) ? 1 - U : U;
 		const round = (num) => Math.round((num + Number.EPSILON) * 1000000) / 1000000;
 		hsl = {"h":round(H * 360),"s":round(S * 100),"l":round(L * 100)};
 		Object.setPrototypeOf(hsl, null);
