@@ -1,3 +1,6 @@
+# Development files
+.devel
+
 # Logs
 logs
 *.log

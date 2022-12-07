@@ -2,7 +2,7 @@
 
 # Barangay KodeGo
 
-An interactive barangay **content management system**. The Group 4 Capstone Project.
+Barangay KodeGo is an interactive barangay **content management system** submitted as a Capstone Project for batch 18 of KodeGo's web development course (WD-18).
 
 * [View the site](http://brgykodego.herokuapp.com/){:target="_projectpage"}
 
