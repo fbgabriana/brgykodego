@@ -260,6 +260,23 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					});
 				});
 				break;
+			case "pref":
+				req.on("data", chunk => {search += chunk});
+				req.on("end", () => {
+					const pref = querystring.parse(search);
+					sql.query(`INSERT INTO brgy_colors_hsl (
+						hsl_id,
+						hsl_hue,
+						hsl_saturation,
+						hsl_lightness
+					) VALUES (
+						'0',
+						'${pref["hsl_hue"]}',
+						'${pref["hsl_saturation"]}',
+						'${pref["hsl_lightness"]}'
+					)`);
+				});
+				break;
 			case "env":
 				content = `<pre>\n${Object.keys(process.env).sort().map(key =>`${key}=${process.env[key]}`).join("\n")}\n</pre>`;
 				res.writeHead(200, {"Content-Type": "text/html"});

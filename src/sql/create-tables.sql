@@ -142,6 +142,19 @@ INSERT INTO brgy_hue (hue_id, hue_primary, hue_secondary, hue_tertiary) VALUES (
 0, "215", "0", "0"
 );
 
+DROP TABLE IF EXISTS brgy_colors_hsl;
+CREATE TABLE IF NOT EXISTS brgy_colors_hsl (
+hsl_id INT,
+hsl_hue float(23),
+hsl_saturation float(23),
+hsl_lightness float(23),
+PRIMARY KEY(hsl_id)
+);
+
+INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness) VALUES (
+0, "215", "66.6667", "40"
+);
+
 DROP TABLE IF EXISTS logbook;
 DROP TABLE IF EXISTS formdata;
 
