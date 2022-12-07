@@ -1,7 +1,4 @@
 <!-- admin -->
-<div>
-<p>Modify your settings here.</p>
-
 <script>
 const handleColorHex = () => {
 	const colorhex = document.querySelector("#colorhex");
@@ -56,6 +53,8 @@ const RGBtoHSL = rgb => {
 	return hsl;
 };
 </script>
+<div>
+<p>Modify your color theme.</p>
 <label for="colorhex">Color (HEX): </label><input id="colorhex" name="colorhex" type="text" maxlength="7" size="7" placeholder="#000000"> <button onclick="handleColorHex()">Apply</button>
 </div>
 
