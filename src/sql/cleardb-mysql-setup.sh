@@ -19,5 +19,4 @@ echo "Creating pages..."
 export DATABASE_URL="$driver://$user:$password@$host/$database?reconnect=true"
 npm run pages
 
-} 2> /dev/null
-
+}
