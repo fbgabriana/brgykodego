@@ -139,7 +139,7 @@ PRIMARY KEY(hsl_id)
 );
 
 INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness) VALUES (
-0, "359.05496216", "75.71428680", "27.45097923"
+0, "216.07917786", "61.67664719", "32.74509811"
 );
 
 DROP TABLE IF EXISTS brgy_hue;
