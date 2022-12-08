@@ -1,25 +1,4 @@
 <!-- admin -->
-<style>
-.colorcode {
-	font-family: monospace;
-	font-size: 1rem;
-	padding: 0.15em 0.25em;
-	vertical-align: middle;
-}
-.colorpicker {
-	font-size: 1.25em;
-	width: calc(1.618 * 2em);
-	height: 2em;
-	vertical-align: middle;
-}
-button {
-	font-size: 0.85rem;
-	line-height: 0.85rem;
-	padding: 0.375em 0.75em;
-	margin: 0 0.15em;
-	vertical-align: middle;
-}
-</style>
 <script>
 const handleColorCode = event => {
 	event.preventDefault();
@@ -114,8 +93,6 @@ window.history.replaceState(null,null,location.href);
 <button id="colorchanger" class="colorchanger" onclick="handleColorCode(event)">Apply</button>
 </form>
 <h3>Messages</h3>
-<p>
-<i>There are currently no messages.</i>
-</p>
+<p class="nomessages">There are currently no messages.</p>
 </div>
 
