@@ -26,10 +26,8 @@ const windowResize = () => {
 	let main = document.querySelector("body>main");
 	let sidebar = document.querySelector("body .sidebar");
 	if (window.innerWidth < 854) {
-		console.log("resized below 854px");
 		main.appendChild(sidebar);
 	} else {
-		console.log("resized above 854px");
 		aside.appendChild(sidebar);
 	}
 }

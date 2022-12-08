@@ -12,8 +12,10 @@
 	height: 2em;
 	vertical-align: middle;
 }
-.colorchanger {
-	padding: 0.25em 0.75em;
+button {
+	font-size: 0.85rem;
+	line-height: 0.85rem;
+	padding: 0.375em 0.75em;
 	margin: 0 0.15em;
 	vertical-align: middle;
 }
@@ -98,6 +100,12 @@ window.addEventListener("DOMContentLoaded", event => {
 window.history.replaceState(null,null,location.href);
 </script>
 <div>
+<h3>News Feed</h3>
+<p>
+<form action="/">
+<button type="submit" name="post">Add new bulletin</button>
+</form>
+</p>
 <h3>Color Theme</h3>
 <form id="colorhandler" class="colorhandler" method="post" action="/pref">
 <label for="colorcode">Color Code: </label>
@@ -105,5 +113,9 @@ window.history.replaceState(null,null,location.href);
 <input type="color" id="colorpicker" class="colorpicker">
 <button id="colorchanger" class="colorchanger" onclick="handleColorCode(event)">Apply</button>
 </form>
+<h3>Messages</h3>
+<p>
+<i>There are currently no messages.</i>
+</p>
 </div>
 

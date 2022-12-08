@@ -81,7 +81,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					}
 					sql.query("SELECT bulletin_id, bulletin_classification_id, bulletin_classification_icon, bulletin_classification_title, bulletin_classification_subtitle, bulletin_details, bulletin_image_filename, bulletin_date_created FROM brgy_bulletin").then(result => {
 						res.writeHead(200, {"Content-Type": "text/html"});
-						if (q == "post") {
+						if (q&&q.includes("post=")) {
 							content += `				<!-- add new bulletin post -->
 				<h1>New Bulletin Post</h1>
 				<div class="new-bulletin-form">
@@ -138,7 +138,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						});
 							content += `
 				<!-- end bulletin posts -->`;
-						if (q != "post") {
+						if (!(q&&q.includes("post="))) {
 							content += `
 				<div class="newpost-anchor"><a href="/?post">[ New post ]</a></div>`;
 						}
