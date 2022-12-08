@@ -132,14 +132,14 @@ PRIMARY KEY(worker_credentials_id)
 DROP TABLE IF EXISTS brgy_colors_hsl;
 CREATE TABLE IF NOT EXISTS brgy_colors_hsl (
 hsl_id INT,
-hsl_hue float(10,7),
-hsl_saturation float(10,7),
-hsl_lightness float(10,7),
+hsl_hue float(11,8),
+hsl_saturation float(11,8),
+hsl_lightness float(11,8),
 PRIMARY KEY(hsl_id)
 );
 
 INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness) VALUES (
-0, "215", "66.666666667", "40"
+0, "359.05496216", "75.71428680", "27.45097923"
 );
 
 DROP TABLE IF EXISTS brgy_hue;
