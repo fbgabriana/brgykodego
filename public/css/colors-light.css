@@ -12,12 +12,12 @@ body>footer {
 	background-color: hsl(%sql:brgy_hue:hue_primary%, 50.0000%, 12.5000%);
 	background-image: linear-gradient(90deg, hsl(%sql:brgy_hue:hue_primary%, 50.000%, 12.5000%) 0%, hsl(%sql:brgy_hue:hue_primary%, 25.000%, 33.3333%) 55%, hsl(%sql:brgy_hue:hue_primary%, 50.0000%, 12.5000%) 120%);
 }
-body>aside {
-	background-color: hsl(0, 0%, 90%);
-	color: inherit;
-}
 body>main {
 	background-color: inherit;
+	color: inherit;
+}
+body .sidebar {
+	background-color: hsl(0, 0%, 90%);
 	color: inherit;
 }
 

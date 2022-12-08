@@ -22,6 +22,16 @@ const windowResize = () => {
 		menubar.style.display = "block";
 		menubtn.style.display = "none";
 	}
+	let aside = document.querySelector("body>aside");
+	let main = document.querySelector("body>main");
+	let sidebar = document.querySelector("body .sidebar");
+	if (window.innerWidth < 854) {
+		console.log("resized below 854px");
+		main.appendChild(sidebar);
+	} else {
+		console.log("resized above 854px");
+		aside.appendChild(sidebar);
+	}
 }
 
 const setDocumentTitle = () => {

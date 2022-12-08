@@ -5,6 +5,7 @@
 body {
 	margin: 0;
 	font-size: 16px;
+	overflow: hidden;
 }
 body>header {
 	border-bottom: 1px solid hsla(0, 0%, 0%, 0.6667);
@@ -128,43 +129,41 @@ footer {
 	min-height: 40px
 }
 footer>p {
-	margin: 0;
+	margin: 0 0.5em;
 	box-sizing: border-box;
 	font-size: 0.833333em;
 	text-align: center;
 }
 
 /* The sidebar */
-aside .sidebar {
-	display: none;
-	overflow: auto;
-}
-aside .sidebar {
+.sidebar {
+	max-width: 500px;
 	box-sizing: border-box;
 	padding: 20px;
 	font-size: 12px
 }
-aside .sidebar figure.qrcode {
+.sidebar figure.qrcode {
 	margin: 0 auto;
 	width: 50%;
+	max-width: 256px;
 	text-align: center;
 	font-size: 10px;
 }
-aside .sidebar figure.qrcode img {
+.sidebar figure.qrcode img {
 	width: 100%;
 }
-aside .sidebar figure.qrcode figcaption h4 {
+.sidebar figure.qrcode figcaption h4 {
 	margin: -4px 0 0 0;
 }
-aside .sidebar figure.qrcode figcaption p {
+.sidebar figure.qrcode figcaption p {
 	margin: 0;
 	opacity: 0.75;
 }
-aside .sidebar ul {
+.sidebar ul {
 	margin: 0;
 	padding: 0 2em;
 }
-aside .sidebar li {
+.sidebar li {
 	margin: 0.5em 0;
 }
 
@@ -244,11 +243,8 @@ article hr.page-break {
 	header nav { margin-left: auto; }
 	header nav ul { margin: 0 20px 0 0; }
 
-	aside, main {
+	body .sidebar, main {
 		height: calc(100vh - 40px - 80px);
-	}
-	aside .sidebar {
-		display: block;
 	}
 }
 
