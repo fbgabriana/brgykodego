@@ -1,6 +1,6 @@
 {
 	"name": "brgykodego",
-	"version": "0.4.2",
+	"version": "0.4.3",
 	"description": "",
 	"homepage": "http://brgykodego.herokuapp.com/",
 	"main": "src/app.js",
@@ -16,6 +16,7 @@
 	"author": "github.com/fbgabriana",
 	"license": "ISC",
 	"dependencies": {
+		"bcrypt": "^5.1.0",
 		"file-api": "^0.10.4",
 		"mime-types": "^2.1.35",
 		"mysql": "^2.18.1",
@@ -23,3 +24,4 @@
 		"parse-database-url": "^0.3.0"
 	}
 }
+
