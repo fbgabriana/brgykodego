@@ -148,9 +148,17 @@ aside .sidebar figure.qrcode {
 	margin: 0 auto;
 	width: 50%;
 	text-align: center;
+	font-size: 10px;
 }
 aside .sidebar figure.qrcode img {
 	width: 100%;
+}
+aside .sidebar figure.qrcode figcaption h4 {
+	margin: -4px 0 0 0;
+}
+aside .sidebar figure.qrcode figcaption p {
+	margin: 0;
+	opacity: 0.75;
 }
 aside .sidebar ul {
 	margin: 0;
