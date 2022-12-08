@@ -1,14 +1,40 @@
 <!-- admin -->
+<style>
+.colorcode {
+	font-family: monospace;
+	font-size: 1rem;
+	padding: 0.15em 0.25em;
+	vertical-align: middle;
+}
+.colorpicker {
+	font-size: 1.25em;
+	width: calc(1.618 * 2em);
+	height: 2em;
+	vertical-align: middle;
+}
+.colorchanger {
+	padding: 0.25em 0.75em;
+	margin: 0 0.15em;
+	vertical-align: middle;
+}
+</style>
+
 <script>
-const handleColorHex = () => {
-	const colorhex = document.querySelector("#colorhex");
-	const rgb = HEXtoRGB(colorhex.value);
+const handleColorCode = event => {
+	event.preventDefault();
+	const colorcode = document.querySelector("#colorcode");
+	const colorchanger = document.querySelector("#colorchanger");
+	const rgb = HEXtoRGB(colorcode.value);
 	const hsl = RGBtoHSL(rgb);
 	console.log(rgb, hsl);
 
-	if (isNaN(hsl.h)) {
+	if (typeof hsl.h === "undefined") {
+		alert("Invalid input");
+	} else if (isNaN(hsl.h)) {
 		alert("Hue is undefined");
 	} else {
+		document.body.style.cursor = colorchanger.style.cursor = "progress";
+		localStorage.setItem("colorcode",colorcode.value)
 		const xhr = new XMLHttpRequest();
 		xhr.open("POST", "/pref", true);
 		xhr.setRequestHeader("Content-Type", "application/json");
@@ -52,9 +78,23 @@ const RGBtoHSL = rgb => {
 	}
 	return hsl;
 };
+window.addEventListener("DOMContentLoaded", event => {
+	const colorcode = document.getElementById("colorcode");
+	const colorpicker = document.getElementById("colorpicker");
+	colorcode.value = colorpicker.value = localStorage.getItem("colorcode") || "#000000";
+	colorpicker.addEventListener("change", event => {
+		colorcode.value = colorpicker.value;
+	});
+});
+window.history.replaceState(null,null,location.href);
 </script>
 <div>
-<p>Modify your color theme.</p>
-<label for="colorhex">Color (HEX): </label><input id="colorhex" name="colorhex" type="text" maxlength="7" size="7" placeholder="#000000"> <button onclick="handleColorHex()">Apply</button>
+<h3>Color Theme</h3>
+<form id="colorhandler" class="colorhandler" method="post" action="/pref">
+<label for="colorcode">Color Code: </label>
+<input type="text" name="colorcode" id="colorcode" class="colorcode" maxlength="7" size="7" placeholder="#rrggbb">
+<input type="color" id="colorpicker" class="colorpicker">
+<button id="colorchanger" class="colorchanger" onclick="handleColorCode(event)">Apply</button>
+</form>
 </div>
 

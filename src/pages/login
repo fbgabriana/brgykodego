@@ -1,5 +1,14 @@
 <!-- login -->
+<div class="login-form">
+<form action="/admin" class="post" method="post">
+<label for="username">User Name</label>
+<input id="username" name="username" type="text">
+<label for="password">Password</label>
+<input id="password" name="password" type="password">
+<label for="login"></label>
 <div>
-<p>Post content</p>
+<button id="login" type="submit">Login</button>
+</div>
+</form>
 </div>
 
