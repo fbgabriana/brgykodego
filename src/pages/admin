@@ -78,13 +78,11 @@ window.addEventListener("DOMContentLoaded", event => {
 });
 window.history.replaceState(null,null,location.href);
 </script>
-<div>
+<div class="admin">
 <h3>News Feed</h3>
-<p>
 <form action="/">
-<button type="submit" name="post">Add new bulletin</button>
+<button class="new-bulletin" type="submit" name="post">Add new bulletin</button>
 </form>
-</p>
 <h3>Color Theme</h3>
 <form id="colorhandler" class="colorhandler" method="post" action="/pref">
 <label for="colorcode">Color Code: </label>
