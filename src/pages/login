@@ -1,6 +1,6 @@
 <!-- login -->
 <div class="login-form">
-<form action="/admin" class="post" method="post">
+<form action="/auth" class="post" method="post">
 <label for="username">User Name</label>
 <input id="username" name="username" type="text">
 <label for="password">Password</label>

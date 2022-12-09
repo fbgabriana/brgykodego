@@ -44,12 +44,13 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 	});
 }).then(content => {
 	const server = http.createServer((req, res) => {
-		const pathArr = req.url.substring(1).split("?");
+		const pathArr = req.url.slice(1).split("?");
 		let [ filename, q, search ] = [ pathArr[0] || "home", pathArr[1], "" ];
 		let templateHTML = content;
 
 		if (filename.indexOf(".") == -1) {
 			templateHTML = fs.existsSync(`public/css/pages/${filename}.css`) ? templateHTML.replace("%req:current-page%", filename) : templateHTML.replace(/^.*%req:current-page%.*$\n/mg, "");
+			templateHTML = fs.existsSync(`public/js/pages/${filename}.js`) ? templateHTML.replace("%req:current-page%", filename) : templateHTML.replace(/^.*%req:current-page%.*$\n/mg, "");
 			const now = new Date().toISOString().slice(0, 19).replace("T", " ");
 			let content = "";
 			switch (filename) {
@@ -209,7 +210,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					id INT UNIQUE NOT NULL AUTO_INCREMENT, \
 					formdata_referer VARCHAR(255) NOT NULL, \
 					formdata_datetime_utc DATETIME NOT NULL, \
-					formdata_query VARCHAR(1024) NOT NULL, \
+					formdata_query VARCHAR(2047) NOT NULL, \
 					PRIMARY KEY(id))",
 				).then(() => {
 					req.on("data", chunk => {search += chunk});
@@ -260,25 +261,35 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					});
 				});
 				break;
-			case "pref":
+			case "update-prefs":
 				req.on("data", chunk => {search += chunk});
 				req.on("end", () => {
 					const pref = querystring.parse(search);
-					sql.query(`REPLACE INTO brgy_colors_hsl (
-						hsl_id,
-						hsl_hue,
-						hsl_saturation,
-						hsl_lightness
-					) VALUES (
-						'0',
-						'${parseFloat(pref["hsl_hue"])}',
-						'${parseFloat(pref["hsl_saturation"])}',
-						'${parseFloat(pref["hsl_lightness"])}'
-					)`).then( result => {
-						res.writeHead(307, {"Location": `${req.headers.referer}`});
-						return res.end();
-					});
+					switch (q) {
+					case "colortheme":
+						sql.query(`REPLACE INTO brgy_colors_hsl (
+							hsl_id,
+							hsl_hue,
+							hsl_saturation,
+							hsl_lightness
+						) VALUES (
+							'1',
+							'${parseFloat(pref["hsl_hue"])}',
+							'${parseFloat(pref["hsl_saturation"])}',
+							'${parseFloat(pref["hsl_lightness"])}'
+						)`).then( result => {
+							res.writeHead(307, {"Location": `${req.headers.referer}`});
+							return res.end();
+						});
+						break;
+					default:
+					}
 				});
+				break;
+			case "auth":
+				source = new URL(req.headers.referer);
+				res.writeHead(307, {"Location": `/admin?${source.pathname.slice(1)}`});
+				return res.end();
 				break;
 			case "env":
 				content = `<pre>\n${Object.keys(process.env).sort().map(key =>`${key}=${process.env[key]}`).join("\n")}\n</pre>`;
@@ -313,7 +324,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				res.writeHead(200, {"Content-Type": mimetype});
 				if (mimetype == "text/css") {
 					sql.query("SELECT hsl_hue FROM brgy_colors_hsl").then(row => {
-						content = content.toString().replace(/%sql:brgy_hue:hue_primary%/g, row[0].hsl_hue);
+						content = content.toString().replace(/%sql:brgy_hue:hue_primary%/g, row[1].hsl_hue);
 						res.write(content);
 						res.end();
 					});
