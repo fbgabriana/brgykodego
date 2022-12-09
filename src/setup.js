@@ -5,7 +5,6 @@ const dbconfig = require("./db.config.js");
 const stdout = (process.platform == "win32") ? "type" : "cat";
 
 const setup = async () => {
-	console.log("\nCreating database:");
 	if (! process.env.DATABASE_URL ) {
 		await exec(`${stdout} src/sql/create-database.sql | mysql -u root`);
 	}

@@ -63,13 +63,13 @@ bulletin_classification_id INT,
 bulletin_classification_icon VARCHAR(255),
 bulletin_classification_title VARCHAR(255),
 bulletin_classification_subtitle VARCHAR(255),
-bulletin_details VARCHAR(1024),
+bulletin_details VARCHAR(1023),
 bulletin_image_filename VARCHAR(255),
 bulletin_date_created datetime,
 bulletin_end_date datetime,
 bulletin_created_by VARCHAR(255),
 bulletin_date_updated TIMESTAMP,
-bulletin_updated_by VARCHAR(1024),
+bulletin_updated_by VARCHAR(1023),
 bulletin_status CHAR(1),
 PRIMARY KEY(bulletin_id)
 );
@@ -100,25 +100,17 @@ bulletin_id INT,
 bulletin_reaction_type CHAR(1),
 login_id CHAR(1),
 need_to_address_concern BOOL,
-message VARCHAR(1024),
+message VARCHAR(1023),
 PRIMARY KEY(bulletin_comment_id)
-);
-
-DROP TABLE IF EXISTS brgy_authorized_user;
-CREATE TABLE IF NOT EXISTS brgy_authorized_user (
-authorized_user_id INT,
-email VARCHAR(255),
-brgyworker_id INT,
-PRIMARY KEY(authorized_user_id)
 );
 
 DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
-user_id INT,
-email VARCHAR(255),
-name VARCHAR(255),
-pass VARCHAR(255),
-PRIMARY KEY(user_id)
+username VARCHAR(255),
+hash VARCHAR(255),
+auth INT,
+userinfo VARCHAR(1023),
+PRIMARY KEY(username)
 );
 
 DROP TABLE IF EXISTS brgy_worker_credentials;
@@ -139,12 +131,16 @@ PRIMARY KEY(hsl_id)
 );
 
 INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness) VALUES (
-0, "216.07917786", "61.67664719", "32.74509811"
+0, '216.07917786', '61.67664719', '32.74509811'
 );
 INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness) VALUES (
-1, "216.07917786", "61.67664719", "32.74509811"
+1, '216.07917786', '61.67664719', '32.74509811'
+);
+INSERT INTO users (username, hash, auth, userinfo) VALUES (
+'admin', '$2b$10$B3LeBvcoujIKcShDT6yd7uGI/CUx/dBAv2waVNFhP64fp2MEF2eLq', 2, '{"displayname":"Admin","email":""}'
 );
 
+DROP TABLE IF EXISTS brgy_authorized_user;
 DROP TABLE IF EXISTS brgy_hue;
 DROP TABLE IF EXISTS logbook;
 DROP TABLE IF EXISTS formdata;

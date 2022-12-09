@@ -1,13 +1,5 @@
 const bcrypt = require("bcrypt");
 
-class User {
-	constructor(username, password, hash) {
-		this.name = username;
-		this.pass = password;
-		this.hash = hash;
-	}
-}
-
 class Auth {
 
 	constructor(rounds) {

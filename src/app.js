@@ -287,9 +287,45 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				});
 				break;
 			case "auth":
-				source = new URL(req.headers.referer);
-				res.writeHead(307, {"Location": `/admin?${source.pathname.slice(1)}`});
-				return res.end();
+				req.on("data", chunk => {search += chunk});
+				req.on("end", () => {
+					const login = querystring.parse(search);
+					const auth = require(`./auth.js`);
+					sql.query("SELECT username, hash, auth, userinfo FROM users").then(users => {
+						for (var user of users) {
+							if (user.username == login.username) {
+								login.found = true;
+								auth.comparePassword(login.password, user.hash).then(comp => {
+									if (comp == true) {
+										if (user.auth >= 2) {
+											source = new URL(req.headers.referer);
+											res.writeHead(307, {"Location": `/admin?${source.pathname.slice(1)}`});
+											return res.end();
+										} else {
+											res.writeHead(403);
+											user.userinfo = JSON.parse(user.userinfo);
+											content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${user.userinfo.displayname || user.username}' is not allowed to access this content</p>`;
+											res.write(templateHTML.replace("<!-- content -->", content));
+											return res.end();
+										}
+									} else {
+										res.writeHead(401);
+										user.userinfo = JSON.parse(user.userinfo);
+										content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${user.userinfo.displayname || user.username}' supplied incorrect login credentials</p>`;
+										res.write(templateHTML.replace("<!-- content -->", content));
+										return res.end();
+									}
+								});
+							}
+						}
+						if (!login.found) {
+							res.writeHead(401);
+							content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${login.username}' does not exist in our database</p>`;
+							res.write(templateHTML.replace("<!-- content -->", content));
+							return res.end();
+						}
+					});
+				});
 				break;
 			case "env":
 				content = `<pre>\n${Object.keys(process.env).sort().map(key =>`${key}=${process.env[key]}`).join("\n")}\n</pre>`;
