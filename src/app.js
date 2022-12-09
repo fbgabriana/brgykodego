@@ -292,7 +292,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						default:
 						}
 					} else {
-						res.writeHead(307, {"Location": req.headers.referer || `/`});
+						res.writeHead(307, {"Location": req.headers.referer || req.headers.origin});
 						return res.end();
 					}
 				});
@@ -308,6 +308,12 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				req.on("end", () => {
 					if (search) {
 						const login = querystring.parse(search);
+						if (!login.username || !login.password) {
+							res.writeHead(401);
+							content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User has not supplied any login credentials.</p>`;
+							res.write(templateHTML.replace("<!-- content -->", content));
+							return res.end();
+						}
 						const auth = require(`./auth.js`);
 						sql.query("SELECT username, hash, auth, userinfo FROM users").then(users => {
 							for (var user of users) {
@@ -344,7 +350,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							}
 						});
 					} else {
-						res.writeHead(307, {"Location": req.headers.referer || `/`});
+						res.writeHead(307, {"Location": req.headers.referer || req.headers.origin});
 						return res.end();
 					}
 				});
