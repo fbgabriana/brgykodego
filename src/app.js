@@ -262,69 +262,91 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				});
 				break;
 			case "update-prefs":
+				if (req.method !== "POST") {
+					res.writeHead(405);
+					content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>The request method '${req.method}' is not supported by the target resource '${req.url}'.</p>`;
+					res.write(templateHTML.replace("<!-- content -->", content));
+					return res.end();
+				}
 				req.on("data", chunk => {search += chunk});
 				req.on("end", () => {
-					const pref = querystring.parse(search);
-					switch (q) {
-					case "colortheme":
-						sql.query(`REPLACE INTO brgy_colors_hsl (
-							hsl_id,
-							hsl_hue,
-							hsl_saturation,
-							hsl_lightness
-						) VALUES (
-							'1',
-							'${parseFloat(pref["hsl_hue"])}',
-							'${parseFloat(pref["hsl_saturation"])}',
-							'${parseFloat(pref["hsl_lightness"])}'
-						)`).then( result => {
-							res.writeHead(307, {"Location": `${req.headers.referer}`});
-							return res.end();
-						});
-						break;
-					default:
+					if (search) {
+						const pref = querystring.parse(search);
+						switch (q) {
+						case "colortheme":
+							sql.query(`REPLACE INTO brgy_colors_hsl (
+								hsl_id,
+								hsl_hue,
+								hsl_saturation,
+								hsl_lightness
+							) VALUES (
+								'1',
+								'${parseFloat(pref["hsl_hue"])}',
+								'${parseFloat(pref["hsl_saturation"])}',
+								'${parseFloat(pref["hsl_lightness"])}'
+							)`).then( result => {
+								res.writeHead(307, {"Location": `${req.headers.referer}`});
+								return res.end();
+							});
+							break;
+						default:
+						}
+					} else {
+						res.writeHead(307, {"Location": req.headers.referer || `/`});
+						return res.end();
 					}
 				});
 				break;
 			case "auth":
+				if (req.method !== "POST") {
+					res.writeHead(405);
+					content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>The request method '${req.method}' is not supported by the target resource '${req.url}'.</p>`;
+					res.write(templateHTML.replace("<!-- content -->", content));
+					return res.end();
+				}
 				req.on("data", chunk => {search += chunk});
 				req.on("end", () => {
-					const login = querystring.parse(search);
-					const auth = require(`./auth.js`);
-					sql.query("SELECT username, hash, auth, userinfo FROM users").then(users => {
-						for (var user of users) {
-							if (user.username == login.username) {
-								login.found = true;
-								auth.comparePassword(login.password, user.hash).then(comp => {
-									if (comp == true) {
-										if (user.auth >= 2) {
-											source = new URL(req.headers.referer);
-											res.writeHead(307, {"Location": `/admin?${source.pathname.slice(1)}`});
-											return res.end();
+					if (search) {
+						const login = querystring.parse(search);
+						const auth = require(`./auth.js`);
+						sql.query("SELECT username, hash, auth, userinfo FROM users").then(users => {
+							for (var user of users) {
+								if (user.username == login.username) {
+									login.found = true;
+									auth.comparePassword(login.password, user.hash).then(comp => {
+										if (comp == true) {
+											if (user.auth >= 2) {
+												source = new URL(req.headers.referer);
+												res.writeHead(307, {"Location": `/admin?${source.pathname.slice(1)}`});
+												return res.end();
+											} else {
+												res.writeHead(403);
+												user.userinfo = JSON.parse(user.userinfo);
+												content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${user.userinfo.displayname || user.username}' is not allowed to access this content.</p>`;
+												res.write(templateHTML.replace("<!-- content -->", content));
+												return res.end();
+											}
 										} else {
-											res.writeHead(403);
+											res.writeHead(401);
 											user.userinfo = JSON.parse(user.userinfo);
-											content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${user.userinfo.displayname || user.username}' is not allowed to access this content</p>`;
+											content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${user.userinfo.displayname || user.username}' supplied incorrect login credentials.</p>`;
 											res.write(templateHTML.replace("<!-- content -->", content));
 											return res.end();
 										}
-									} else {
-										res.writeHead(401);
-										user.userinfo = JSON.parse(user.userinfo);
-										content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${user.userinfo.displayname || user.username}' supplied incorrect login credentials</p>`;
-										res.write(templateHTML.replace("<!-- content -->", content));
-										return res.end();
-									}
-								});
+									});
+								}
 							}
-						}
-						if (!login.found) {
-							res.writeHead(401);
-							content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${login.username}' does not exist in our database</p>`;
-							res.write(templateHTML.replace("<!-- content -->", content));
-							return res.end();
-						}
-					});
+							if (!login.found) {
+								res.writeHead(401);
+								content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${login.username}' does not exist in our system.</p>`;
+								res.write(templateHTML.replace("<!-- content -->", content));
+								return res.end();
+							}
+						});
+					} else {
+						res.writeHead(307, {"Location": req.headers.referer || `/`});
+						return res.end();
+					}
 				});
 				break;
 			case "env":
