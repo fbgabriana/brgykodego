@@ -2,9 +2,9 @@
 <div class="login-form">
 <form action="/auth" class="post" method="post">
 <label for="username">User Name</label>
-<input id="username" name="username" type="text">
+<input id="username" name="username" type="text" required>
 <label for="password">Password</label>
-<input id="password" name="password" type="password">
+<input id="password" name="password" type="password" required>
 <label for="login"></label>
 <div>
 <button id="login" type="submit">Login</button>
