@@ -57,29 +57,27 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				req.on("data", chunk => {search += chunk});
 				req.on("end", () => {
 					if (search) {
-						if (req.method == "POSTED") {
-							const formpost = querystring.parse(search);
-							formpost["bulletin_date_created"] = now;
-							formpost["bulletin_classification_icon"] = ["project-update","news-update","waterservice","calamity"][formpost["bulletin_classification_id"] - 1];
-							formpost["bulletin_details"] = `<p>${formpost["bulletin_details"]}</p>`.replaceAll(/\n/g,"</p><p>");
-							sql.query(`INSERT INTO brgy_bulletin (
-								bulletin_classification_id,
-								bulletin_classification_icon,
-								bulletin_classification_title,
-								bulletin_classification_subtitle,
-								bulletin_details,
-								bulletin_image_filename,
-								bulletin_date_created
-							) VALUES (
-								'${formpost["bulletin_classification_id"]}',
-								'${formpost["bulletin_classification_icon"]}',
-								'${formpost["bulletin_classification_title"]}',
-								'${formpost["bulletin_classification_subtitle"]}',
-								'${formpost["bulletin_details"]}',
-								'${formpost["bulletin_image_filename"]}',
-								'${formpost["bulletin_date_created"]}'
-							)`);
-						}
+						const formpost = querystring.parse(search);
+						formpost["bulletin_date_created"] = now;
+						formpost["bulletin_classification_icon"] = ["project-update","news-update","waterservice","calamity"][formpost["bulletin_classification_id"] - 1];
+						formpost["bulletin_details"] = `<p>${formpost["bulletin_details"]}</p>`.replaceAll(/\n/g,"</p><p>");
+						sql.query(`INSERT INTO brgy_bulletin (
+							bulletin_classification_id,
+							bulletin_classification_icon,
+							bulletin_classification_title,
+							bulletin_classification_subtitle,
+							bulletin_details,
+							bulletin_image_filename,
+							bulletin_date_created
+						) VALUES (
+							'${formpost["bulletin_classification_id"]}',
+							'${formpost["bulletin_classification_icon"]}',
+							'${formpost["bulletin_classification_title"]}',
+							'${formpost["bulletin_classification_subtitle"]}',
+							'${formpost["bulletin_details"]}',
+							'${formpost["bulletin_image_filename"]}',
+							'${formpost["bulletin_date_created"]}'
+						)`);
 					}
 					sql.query("SELECT bulletin_id, bulletin_classification_id, bulletin_classification_icon, bulletin_classification_title, bulletin_classification_subtitle, bulletin_details, bulletin_image_filename, bulletin_date_created FROM brgy_bulletin").then(result => {
 						res.writeHead(200, {"Content-Type": "text/html"});
