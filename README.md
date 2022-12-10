@@ -14,20 +14,19 @@ It is written in pure NodeJS without any frameworks on a MySQL database. A port 
 
 ## Setup instructions:
 
-✓ To set up _brgykodego_ as a local server:
+✓ To set up _brgykodego_ as a local server application:
 
 1. Download and extract the source.
 1. Make sure the commands `npm` and `mysql` are in your path.
 1. On the terminal, go to the project folder and do `npm run setup`.
 1. Once setup completes, start it anytime by running `npm start`.
 
-✓ To set up a custom _brgykodego_ as a remote server:
+✓ To set up a custom _brgykodego_ as a remote server application:
 
-1. Clone this project on GitHub and make changes according to your need.
-1. Create a project on a host that allows running web applications, e.g., Heroku.
-1. Associate your project account to your GitHub repository, i.e., don't maintain them separately.
-1. Use a remote MySQL server such as ClearDB instead of your local SQL server.
-1. Set up your project to use your remote MySQL server.
-1. The application should show up online now.
+1. Clone this project on GitHub and fork it to your own GitHub repository.
+1. Create a remote project on a host that allows running web applications, e.g., Heroku.
+1. Associate your remote project to your GitHub repository and set up automatic sync.
+1. Use a remote MySQL server such as ClearDB instead of your localhost's SQL server.
 1. If on Heroku, you can additionally install the `heroku` command line for remote debugging.
+1. Restart the remote server. The application should show up online now.
 
