@@ -22,7 +22,9 @@ const sql = mysql.createPool({
 sql.query = util.promisify(sql.query).bind(sql);
 fs.readFile = util.promisify(fs.readFile).bind(fs);
 
-const appver = `${process.env.npm_package_name}-${process.env.npm_package_version}`;
+const app_ver = `${process.env.npm_package_name}-${process.env.npm_package_version}`;
+const app_homepage = process.env.HOME == "/app" ? require(process.env.npm_package_json).homepage : `http://${process.env.npm_package_name}.localhost:${host.port}`;
+
 
 const publicpath = "./public";
 
@@ -429,9 +431,9 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 		process.exit(0);
 	}).on("listening", () => {
 		const socketAddress = server.address();
-		console.log("\x1b[36m%s\x1b[0m",`[app] ${process.env.npm_package_name}-${process.env.npm_package_version}`, "\x1b[0m");
+		console.log("\x1b[36m%s\x1b[0m",`[app] ${app_ver}`, "\x1b[0m");
 		console.log("\x1b[36m%s\x1b[0m",`[app] Development server running at ${socketAddress.address} over ${socketAddress.port}...`, "\x1b[0m");
-		console.log("\x1b[34m%s\x1b[0m",`[app] http://${process.env.npm_package_name}.localhost:${host.port}\x1b[0m`, "\x1b[0m");
+		console.log("\x1b[34m%s\x1b[0m",`[app] ${app_homepage}\x1b[0m`, "\x1b[0m");
 	});
 });
 
