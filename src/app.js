@@ -25,6 +25,7 @@ fs.readFile = util.promisify(fs.readFile).bind(fs);
 const appver = `${process.env.npm_package_name}-${process.env.npm_package_version}`;
 
 const publicpath = "./public";
+
 fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 	return sql.query("SELECT brgy_name, brgy_city, brgylogofilename, citylogofilename FROM brgy_info").then(row => {
 		let brgy_info = row[0];
@@ -40,7 +41,8 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 		return content.replace("<!-- sidebar -->", sidebar)
 	});
 }).then(content => {
-	const server = http.createServer((req, res) => {
+
+	const app = (req, res) => {
 		const pathArr = req.url.slice(1).split("?");
 		let [ filename, q, search ] = [ pathArr[0] || "home", pathArr[1], "" ];
 		let templateHTML = content;
@@ -413,17 +415,16 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				res.end();
 			});
 		}
-	}).listen(host.port, host.hostname, () => {
-	}).on("error", err => {
+	}
+
+	const server = http.createServer(app).listen(host.port, host.hostname).on("error", err => {
 		console.log(`\x1b[31m${err.message}\x1b[0m`);
 		process.exit(0);
 	}).on("listening", () => {
-		if (server.listening) {
-			const listening = server.address();
-			console.log("\x1b[36m%s\x1b[0m",`[app] ${process.env.npm_package_name}-${process.env.npm_package_version}`, "\x1b[0m");
-			console.log("\x1b[36m%s\x1b[0m",`[app] Development server running at ${listening.address} over ${listening.port}...`, "\x1b[0m");
-			console.log("\x1b[34m%s\x1b[0m",`[app] http://${process.env.npm_package_name}.localhost:${host.port}\x1b[0m`, "\x1b[0m");
-		}
+		const socketAddress = server.address();
+		console.log("\x1b[36m%s\x1b[0m",`[app] ${process.env.npm_package_name}-${process.env.npm_package_version}`, "\x1b[0m");
+		console.log("\x1b[36m%s\x1b[0m",`[app] Development server running at ${socketAddress.address} over ${socketAddress.port}...`, "\x1b[0m");
+		console.log("\x1b[34m%s\x1b[0m",`[app] http://${process.env.npm_package_name}.localhost:${host.port}\x1b[0m`, "\x1b[0m");
 	});
 });
 
