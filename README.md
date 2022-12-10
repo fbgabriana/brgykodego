@@ -21,8 +21,7 @@ It is written in pure NodeJS without any frameworks on a MySQL database. A port 
 1. On the terminal, go to the project folder and do `npm run setup`.
 1. Once setup completes, start it anytime by running `npm start`.
 
-* Note: On your **`/etc/hosts`** file, you may have to set
-
+* Note: On your **`/etc/hosts`** file, you may have to set  
 ```*.localhost 127.0.0.1```
 
 ✓ To set up a custom _brgykodego_ as a remote server application:
