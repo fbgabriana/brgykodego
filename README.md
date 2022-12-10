@@ -6,8 +6,6 @@ Barangay KodeGo is an interactive barangay **content management system** submitt
 
 It is written in pure NodeJS without any frameworks on a MySQL database.
 
-A port to the MEAN stack is planned, but not in the works. This will allow the advantages of Express and MongoDB for a JS solution.
-
 * [View a working demo](http://brgykodego.herokuapp.com/){:target="_projectpage"}
 
 * [View the source](https://github.com/fbgabriana/brgykodego){:target="_projectsource"}
