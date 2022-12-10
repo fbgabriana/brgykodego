@@ -1,3 +1,5 @@
+auth.require();
+
 const handleColorCode = event => {
 	event.preventDefault();
 	const colorcode = document.querySelector("#colorcode");

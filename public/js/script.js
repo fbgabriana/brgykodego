@@ -1,4 +1,4 @@
-// Philippine Astronomy Magazine
+// Barangay KodeGo
 
 const toggleMenuBar = () => {
 	let menubar = document.getElementById("menubar");
@@ -122,6 +122,15 @@ const querystring = {
 			query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
 		}
 		return query;
+	}
+}
+
+const auth = {
+	isLoggedIn: Cookies.getItem("isLoggedIn") == "true",
+	require() {
+		if (auth.isLoggedIn === false) {
+			location.href = `/login?${location.href.replace(location.origin,"")}`;
+		}
 	}
 }
 

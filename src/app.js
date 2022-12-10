@@ -81,8 +81,9 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					}
 					sql.query("SELECT bulletin_id, bulletin_classification_id, bulletin_classification_icon, bulletin_classification_title, bulletin_classification_subtitle, bulletin_details, bulletin_image_filename, bulletin_date_created FROM brgy_bulletin").then(result => {
 						res.writeHead(200, {"Content-Type": "text/html"});
-						if (q&&q.includes("post=")) {
-							content += `				<!-- add new bulletin post -->
+						if (q && q.includes("post")) {
+							content += `<script>auth.require();</script>
+				<!-- add new bulletin post -->
 				<h1>New Bulletin Post</h1>
 				<div class="new-bulletin-form">
 				<form class="post" method="post">
@@ -321,8 +322,8 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 									auth.comparePassword(login.password, user.hash).then(comp => {
 										if (comp == true) {
 											if (user.auth >= 2) {
-												source = new URL(req.headers.referer);
-												res.writeHead(307, {"Location": `/admin?${source.pathname.slice(1)}`});
+												res.setHeader("Set-Cookie", ["isLoggedIn=true"]);
+												res.writeHead(307, {"Location": `${login.from}`});
 												return res.end();
 											} else {
 												res.writeHead(403);
