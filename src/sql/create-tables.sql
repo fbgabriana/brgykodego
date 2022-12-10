@@ -127,14 +127,15 @@ hsl_id INT,
 hsl_hue float(11,8),
 hsl_saturation float(11,8),
 hsl_lightness float(11,8),
+rgb_hex VARCHAR(7),
 PRIMARY KEY(hsl_id)
 );
 
-INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness) VALUES (
-0, '216.07917786', '61.67664719', '32.74509811'
+INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness, rgb_hex) VALUES (
+0, '216.07917786', '61.67664719', '32.74509811', '#204a87'
 );
-INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness) VALUES (
-1, '216.07917786', '61.67664719', '32.74509811'
+INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness, rgb_hex) VALUES (
+1, '216.07917786', '61.67664719', '32.74509811', '#204a87'
 );
 INSERT INTO users (username, hash, auth, userinfo) VALUES (
 'admin', '$2b$10$B3LeBvcoujIKcShDT6yd7uGI/CUx/dBAv2waVNFhP64fp2MEF2eLq', 2, '{"displayname":"Admin","email":""}'

@@ -1,6 +1,6 @@
 auth.require();
 
-const handleColorCode = event => {
+const setColors = event => {
 	event.preventDefault();
 	const colorcode = document.querySelector("#colorcode");
 	const colorchanger = document.querySelector("#colorchanger");
@@ -14,15 +14,45 @@ const handleColorCode = event => {
 		alert("Hue is undefined");
 	} else {
 		document.body.style.cursor = colorchanger.style.cursor = "progress";
-		localStorage.setItem("colorcode",colorcode.value)
-		const xhr = new XMLHttpRequest();
-		xhr.open("POST", "/update-prefs?colortheme", true);
-		xhr.setRequestHeader("Content-Type", "application/json");
-		xhr.send(`hue_id=0&hsl_hue=${hsl.h}&hsl_saturation=${hsl.s}&hsl_lightness=${hsl.l}`);
+		const req = new XMLHttpRequest();
+		req.open("POST", "/update-prefs?colortheme", true);
+		req.setRequestHeader("Content-Type", "application/json");
+		req.send(`hue_id=0&hsl_hue=${hsl.h}&hsl_saturation=${hsl.s}&hsl_lightness=${hsl.l}&rgb_hex=${colorcode.value}`);
 		setTimeout(() => {
 			location.reload(true);
 		}, 360);
 	}
+	sessionStorage.setItem("colortheme", colorcode.value)
+}
+const getColors = event => {
+	const colorcode = document.getElementById("colorcode");
+	const colorpicker = document.getElementById("colorpicker");
+	const colorchanger = document.getElementById("colorchanger");
+	const colortheme = sessionStorage.getItem("colortheme");
+
+	colorcode.value = colortheme;
+	colorpicker.value = colortheme;
+
+	fetch("/update-prefs?colortheme").then(res => res.json()).then(brgy_colors_hsl => {
+		colorcode.value = brgy_colors_hsl.rgb_hex;
+		colorpicker.value = brgy_colors_hsl.rgb_hex;
+		sessionStorage.setItem("colortheme", colorcode.value)
+	});
+
+	colorpicker.addEventListener("change", event => {
+		colorcode.value = colorpicker.value;
+	});
+	colorcode.addEventListener("change", event => {
+		if (colorcode.value.match(/^#[0-9a-f]{6}/i)) {
+			colorpicker.value = colorcode.value;
+		}
+	});
+	colorcode.addEventListener("input", event => {
+		if (colorcode.value.match(/^#[0-9a-f]{6}/i)) {
+			colorpicker.value = colorcode.value;
+		}
+	});
+	colorchanger.addEventListener("click", setColors);
 }
 const HEXtoRGB = (hex) => {
 	let rgb = Object.create(null);
@@ -59,22 +89,7 @@ const RGBtoHSL = rgb => {
 	return hsl;
 };
 window.addEventListener("DOMContentLoaded", event => {
-	const colorcode = document.getElementById("colorcode");
-	const colorpicker = document.getElementById("colorpicker");
-	colorcode.value = colorpicker.value = localStorage.getItem("colorcode") || "#000000";
-	colorpicker.addEventListener("change", event => {
-		colorcode.value = colorpicker.value;
-	});
-	colorcode.addEventListener("change", event => {
-		if (colorcode.value.match(/^#[0-9a-f]{6}/i)) {
-			colorpicker.value = colorcode.value;
-		}
-	});
-	colorcode.addEventListener("input", event => {
-		if (colorcode.value.match(/^#[0-9a-f]{6}/i)) {
-			colorpicker.value = colorcode.value;
-		}
-	});
+	getColors(event);
 });
 window.history.replaceState(null,null,location.href);
 

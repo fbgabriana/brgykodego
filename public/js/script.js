@@ -45,6 +45,15 @@ const setCurrentPage = () => {
 	let currentLocation = location.href.replace("index.html","");
 	for (i = 0; i < a.length; i++) {
 		if (a[i].origin == location.origin) {
+			if (a[i].pathname == `/login`) {
+				if (auth.isLoggedIn) {
+					a[i].pathname = `/admin`;
+					a[i].innerText = `Admin`;
+				} else {
+					a[i].pathname = `/login`;
+					a[i].innerText = `Login`;
+				}
+			}
 			if (a[i].href == currentLocation) {
 				a[i].classList.add("current-page");
 				a[i].removeAttribute("href");
@@ -126,11 +135,15 @@ const querystring = {
 }
 
 const auth = {
-	isLoggedIn: Cookies.getItem("isLoggedIn") == "true",
+	isLoggedIn: cookieStorage.hasItem("isLoggedIn"),
 	require() {
 		if (auth.isLoggedIn === false) {
 			location.href = `/login?${location.href.replace(location.origin,"")}`;
 		}
+	},
+	logout(redir) {
+		cookieStorage.removeItem("isLoggedIn");
+		location.href = redir || "/";
 	}
 }
 

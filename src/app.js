@@ -58,7 +58,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				req.on("end", async () => {
 					if (search) {
 						referer = new URL(req.headers.referer);
-						if (referer === req.url) {
+						if (referer.href.replace(referer.origin,"") === req.url) {
 							const formpost = querystring.parse(search);
 							formpost["bulletin_date_created"] = now;
 							formpost["bulletin_classification_icon"] = ["project-update","news-update","waterservice","calamity"][formpost["bulletin_classification_id"] - 1];
@@ -162,17 +162,21 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					req.on("data", chunk => {search += chunk});
 					req.on("end", async () => {
 						if (search) {
-							const formpost = querystring.parse(search);
-							formpost["logbook_datetime_utc"] = now;
-							await sql.query(`INSERT INTO logbook (
-								logbook_displayname,
-								logbook_message,
-								logbook_datetime_utc
-							) VALUES (
-								'${formpost["logbook_displayname"]}',
-								'${formpost["logbook_message"]}',
-								'${formpost["logbook_datetime_utc"]}'
-							)`);
+							referer = new URL(req.headers.referer);
+							console.log(referer, req.url)
+							if (referer.href.replace(referer.origin,"") === req.url) {
+								const formpost = querystring.parse(search);
+								formpost["logbook_datetime_utc"] = now;
+								await sql.query(`INSERT INTO logbook (
+									logbook_displayname,
+									logbook_message,
+									logbook_datetime_utc
+								) VALUES (
+									'${formpost["logbook_displayname"]}',
+									'${formpost["logbook_message"]}',
+									'${formpost["logbook_datetime_utc"]}'
+								)`);
+							}
 						}
 						sql.query("SELECT logbook_displayname, logbook_message, logbook_datetime_utc FROM logbook").then(result => {
 							content = `				<!-- begin logbook -->
@@ -265,38 +269,37 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				});
 				break;
 			case "update-prefs":
-				if (req.method !== "POST") {
-					res.writeHead(405);
-					content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>The request method '${req.method}' is not supported by the target resource '${req.url}'.</p>`;
-					res.write(templateHTML.replace("<!-- content -->", content));
-					return res.end();
-				}
 				req.on("data", chunk => {search += chunk});
-				req.on("end", () => {
-					if (search) {
-						const pref = querystring.parse(search);
-						switch (q) {
-						case "colortheme":
+				req.on("end", async () => {
+					switch (q) {
+					case "colortheme":
+						if (search) {
+							const pref = querystring.parse(search);
 							sql.query(`REPLACE INTO brgy_colors_hsl (
 								hsl_id,
 								hsl_hue,
 								hsl_saturation,
-								hsl_lightness
+								hsl_lightness,
+								rgb_hex
 							) VALUES (
 								'1',
 								'${parseFloat(pref["hsl_hue"])}',
 								'${parseFloat(pref["hsl_saturation"])}',
-								'${parseFloat(pref["hsl_lightness"])}'
+								'${parseFloat(pref["hsl_lightness"])}',
+								'${pref["rgb_hex"]}'
 							)`).then( result => {
 								res.writeHead(307, {"Location": `${req.headers.referer}`});
 								return res.end();
 							});
-							break;
-						default:
+						} else {
+							sql.query("SELECT hsl_id, hsl_hue, hsl_saturation, hsl_lightness, rgb_hex FROM brgy_colors_hsl").then(row => {
+								res.writeHead(200, {"Content-Type": "application/json"});
+								res.write(JSON.stringify(row[1]));
+								res.end();
+							});
 						}
-					} else {
-						res.writeHead(307, {"Location": req.headers.referer || req.headers.origin});
-						return res.end();
+						break;
+					default:
 					}
 				});
 				break;

@@ -1,17 +1,26 @@
 <!-- admin -->
 <div class="admin">
+
+<h3>Log out</h3>
+<form action="/">
+<button type="button" onclick=auth.logout("/login")>Log out</button>
+</form>
+
 <h3>News Feed</h3>
 <form action="/">
 <button class="new-bulletin" type="submit" name="post">Add new bulletin</button>
 </form>
+
 <h3>Color Theme</h3>
 <form id="colorhandler" class="colorhandler" method="post" action="/update-prefs">
 <label for="colorcode">Color Code: </label>
 <input type="text" name="colorcode" id="colorcode" class="colorcode" maxlength="7" size="7" placeholder="#rrggbb">
 <input type="color" id="colorpicker" class="colorpicker">
-<button id="colorchanger" class="colorchanger" onclick="handleColorCode(event)">Apply</button>
+<button id="colorchanger" class="colorchanger">Apply</button>
 </form>
+
 <h3>Messages</h3>
 <p class="nomessages">There are currently no messages.</p>
+
 </div>
 
