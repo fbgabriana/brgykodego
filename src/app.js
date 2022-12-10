@@ -420,7 +420,6 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 	}).on("listening", () => {
 		if (server.listening) {
 			const listening = server.address();
-			console.log(JSON.stringify(listening));
 			console.log("\x1b[36m%s\x1b[0m",`[app] ${process.env.npm_package_name}-${process.env.npm_package_version}`, "\x1b[0m");
 			console.log("\x1b[36m%s\x1b[0m",`[app] Development server running at ${listening.address} over ${listening.port}...`, "\x1b[0m");
 			console.log("\x1b[34m%s\x1b[0m",`[app] http://${process.env.npm_package_name}.localhost:${host.port}\x1b[0m`, "\x1b[0m");
