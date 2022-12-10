@@ -57,7 +57,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				req.on("data", chunk => {search += chunk});
 				req.on("end", () => {
 					if (search) {
-						if (req.method == "POST") {
+						if (req.method == "POSTED") {
 							const formpost = querystring.parse(search);
 							formpost["bulletin_date_created"] = now;
 							formpost["bulletin_classification_icon"] = ["project-update","news-update","waterservice","calamity"][formpost["bulletin_classification_id"] - 1];
