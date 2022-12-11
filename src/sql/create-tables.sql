@@ -132,10 +132,10 @@ PRIMARY KEY(hsl_id)
 );
 
 INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness, rgb_hex) VALUES (
-0, '216.07917786', '61.67664719', '32.74509811', '#204a87'
+0, '215', '66.66666667', '40', '#204a87'
 );
 INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness, rgb_hex) VALUES (
-1, '216.07917786', '61.67664719', '32.74509811', '#204a87'
+0, '215', '66.66666667', '40', '#204a87'
 );
 INSERT INTO users (username, hash, auth, userinfo) VALUES (
 'admin', '$2b$10$B3LeBvcoujIKcShDT6yd7uGI/CUx/dBAv2waVNFhP64fp2MEF2eLq', 2, '{"displayname":"Admin","email":""}'
