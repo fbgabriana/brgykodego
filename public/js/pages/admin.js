@@ -1,60 +1,78 @@
 auth.require();
 
-const setColors = event => {
-	event.preventDefault();
-	const colorcode = document.querySelector("#colorcode");
-	const colorchanger = document.querySelector("#colorchanger");
-	const rgb = HEXtoRGB(colorcode.value);
-	const hsl = RGBtoHSL(rgb);
-	console.log(rgb, hsl);
+const prefs = {
 
-	if (typeof hsl.h === "undefined") {
-		alert("Invalid input");
-	} else if (isNaN(hsl.h)) {
-		alert("Hue is undefined");
-	} else {
-		document.body.style.cursor = colorchanger.style.cursor = "progress";
-		const req = new XMLHttpRequest();
-		req.open("POST", "/update-prefs?colortheme", true);
-		req.setRequestHeader("Content-Type", "application/json");
-		req.send(`hue_id=0&hsl_hue=${hsl.h}&hsl_saturation=${hsl.s}&hsl_lightness=${hsl.l}&rgb_hex=${colorcode.value}`);
-		setTimeout(() => {
-			location.reload(true);
-		}, 360);
+	getColors (event) {
+		const colorcode = document.getElementById("colorcode");
+		const colorpicker = document.getElementById("colorpicker");
+		const colorchanger = document.getElementById("colorchanger");
+		const colortheme = sessionStorage.getItem("colortheme");
+
+		colorcode.value = colortheme;
+		colorpicker.value = colortheme;
+
+		fetch("/update-prefs?colortheme").then(res => res.json()).then(brgy_colors_hsl => {
+			colorcode.value = brgy_colors_hsl.rgb_hex;
+			colorpicker.value = brgy_colors_hsl.rgb_hex;
+			sessionStorage.setItem("colortheme", colorcode.value)
+		});
+
+		let rgb = HEXtoRGB(colorcode.value);
+		let hsl = RGBtoHSL(rgb);
+		let hex = RGBtoHEX(rgb);
+		console.log(rgb, hsl, hex);
+
+		colorpicker.addEventListener("change", event => {
+			colorcode.value = colorpicker.value;
+		});
+		colorcode.addEventListener("change", event => {
+			if (colorcode.value.match(/^#[0-9a-f]{6}/i)) {
+				colorpicker.value = colorcode.value;
+			}
+		});
+		colorcode.addEventListener("input", event => {
+			if (colorcode.value.match(/^#[0-9a-f]{6}/i)) {
+				colorpicker.value = colorcode.value;
+			}
+		});
+		colorchanger.addEventListener("click", this.setColors);
+	},
+
+	setColors (event) {
+		event.preventDefault();
+		const colorcode = document.getElementById("colorcode");
+		const colorpicker = document.getElementById("colorpicker");
+		const colorchanger = document.getElementById("colorchanger");
+		const colortheme = sessionStorage.getItem("colortheme");
+
+		const rgb = HEXtoRGB(colorcode.value);
+		const hsl = RGBtoHSL(rgb);
+
+		if (typeof hsl.h === "undefined") {
+			alert("Invalid input");
+			colorpicker.value = colorcode.value = colortheme;
+		} else if (isNaN(hsl.h)) {
+			alert("Hue is undefined");
+			colorpicker.value = colorcode.value = colortheme;
+		} else {
+			sessionStorage.setItem("colortheme", colorcode.value)
+			document.body.style.cursor = colorchanger.style.cursor = "progress";
+			const req = new XMLHttpRequest();
+			req.open("POST", "/update-prefs?colortheme", true);
+			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			req.send(`hue_id=1&hsl_hue=${hsl.h}&hsl_saturation=${hsl.s}&hsl_lightness=${hsl.l}&rgb_hex=${colorcode.value}`);
+			setTimeout(() => {
+				location.reload(true);
+			}, 360);
+		}
 	}
-	sessionStorage.setItem("colortheme", colorcode.value)
 }
-const getColors = event => {
-	const colorcode = document.getElementById("colorcode");
-	const colorpicker = document.getElementById("colorpicker");
-	const colorchanger = document.getElementById("colorchanger");
-	const colortheme = sessionStorage.getItem("colortheme");
 
-	colorcode.value = colortheme;
-	colorpicker.value = colortheme;
-
-	fetch("/update-prefs?colortheme").then(res => res.json()).then(brgy_colors_hsl => {
-		colorcode.value = brgy_colors_hsl.rgb_hex;
-		colorpicker.value = brgy_colors_hsl.rgb_hex;
-		sessionStorage.setItem("colortheme", colorcode.value)
-	});
-
-	colorpicker.addEventListener("change", event => {
-		colorcode.value = colorpicker.value;
-	});
-	colorcode.addEventListener("change", event => {
-		if (colorcode.value.match(/^#[0-9a-f]{6}/i)) {
-			colorpicker.value = colorcode.value;
-		}
-	});
-	colorcode.addEventListener("input", event => {
-		if (colorcode.value.match(/^#[0-9a-f]{6}/i)) {
-			colorpicker.value = colorcode.value;
-		}
-	});
-	colorchanger.addEventListener("click", setColors);
+const RGBtoHEX = rgb => {
+	const hex = dec => Math.round(dec + Number.EPSILON).toString(16).padStart(2, "0");
+	return `#${hex(rgb.r)}${hex(rgb.g)}${hex(rgb.b)}`;
 }
-const HEXtoRGB = (hex) => {
+const HEXtoRGB = hex => {
 	let rgb = Object.create(null);
 	if (hex[0] == "#") {
 		let [R,G,B] = [];
@@ -82,14 +100,26 @@ const RGBtoHSL = rgb => {
 		const L = (M + m) / 2;
 		const S = (M - m) / (1 - Math.abs(2*L - 1));
 		const H = (B > G) ? 1 - U : U;
-		const round = (num) => Math.round((num + Number.EPSILON) * 1000000) / 1000000;
+		const round = (num) => Math.round((num + Number.EPSILON) * 10**8) / 10**8;
 		hsl = {"h":round(H * 360),"s":round(S * 100),"l":round(L * 100)};
 		Object.setPrototypeOf(hsl, null);
 	}
 	return hsl;
 };
-window.addEventListener("DOMContentLoaded", event => {
-	getColors(event);
-});
+const HSLtoRGB = hsl => {
+	let [H,S,L] = [ hsl.h / 360, hsl.s / 100, hsl.l / 100 ]
+	const A = S * Math.min(L, 1 - L);
+	const f = N => {
+		const K = (N + H * 12) % 12;
+		const color = L - A * Math.max(Math.min(K - 3, 9 - K, 1), -1);
+		return Math.round(255 * (color + Number.EPSILON) * 10**8) / 10**8;
+	};
+	return {"r":f(0),"g":f(8),"b":f(4)}
+}
+
 window.history.replaceState(null,null,location.href);
+
+window.addEventListener("DOMContentLoaded", event => {
+	prefs.getColors(event);
+});
 

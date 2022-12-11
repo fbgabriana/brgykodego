@@ -284,7 +284,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 								hsl_lightness,
 								rgb_hex
 							) VALUES (
-								'1',
+								'${parseInt(pref["hue_id"])}',
 								'${parseFloat(pref["hsl_hue"])}',
 								'${parseFloat(pref["hsl_saturation"])}',
 								'${parseFloat(pref["hsl_lightness"])}',

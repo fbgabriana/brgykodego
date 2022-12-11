@@ -131,15 +131,12 @@ rgb_hex VARCHAR(7),
 PRIMARY KEY(hsl_id)
 );
 
-INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness, rgb_hex) VALUES (
-0, '215.33333333', '66.66666667', '40', '#225baa'
-);
-INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness, rgb_hex) VALUES (
-1, '215.33333333', '66.66666667', '40', '#225baa'
-);
-INSERT INTO users (username, hash, auth, userinfo) VALUES (
-'admin', '$2b$10$B3LeBvcoujIKcShDT6yd7uGI/CUx/dBAv2waVNFhP64fp2MEF2eLq', 2, '{"displayname":"Admin","email":""}'
-);
+INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness, rgb_hex) VALUES
+('0', '215.00000000', '66.66666667', '40.00000000', '#225baa'),
+('1', '215.33566284', '66.66666412', '40.00000000', '#225baa');
+
+INSERT INTO users (username, hash, auth, userinfo) VALUES
+('admin', '$2b$10$B3LeBvcoujIKcShDT6yd7uGI/CUx/dBAv2waVNFhP64fp2MEF2eLq', 2, '{"displayname":"Admin","email":""}');
 
 DROP TABLE IF EXISTS brgy_authorized_user;
 DROP TABLE IF EXISTS brgy_hue;
