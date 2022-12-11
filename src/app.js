@@ -165,7 +165,6 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					req.on("end", async () => {
 						if (search) {
 							referer = new URL(req.headers.referer);
-							console.log(referer, req.url)
 							if (referer.href.replace(referer.origin,"") === req.url) {
 								const formpost = querystring.parse(search);
 								formpost["logbook_datetime_utc"] = now;
@@ -270,12 +269,53 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					});
 				});
 				break;
-			case "update-prefs":
+			case "get":
+				switch (q) {
+				case "messages":
+					sql.query("CREATE TABLE IF NOT EXISTS formdata( \
+						id INT UNIQUE NOT NULL AUTO_INCREMENT, \
+						formdata_referer VARCHAR(255) NOT NULL, \
+						formdata_datetime_utc DATETIME NOT NULL, \
+						formdata_query VARCHAR(2047) NOT NULL, \
+						PRIMARY KEY(id))",
+					).then(() => {
+						sql.query(`SELECT
+							formdata_datetime_utc,
+							formdata_query
+						FROM
+							formdata
+						WHERE
+							formdata_referer = '/contact'`
+						).then(formdata => {
+							if (formdata[0]) {
+								let json = [];
+								for (row of formdata) {
+									let datetime = row.formdata_datetime_utc.toLocaleString();
+									let arr = [`"timestamp":"${datetime}"`];
+									let cols = row.formdata_query.replace(/,$/,"").split(/,\n/);
+									for (col of cols) {
+										let entries = col.split(": ");
+										arr.push(`"${entries[0]}":"${entries[1]}"`);
+									}
+									str = arr.join(",");
+									json.push(`{${str}}`);
+								}
+								res.writeHead(200, {"Content-Type": "application/json"});
+								res.write(JSON.stringify(JSON.parse(`[${json}]`)));
+								res.end();
+							}
+						});
+					});
+					break;
+				}
+				break;
+			case "prefs":
 				req.on("data", chunk => {search += chunk});
 				req.on("end", async () => {
 					switch (q) {
 					case "colortheme":
-						if (search) {
+						switch (req.method) {
+						case "POST":
 							const pref = querystring.parse(search);
 							sql.query(`REPLACE INTO brgy_colors_hsl (
 								hsl_id,
@@ -289,16 +329,30 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 								'${parseFloat(pref["hsl_saturation"])}',
 								'${parseFloat(pref["hsl_lightness"])}',
 								'${pref["rgb_hex"]}'
-							)`).then( result => {
+							)`).then(packet => {
 								res.writeHead(307, {"Location": `${req.headers.referer}`});
 								return res.end();
 							});
-						} else {
-							sql.query("SELECT hsl_id, hsl_hue, hsl_saturation, hsl_lightness, rgb_hex FROM brgy_colors_hsl").then(row => {
+							break;
+						case "GET":
+							sql.query(`SELECT
+								hsl_id,
+								hsl_hue,
+								hsl_saturation,
+								hsl_lightness,
+								rgb_hex
+							FROM brgy_colors_hsl`).then(row => {
 								res.writeHead(200, {"Content-Type": "application/json"});
 								res.write(JSON.stringify(row[1]));
 								res.end();
 							});
+							break;
+						default:
+							res.writeHead(405);
+							content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>The request method '${req.method}' is not supported by the target resource '${req.url}'.</p>`;
+							res.write(templateHTML.replace("<!-- content -->", content));
+							return res.end();
+							break;
 						}
 						break;
 					default:

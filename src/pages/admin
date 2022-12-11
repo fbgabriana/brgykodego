@@ -20,7 +20,6 @@
 	</form>
 
 	<h3>Messages</h3>
-	<p class="nomessages">There are currently no messages.</p>
-
+	<div class="message-table"><p class="empty">There are currently no messages.</p></div>
 </div>
 

@@ -1,5 +1,31 @@
 auth.require();
 
+const messages = {
+	getMessages() {
+		const message_table = document.querySelector(".message-table");
+		fetch("/get?messages").then(res => res.json()).then(messages => {
+			let table = document.createElement("table");
+			let tr = document.createElement("tr");
+			for (tableheader in messages[0]) {
+				let th = document.createElement("th");
+				th.innerText = tableheader;
+				tr.appendChild(th);
+			}
+			table.appendChild(tr)
+			for (tablerow of messages) {
+				let tr = document.createElement("tr");
+				for (tabledata in tablerow) {
+					let td = document.createElement("td");
+					td.innerText = tablerow[tabledata];
+					tr.appendChild(td);
+				}
+				table.appendChild(tr)
+			}
+			message_table.replaceChildren(table);
+		});
+	}
+}
+
 const prefs = {
 
 	getColors (event) {
@@ -11,7 +37,7 @@ const prefs = {
 		colorcode.value = colortheme;
 		colorpicker.value = colortheme;
 
-		fetch("/update-prefs?colortheme").then(res => res.json()).then(brgy_colors_hsl => {
+		fetch("/prefs?colortheme").then(res => res.json()).then(brgy_colors_hsl => {
 			colorcode.value = brgy_colors_hsl.rgb_hex;
 			colorpicker.value = brgy_colors_hsl.rgb_hex;
 			sessionStorage.setItem("colortheme", colorcode.value)
@@ -20,7 +46,7 @@ const prefs = {
 		let rgb = HEXtoRGB(colorcode.value);
 		let hsl = RGBtoHSL(rgb);
 		let hex = RGBtoHEX(rgb);
-		console.log(rgb, hsl, hex);
+		//console.log(rgb, hsl, hex);
 
 		colorpicker.addEventListener("change", event => {
 			colorcode.value = colorpicker.value;
@@ -58,7 +84,7 @@ const prefs = {
 			sessionStorage.setItem("colortheme", colorcode.value)
 			document.body.style.cursor = colorchanger.style.cursor = "progress";
 			const req = new XMLHttpRequest();
-			req.open("POST", "/update-prefs?colortheme", true);
+			req.open("POST", "/prefs?colortheme", true);
 			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			req.send(`hue_id=1&hsl_hue=${hsl.h}&hsl_saturation=${hsl.s}&hsl_lightness=${hsl.l}&rgb_hex=${colorcode.value}`);
 			setTimeout(() => {
@@ -121,5 +147,6 @@ window.history.replaceState(null,null,location.href);
 
 window.addEventListener("DOMContentLoaded", event => {
 	prefs.getColors(event);
+	messages.getMessages()
 });
 

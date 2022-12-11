@@ -23,7 +23,7 @@
 	height: 2em;
 	vertical-align: middle;
 }
-.admin p.nomessages {
+.admin .message-table .empty {
 	font-style: italic;
 }
 
