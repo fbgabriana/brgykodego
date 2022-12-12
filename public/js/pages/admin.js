@@ -28,7 +28,7 @@ const messages = {
 				}
 				message_table.replaceChildren(table);
 			}
-		}).catch(err => console.log(err.message));
+		});
 	}
 }
 

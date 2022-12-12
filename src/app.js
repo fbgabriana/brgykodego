@@ -272,39 +272,39 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 			case "get":
 				switch (q) {
 				case "messages":
-					sql.query("CREATE TABLE IF NOT EXISTS formdata( \
-						id INT UNIQUE NOT NULL AUTO_INCREMENT, \
-						formdata_referer VARCHAR(255) NOT NULL, \
-						formdata_datetime_utc DATETIME NOT NULL, \
-						formdata_query VARCHAR(2047) NOT NULL, \
-						PRIMARY KEY(id))",
-					).then(() => {
-						sql.query(`SELECT
-							formdata_datetime_utc,
-							formdata_query
-						FROM
-							formdata
-						WHERE
-							formdata_referer = '/contact'`
-						).then(formdata => {
-							let json = [];
-							for (row of formdata.reverse()) {
-								let datetime = row.formdata_datetime_utc.toLocaleString();
-								let arr = [`"timestamp":"${datetime}"`];
-								let cols = row.formdata_query.replace(/,$/,"").split(/,\n/);
-								for (col of cols) {
-									let entries = col.split(": ");
-									arr.push(`"${entries[0]}":"${entries[1]}"`);
-								}
-								str = arr.join(",");
-								json.push(`{${str}}`);
+					sql.query(`SELECT
+						formdata_datetime_utc,
+						formdata_query
+					FROM
+						formdata
+					WHERE
+						formdata_referer = '/contact'`
+					).then(formdata => {
+						let json = [];
+						for (row of formdata.reverse()) {
+							let datetime = row.formdata_datetime_utc.toLocaleString();
+							let arr = [`"timestamp":"${datetime}"`];
+							let cols = row.formdata_query.replace(/,$/,"").split(/,\n/);
+							for (col of cols) {
+								let entries = col.split(": ");
+								arr.push(`"${entries[0]}":"${entries[1]}"`);
 							}
-							res.writeHead(200, {"Content-Type": "application/json"});
-							res.write(JSON.stringify(JSON.parse(`[${json}]`)));
-							res.end();
-						});
+							str = arr.join(",");
+							json.push(`{${str}}`);
+						}
+						res.writeHead(200, {"Content-Type": "application/json"});
+						res.write(JSON.stringify(JSON.parse(`[${json}]`)));
+						res.end();
+					}).catch(err => {
+						res.writeHead(200, {"Content-Type": "application/json"});
+						res.write(`[]`);
+						res.end();
 					});
 					break;
+				default:
+					res.writeHead(200, {"Content-Type": "application/json"});
+					res.write(`[]`);
+					res.end();
 				}
 				break;
 			case "prefs":
