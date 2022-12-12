@@ -74,6 +74,8 @@ const prefs = {
 		const rgb = HEXtoRGB(colorcode.value);
 		const hsl = RGBtoHSL(rgb);
 
+		const id = (event.target.id === "colorchanger") ? 1 : 0;
+
 		if (typeof hsl.h === "undefined") {
 			alert("Invalid input");
 			colorpicker.value = colorcode.value = colortheme;
@@ -86,7 +88,7 @@ const prefs = {
 			const req = new XMLHttpRequest();
 			req.open("POST", "/prefs?colortheme", true);
 			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			req.send(`hue_id=1&hsl_hue=${hsl.h}&hsl_saturation=${hsl.s}&hsl_lightness=${hsl.l}&rgb_hex=${colorcode.value}`);
+			req.send(`hue_id=${id}&hsl_hue=${hsl.h}&hsl_saturation=${hsl.s}&hsl_lightness=${hsl.l}&rgb_hex=${colorcode.value}`);
 			setTimeout(() => {
 				location.reload(true);
 			}, 360);
