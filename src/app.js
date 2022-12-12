@@ -354,6 +354,9 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						}
 						break;
 					default:
+						res.writeHead(200, {"Content-Type": "application/json"});
+						res.write(`[]`);
+						res.end();
 					}
 				});
 				break;
