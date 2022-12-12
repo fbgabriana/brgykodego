@@ -19,53 +19,53 @@ if (search) {
 }
 </script>
 
-	<div class="row">
-		<div class="col">
-			<div class="office-info">
-				<h2>Main Office</h2>
-				<p>18th floor, The W Fifth Avenue, 5th Ave, Taguig, 1630 Metro Manila</p>
-				<h2>Email</h2>
-				<p>brgykodego@gmail.com / cyberhomies@gmail.com</p>
-				<h2>Contact Numbers</h2>
-				<p>09122344567 / +043 2344 234</p>
-				<h2>Location</h2>
-				<p>18th floor, The W Fifth Avenue, 5th Ave, Taguig, 1630 Metro Manila</p>
-			</div>
-			<iframe class="locator-map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7723.789406842419!2d121.0429970729952!3d14.54801359421454!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c8efd99aad53%3A0xb64b39847a866fde!2skodego!5e0!3m2!1sen!2sph!4v1669434173548!5m2!1sen!2sph"
-				style="border:1" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-			</iframe>
+<div class="row">
+	<div class="col">
+		<div class="office-info">
+			<h2>Main Office</h2>
+			<p>18th floor, The W Fifth Avenue, 5th Ave, Taguig, 1630 Metro Manila</p>
+			<h2>Email</h2>
+			<p>brgykodego@gmail.com / cyberhomies@gmail.com</p>
+			<h2>Contact Numbers</h2>
+			<p>09122344567 / +043 2344 234</p>
+			<h2>Location</h2>
+			<p>18th floor, The W Fifth Avenue, 5th Ave, Taguig, 1630 Metro Manila</p>
 		</div>
-		<div class="col">
-			<div class="form-container">
-				<div class="header">Send us a message!</div>
-				<form class="contact" action="post" method="post">
-				   <input type="hidden" name="redirect" value="contact">
-					<div class="field-group">
-					   <input type="text" name="firstname" id="firstname" class="input-field" placeholder="Enter First Name" autocomplete="off" required>
-					   <label for="firstname" class="input-label">First Name</label>
-					</div>
-					<div class="field-group">
-					   <input type="text" name="lastname" id="lastname" class="input-field" placeholder="Enter Last Name" autocomplete="off" required>
-					   <label for="lastname" class="input-label">Last Name</label>
-					</div>
-					<div class="field-group">
-					   <input type="email" name="email" id="email" class="input-field" placeholder="Enter Email" autocomplete="off" required>
-					   <label for="email" class="input-label">Email Address</label>
-					</div>
-					<div class="field-group">
-					   <input type="tel" name="tel" id="tel" class="input-field" placeholder="Enter Contact Number" autocomplete="off" required>
-					   <label for="tel" class="input-label">Contact no.</label>
-					</div>
-					<div class="field-group">
-					   <input type="text" name="message" id="message" class="input-field" placeholder="Please send us a message" autocomplete="off" required>
-					   <label for="message" class="input-label">Message:</label>
-					</div>
-					<button type="submit">Confirm</button>
-				</form>
-			</div>
-			<div>
-				<p>Or leave a note at our <a href="/logbook">logbook</a>.</o>
-			</div>
+		<iframe class="locator-map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7723.789406842419!2d121.0429970729952!3d14.54801359421454!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c8efd99aad53%3A0xb64b39847a866fde!2skodego!5e0!3m2!1sen!2sph!4v1669434173548!5m2!1sen!2sph"
+			style="border:1" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+		</iframe>
+	</div>
+	<div class="col">
+		<div class="form-container">
+			<div class="header">Send us a message!</div>
+			<form class="contact" action="post" method="post">
+			   <input type="hidden" name="redirect" value="contact">
+				<div class="field-group">
+				   <input type="text" name="firstname" id="firstname" class="input-field" placeholder="Enter First Name" autocomplete="off" required>
+				   <label for="firstname" class="input-label">First Name</label>
+				</div>
+				<div class="field-group">
+				   <input type="text" name="lastname" id="lastname" class="input-field" placeholder="Enter Last Name" autocomplete="off" required>
+				   <label for="lastname" class="input-label">Last Name</label>
+				</div>
+				<div class="field-group">
+				   <input type="email" name="email" id="email" class="input-field" placeholder="Enter Email" autocomplete="off" required>
+				   <label for="email" class="input-label">Email Address</label>
+				</div>
+				<div class="field-group">
+				   <input type="tel" name="tel" id="tel" class="input-field" placeholder="Enter Contact Number" autocomplete="off" required>
+				   <label for="tel" class="input-label">Contact no.</label>
+				</div>
+				<div class="field-group">
+				   <input type="text" name="message" id="message" class="input-field" placeholder="Please send us a message" autocomplete="off" required>
+				   <label for="message" class="input-label">Message:</label>
+				</div>
+				<button type="submit">Confirm</button>
+			</form>
+		</div>
+		<div>
+			<p>Or leave a note at our <a href="/logbook">logbook</a>.</o>
 		</div>
 	</div>
+</div>
 
