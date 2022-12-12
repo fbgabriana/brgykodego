@@ -1,28 +1,34 @@
 auth.require();
 
 const messages = {
+
 	getMessages() {
 		const message_table = document.querySelector(".message-table");
-		fetch("/get?messages").then(res => res.json()).then(messages => {
-			let table = document.createElement("table");
-			let tr = document.createElement("tr");
-			for (tableheader in messages[0]) {
-				let th = document.createElement("th");
-				th.innerText = tableheader;
-				tr.appendChild(th);
-			}
-			table.appendChild(tr)
-			for (tablerow of messages) {
+		fetch("/get?messages", {
+			method:"GET",
+			headers:{"Content-Type": "application/json"}
+		}).then(res => res.json()).then(messages => {
+			if (messages.length) {
+				let table = document.createElement("table");
 				let tr = document.createElement("tr");
-				for (tabledata in tablerow) {
-					let td = document.createElement("td");
-					td.innerText = tablerow[tabledata];
-					tr.appendChild(td);
+				for (tableheader in messages[0]) {
+					let th = document.createElement("th");
+					th.innerText = tableheader;
+					tr.appendChild(th);
 				}
 				table.appendChild(tr)
+				for (tablerow of messages) {
+					let tr = document.createElement("tr");
+					for (tabledata in tablerow) {
+						let td = document.createElement("td");
+						td.innerText = tablerow[tabledata];
+						tr.appendChild(td);
+					}
+					table.appendChild(tr)
+				}
+				message_table.replaceChildren(table);
 			}
-			message_table.replaceChildren(table);
-		});
+		}).catch(err => console.log(err.message));
 	}
 }
 
@@ -37,7 +43,10 @@ const prefs = {
 		colorcode.value = colortheme;
 		colorpicker.value = colortheme;
 
-		fetch("/prefs?colortheme").then(res => res.json()).then(brgy_colors_hsl => {
+		fetch("/prefs?colortheme", {
+			method:"GET",
+			headers:{"Content-Type": "application/json"},
+		}).then(res => res.json()).then(brgy_colors_hsl => {
 			colorcode.value = brgy_colors_hsl.rgb_hex;
 			colorpicker.value = brgy_colors_hsl.rgb_hex;
 			sessionStorage.setItem("colortheme", colorcode.value)
@@ -48,16 +57,21 @@ const prefs = {
 		let hex = RGBtoHEX(rgb);
 		//console.log(rgb, hsl, hex);
 
+		colorchanger.disabled = true;
+
 		colorpicker.addEventListener("change", event => {
+			colorchanger.disabled = false;
 			colorcode.value = colorpicker.value;
 		});
 		colorcode.addEventListener("change", event => {
 			if (colorcode.value.match(/^#[0-9a-f]{6}/i)) {
+				colorchanger.disabled = false;
 				colorpicker.value = colorcode.value;
 			}
 		});
 		colorcode.addEventListener("input", event => {
 			if (colorcode.value.match(/^#[0-9a-f]{6}/i)) {
+				colorchanger.disabled = false;
 				colorpicker.value = colorcode.value;
 			}
 		});
@@ -84,16 +98,19 @@ const prefs = {
 			colorpicker.value = colorcode.value = colortheme;
 		} else {
 			sessionStorage.setItem("colortheme", colorcode.value)
-			document.body.style.cursor = colorchanger.style.cursor = "progress";
-			const req = new XMLHttpRequest();
-			req.open("POST", "/prefs?colortheme", true);
-			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			req.send(`hue_id=${id}&hsl_hue=${hsl.h}&hsl_saturation=${hsl.s}&hsl_lightness=${hsl.l}&rgb_hex=${colorcode.value}`);
 			setTimeout(() => {
+				document.body.style.cursor = colorchanger.style.cursor = "progress";
+			}, 10);
+			fetch("/prefs?colortheme", {
+				method:"POST",
+				headers:{"Content-Type": "application/x-www-form-urlencoded"},
+				body:`hue_id=${id}&hsl_hue=${hsl.h}&hsl_saturation=${hsl.s}&hsl_lightness=${hsl.l}&rgb_hex=${colorcode.value}`,
+			}).then(res => {
+				document.body.style.cursor = colorchanger.style.cursor = "default";
 				location.reload(true);
-			}, 360);
+			});
 		}
-	}
+	},
 }
 
 const RGBtoHEX = rgb => {
@@ -149,6 +166,6 @@ window.history.replaceState(null,null,location.href);
 
 window.addEventListener("DOMContentLoaded", event => {
 	prefs.getColors(event);
-	messages.getMessages()
+	messages.getMessages();
 });
 

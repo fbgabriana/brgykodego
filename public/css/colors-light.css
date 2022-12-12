@@ -94,11 +94,6 @@ article form input:focus,
 article form textarea:focus {
 	outline: 1px solid hsl(%sql:brgy_hue:hue_primary%, 20%, 50%);
 }
-article form button {
-	background-color: hsl(0, 0%, 90%);
-	color: hsl(%sql:brgy_hue:hue_primary%, 0%, 12.5%);
-	border: 1px solid hsl(%sql:brgy_hue:hue_primary%, 20%, 60%);
-}
 article blockquote {
 	border-left: 2px solid hsl(%sql:brgy_hue:hue_primary%, 25%, 75%);
 }

@@ -2,7 +2,7 @@
 <div class="admin">
 
 	<h3>Log out</h3>
-	<form action="/">
+	<form id="logout" class="logout">
 	<button type="button" onclick=auth.logout("/login")>Log out</button>
 	</form>
 
@@ -12,7 +12,7 @@
 	</form>
 
 	<h3>Color Theme</h3>
-	<form id="colorhandler" class="colorhandler" method="post" action="/update-prefs">
+	<form id="colorhandler" class="colorhandler">
 	<label for="colorcode">Color Code: </label>
 	<input type="text" name="colorcode" id="colorcode" class="colorcode" maxlength="7" size="7" placeholder="#rrggbb">
 	<input type="color" id="colorpicker" class="colorpicker">

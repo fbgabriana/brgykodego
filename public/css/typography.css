@@ -157,7 +157,6 @@ article form.post input[type="file"] {
 article form.post button {
 	min-height: 2em;
 	padding: 0 2.5em;
-	border-radius: 0.25em;
 }
 article form.post input,
 article form.post textarea {

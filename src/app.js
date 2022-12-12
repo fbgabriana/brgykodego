@@ -287,23 +287,21 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						WHERE
 							formdata_referer = '/contact'`
 						).then(formdata => {
-							if (formdata[0]) {
-								let json = [];
-								for (row of formdata) {
-									let datetime = row.formdata_datetime_utc.toLocaleString();
-									let arr = [`"timestamp":"${datetime}"`];
-									let cols = row.formdata_query.replace(/,$/,"").split(/,\n/);
-									for (col of cols) {
-										let entries = col.split(": ");
-										arr.push(`"${entries[0]}":"${entries[1]}"`);
-									}
-									str = arr.join(",");
-									json.push(`{${str}}`);
+							let json = [];
+							for (row of formdata.reverse()) {
+								let datetime = row.formdata_datetime_utc.toLocaleString();
+								let arr = [`"timestamp":"${datetime}"`];
+								let cols = row.formdata_query.replace(/,$/,"").split(/,\n/);
+								for (col of cols) {
+									let entries = col.split(": ");
+									arr.push(`"${entries[0]}":"${entries[1]}"`);
 								}
-								res.writeHead(200, {"Content-Type": "application/json"});
-								res.write(JSON.stringify(JSON.parse(`[${json}]`)));
-								res.end();
+								str = arr.join(",");
+								json.push(`{${str}}`);
 							}
+							res.writeHead(200, {"Content-Type": "application/json"});
+							res.write(JSON.stringify(JSON.parse(`[${json}]`)));
+							res.end();
 						});
 					});
 					break;
@@ -315,6 +313,19 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					switch (q) {
 					case "colortheme":
 						switch (req.method) {
+						case "GET":
+							sql.query(`SELECT
+								hsl_id,
+								hsl_hue,
+								hsl_saturation,
+								hsl_lightness,
+								rgb_hex
+							FROM brgy_colors_hsl`).then(row => {
+								res.writeHead(200, {"Content-Type": "application/json"});
+								res.write(JSON.stringify(row[1]));
+								res.end();
+							});
+							break;
 						case "POST":
 							const pref = querystring.parse(search);
 							sql.query(`REPLACE INTO brgy_colors_hsl (
@@ -332,19 +343,6 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							)`).then(packet => {
 								res.writeHead(307, {"Location": `${req.headers.referer}`});
 								return res.end();
-							});
-							break;
-						case "GET":
-							sql.query(`SELECT
-								hsl_id,
-								hsl_hue,
-								hsl_saturation,
-								hsl_lightness,
-								rgb_hex
-							FROM brgy_colors_hsl`).then(row => {
-								res.writeHead(200, {"Content-Type": "application/json"});
-								res.write(JSON.stringify(row[1]));
-								res.end();
 							});
 							break;
 						default:
