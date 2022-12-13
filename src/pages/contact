@@ -18,7 +18,6 @@ if (search) {
 	document.write(`\\n<div class="row"><div class="col">\\n${content}\\n</div></div>\\n`);
 }
 </script>
-
 <div class="row">
 	<div class="col">
 		<div class="office-info">

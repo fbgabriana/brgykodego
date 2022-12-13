@@ -505,7 +505,8 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 	}).on("listening", () => {
 		const socketAddress = server.address();
 		console.log("\x1b[36m%s\x1b[0m",`[app] ${app_ver}`, "\x1b[0m");
-		console.log("\x1b[36m%s\x1b[0m",`[app] Development server running at ${socketAddress.address} over ${socketAddress.port}...`, "\x1b[0m");
+		console.log("\x1b[36m%s\x1b[0m",`[app] Started development server on ${new Date()}`, "\x1b[0m");
+		console.log("\x1b[36m%s\x1b[0m",`[app] Running at ${socketAddress.address} over ${socketAddress.port}...`, "\x1b[0m");
 		console.log("\x1b[34m%s\x1b[0m",`[app] ${app_homepage}\x1b[0m`, "\x1b[0m");
 	});
 });
