@@ -4,7 +4,7 @@ document.write(`
 <div class="login-form">
 <form action="/auth" class="post" method="post">
 <label for="username">User Name</label>
-<input id="username" name="username" type="text" required>
+<input id="username" name="username" type="text" required autofocus>
 <label for="password">Password</label>
 <input id="password" name="password" type="password" required>
 <label for="login"></label>
