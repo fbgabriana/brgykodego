@@ -25,7 +25,6 @@ fs.readFile = util.promisify(fs.readFile).bind(fs);
 const app_ver = `${process.env.npm_package_name}-${process.env.npm_package_version}`;
 const app_homepage = process.env.HOME == "/app" ? require(process.env.npm_package_json).homepage : `http://${process.env.npm_package_name}.localhost:${host.port}`;
 
-
 const publicpath = "./public";
 
 fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
@@ -87,7 +86,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					sql.query("SELECT bulletin_id, bulletin_classification_id, bulletin_classification_icon, bulletin_classification_title, bulletin_classification_subtitle, bulletin_details, bulletin_image_filename, bulletin_date_created FROM brgy_bulletin").then(result => {
 						res.writeHead(200, {"Content-Type": "text/html"});
 						if (q && q.includes("post")) {
-							content += `<script>auth.require();</script>
+							content += `				<script>auth.require(2);</script>
 				<!-- add new bulletin post -->
 				<h1>New Bulletin Post</h1>
 				<div class="new-bulletin-form">
@@ -180,7 +179,8 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							}
 						}
 						sql.query("SELECT logbook_displayname, logbook_message, logbook_datetime_utc FROM logbook").then(result => {
-							content = `				<!-- begin logbook -->
+							content = `				<script>auth.require(1);</script>
+				<!-- begin logbook -->
 				<h1>Leave a Message</h1>
 				<p>Hello mga kabarangay. This is our online logbook. Feel free to leave a note to us.</p>
 				<div class="logbook">
@@ -271,6 +271,11 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				break;
 			case "get":
 				switch (q) {
+				case "env":
+					res.writeHead(200, {"Content-Type": "application/json"});
+					res.write( `[${Object.keys(process.env).sort().map(key =>`{"Name":"${key}","Value":"${process.env[key]}"}`).toString()}]` );
+					res.end();
+					break;
 				case "messages":
 					sql.query(`SELECT
 						formdata_datetime_utc,
@@ -327,7 +332,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							});
 							break;
 						case "POST":
-							const pref = querystring.parse(search);
+							const pref = JSON.parse(search);
 							sql.query(`REPLACE INTO brgy_colors_hsl (
 								hsl_id,
 								hsl_hue,
@@ -361,11 +366,19 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				});
 				break;
 			case "auth":
-				if (req.method !== "POST") {
-					res.writeHead(405);
-					content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>The request method '${req.method}' is not supported by the target resource '${req.url}'.</p>`;
-					res.write(templateHTML.replace("<!-- content -->", content));
-					return res.end();
+				if (req.method == "GET") {
+					if (req.headers.referer) {
+						referer = new URL(req.headers.referer);
+						res.writeHead(403);
+						content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User is not allowed to access ${referer.href.replace(referer.origin,"")}.</p>`;
+						res.write(templateHTML.replace("<!-- content -->", content));
+						return res.end();
+					} else {
+						res.writeHead(403);
+						content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User is not allowed to access ${req.url}.</p>`;
+						res.write(templateHTML.replace("<!-- content -->", content));
+						return res.end();
+					}
 				}
 				req.on("data", chunk => {search += chunk});
 				req.on("end", () => {
@@ -385,8 +398,12 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 									auth.comparePassword(login.password, user.hash).then(comp => {
 										if (comp == true) {
 											if (user.auth >= 2) {
-												res.setHeader("Set-Cookie", ["isLoggedIn=true"]);
-												res.writeHead(307, {"Location": `${login.from}`});
+												res.setHeader("Set-Cookie", [`isLoggedIn=${user.auth}`]);
+												res.writeHead(307, {"Location": `/admin`});
+												return res.end();
+											} else if (user.auth >= 1) {
+												res.setHeader("Set-Cookie", [`isLoggedIn=${user.auth}`]);
+												res.writeHead(307, {"Location": `/logbook`});
 												return res.end();
 											} else {
 												res.writeHead(403);
@@ -403,6 +420,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 											return res.end();
 										}
 									});
+									break;
 								}
 							}
 							if (!login.found) {

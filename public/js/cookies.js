@@ -1,4 +1,4 @@
-// Cookie Handler
+// Cookie Jar
 
 var cookieStorage = {
 	getItem (sKey) {

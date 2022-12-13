@@ -1,11 +1,6 @@
 <!-- admin -->
 <div class="admin">
 
-	<h3>Log out</h3>
-	<form id="logout" class="logout">
-	<button type="button" onclick=auth.logout("/login")>Log out</button>
-	</form>
-
 	<h3>News Feed</h3>
 	<form action="/">
 	<button class="new-bulletin" type="submit" name="post">Add new bulletin</button>

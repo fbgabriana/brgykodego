@@ -1,34 +1,9 @@
-auth.require();
+auth.require(2);
 
 const messages = {
-
 	getMessages() {
-		const message_table = document.querySelector(".message-table");
-		fetch("/get?messages", {
-			method:"GET",
-			headers:{"Content-Type": "application/json"}
-		}).then(res => res.json()).then(messages => {
-			if (messages.length) {
-				let table = document.createElement("table");
-				let tr = document.createElement("tr");
-				for (tableheader in messages[0]) {
-					let th = document.createElement("th");
-					th.innerText = tableheader;
-					tr.appendChild(th);
-				}
-				table.appendChild(tr)
-				for (tablerow of messages) {
-					let tr = document.createElement("tr");
-					for (tabledata in tablerow) {
-						let td = document.createElement("td");
-						td.innerText = tablerow[tabledata];
-						tr.appendChild(td);
-					}
-					table.appendChild(tr)
-				}
-				message_table.replaceChildren(table);
-			}
-		});
+		jsonTable = new JSONTable("/get?messages", ".message-table");
+		jsonTable.getData();
 	}
 }
 
@@ -103,8 +78,8 @@ const prefs = {
 			}, 10);
 			fetch("/prefs?colortheme", {
 				method:"POST",
-				headers:{"Content-Type": "application/x-www-form-urlencoded"},
-				body:`hue_id=${id}&hsl_hue=${hsl.h}&hsl_saturation=${hsl.s}&hsl_lightness=${hsl.l}&rgb_hex=${colorcode.value}`,
+				headers:{"Content-Type": "application/json"},
+				body:`{"hue_id":"${id}","hsl_hue":"${hsl.h}","hsl_saturation":"${hsl.s}","hsl_lightness":"${hsl.l}","rgb_hex":"${colorcode.value}"}`
 			}).then(res => {
 				document.body.style.cursor = colorchanger.style.cursor = "default";
 				location.reload(true);

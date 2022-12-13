@@ -3,7 +3,6 @@
 document.write(`
 <div class="login-form">
 <form action="/auth" class="post" method="post">
-<input name="from" value="${location.search.slice(1) || \'/admin\'}" type="hidden">
 <label for="username">User Name</label>
 <input id="username" name="username" type="text" required>
 <label for="password">Password</label>

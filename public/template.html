@@ -11,6 +11,7 @@
 	<link rel="stylesheet" media="screen" href="css/pages/%req:current-page%.css" />
 	<link rel="stylesheet" media="print" href="css/print.css" />
 	<script src="js/cookies.js"></script>
+	<script src="js/jsontable.js"></script>
 	<script src="js/script.js"></script>
 	<script src="js/pages/%req:current-page%.js"></script>
 </head>
@@ -30,11 +31,13 @@
 		<nav>
 			<img id="menubtn" src="svg/menu.svg" alt="" title="Click to Show/Hide the menu bar" onclick="toggleMenuBar()" />
 			<ul id="menubar">
+				<li><a href="/admin">Admin</a></li>
 				<li><a href="/">Home</a></li>
 				<li><a href="/services">Services</a></li>
 				<li><a href="/about">About Us</a></li>
 				<li><a href="/contact">Contact Us</a></li>
 				<li><a href="/login">Login</a></li>
+				<li><a href="/logout">Logout</a></li>
 			</ul>
 		</nav>
 	</header>

@@ -1,5 +1,37 @@
 // Barangay KodeGo
 
+const auth = {
+	isLoggedIn: cookieStorage.hasItem("isLoggedIn"),
+	authLevel() {
+		return cookieStorage.getItem("isLoggedIn")
+	},
+	require(requiredLevel) {
+		console.log(requiredLevel, this.authLevel())
+		if (this.authLevel() < requiredLevel) {
+			location.href = `/auth`;
+		}
+		if (this.isLoggedIn === false) {
+			location.href = `/login?${location.href.replace(location.origin,"")}`;
+		}
+	},
+	logout(redir) {
+		cookieStorage.removeItem("isLoggedIn");
+		location.href = redir || "/";
+	}
+}
+
+const querystring = {
+	parse : (str="", sep="&", eq="=") => {
+		let query = Object.create(null);
+		let pairs = str ? str.split(sep) : [];
+		for (let i = 0; i < pairs.length; i++) {
+			let pair = pairs[i].split(eq);
+			query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
+		}
+		return query;
+	}
+}
+
 const toggleMenuBar = () => {
 	let menubar = document.getElementById("menubar");
 	menubar.style.display = menubar.style.display == "none" ? "block" : "none";
@@ -25,7 +57,7 @@ const windowResize = () => {
 	let aside = document.querySelector("body>aside");
 	let main = document.querySelector("body>main");
 	let sidebar = document.querySelector("body .sidebar");
-	if (window.innerWidth < 854) {
+	if (window.innerWidth < 862) {
 		main.appendChild(sidebar);
 	} else {
 		aside.appendChild(sidebar);
@@ -45,13 +77,15 @@ const setCurrentPage = () => {
 	let currentLocation = location.href.replace("index.html","");
 	for (i = 0; i < a.length; i++) {
 		if (a[i].origin == location.origin) {
-			if (a[i].pathname == `/login`) {
-				if (auth.isLoggedIn) {
-					a[i].pathname = `/admin`;
-					a[i].innerText = `Admin`;
-				} else {
-					a[i].pathname = `/login`;
-					a[i].innerText = `Login`;
+			if (auth.isLoggedIn) {
+				document.querySelector(`header nav li a[href="/login"]`).style.display = "none";
+				document.querySelector(`header nav li a[href="/logout"]`).style.display = "flex";
+				document.querySelector(`header nav li a[href="/logout"]`).addEventListener("click", event => {
+					event.preventDefault();
+					auth.logout("/login");
+				});
+				if (auth.authLevel() >= 2) {
+					document.querySelector(`header nav li a[href="/admin"]`).style.display = "flex";
 				}
 			}
 			if (a[i].href == currentLocation) {
@@ -119,31 +153,6 @@ const addColorSwitcher = (selector) => {
 			set_colorscheme();
 			if (navigator.vibrate) navigator.vibrate(5);
 		});
-	}
-}
-
-const querystring = {
-	parse : (str="", sep="&", eq="=") => {
-		let query = Object.create(null);
-		let pairs = str ? str.split(sep) : [];
-		for (let i = 0; i < pairs.length; i++) {
-			let pair = pairs[i].split(eq);
-			query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
-		}
-		return query;
-	}
-}
-
-const auth = {
-	isLoggedIn: cookieStorage.hasItem("isLoggedIn"),
-	require() {
-		if (auth.isLoggedIn === false) {
-			location.href = `/login?${location.href.replace(location.origin,"")}`;
-		}
-	},
-	logout(redir) {
-		cookieStorage.removeItem("isLoggedIn");
-		location.href = redir || "/";
 	}
 }
 

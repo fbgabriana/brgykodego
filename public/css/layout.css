@@ -84,21 +84,21 @@ header nav ul {
 }
 header nav li {
 	display: inline-block;
-	margin: 1px 0;
 }
 header nav li a {
 	box-sizing: border-box;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	text-decoration: none;
+	margin: 1px 0;
 	min-height: 2em;
 	min-width: 6em;
 	padding: 0.16667px 1em;
-	font-size: 0.83333rem;
 	border-radius: 0.5em;
 	border-bottom: 1px solid rgba(0,0,0,0.75);
 	border-left: 1px solid rgba(0,0,0,0.75);
+	font-size: 0.83333rem;
+	text-decoration: none;
 	cursor: default;
 }
 header nav li a:link,
@@ -110,6 +110,12 @@ header nav li a.current-page,
 header nav li a.current-section,
 header nav li a.current-section:hover {
 	user-select: none;
+}
+header nav li a[href="/admin"] {
+	display: none;
+}
+header nav li a[href="/logout"] {
+	display: none;
 }
 
 /* The main content */
@@ -216,7 +222,7 @@ article hr.page-break {
 	}
 }
 
-@media screen and (min-width: 854px ) {
+@media screen and (min-width: 862px ) {
 
 	/* Code to define the grid */
 	body {

@@ -8,7 +8,6 @@ class Auth {
 
 	hashPassword(pass) {
 		return bcrypt.hash(pass, this.saltRounds).then(hash => {
-			// Store hash in the database
 			return hash;
 		})
 		.catch(err => {

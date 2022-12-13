@@ -136,7 +136,8 @@ INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness, rgb
 ('1', '215.33566284', '66.66666412', '40.00000000', '#225baa');
 
 INSERT INTO users (username, hash, auth, userinfo) VALUES
-('admin', '$2b$10$B3LeBvcoujIKcShDT6yd7uGI/CUx/dBAv2waVNFhP64fp2MEF2eLq', 2, '{"displayname":"Admin","email":""}');
+('admin', '$2b$10$B3LeBvcoujIKcShDT6yd7uGI/CUx/dBAv2waVNFhP64fp2MEF2eLq', 2, '{"displayname":"Admin","email":"brgykodego@gmail.com"}'),
+('bamm', '$2b$10$Q6qBGVNzqh9FAtIaFua/ueXG.wP2zubIG1RYBSJCnDsi.xodAFlOO', 1, '{"displayname":"Bamm","email":"fbgabriana@gmail.com"}');
 
 DROP TABLE IF EXISTS brgy_authorized_user;
 DROP TABLE IF EXISTS brgy_hue;
