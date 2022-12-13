@@ -370,12 +370,12 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					if (req.headers.referer) {
 						referer = new URL(req.headers.referer);
 						res.writeHead(403);
-						content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User is not allowed to access ${referer.href.replace(referer.origin,"")}.</p>`;
+						content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User has insufficient privileges to access ${referer.href.replace(referer.origin,"")}.</p>`;
 						res.write(templateHTML.replace("<!-- content -->", content));
 						return res.end();
 					} else {
 						res.writeHead(403);
-						content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User is not allowed to access ${req.url}.</p>`;
+						content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User has insufficient privileges access ${req.url}.</p>`;
 						res.write(templateHTML.replace("<!-- content -->", content));
 						return res.end();
 					}
