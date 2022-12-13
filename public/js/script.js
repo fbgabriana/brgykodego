@@ -78,14 +78,14 @@ const setCurrentPage = () => {
 	for (i = 0; i < a.length; i++) {
 		if (a[i].origin == location.origin) {
 			if (auth.isLoggedIn) {
-				document.querySelector(`header nav li a[href="/login"]`).style.display = "none";
-				document.querySelector(`header nav li a[href="/logout"]`).style.display = "flex";
-				document.querySelector(`header nav li a[href="/logout"]`).addEventListener("click", event => {
+				document.getElementById(`nav-login`).style.display = "none";
+				document.getElementById(`nav-logout`).style.display = "flex";
+				document.getElementById(`nav-logout`).addEventListener("click", event => {
 					event.preventDefault();
 					auth.logout("/login");
 				});
 				if (auth.authLevel() >= 2) {
-					document.querySelector(`header nav li a[href="/admin"]`).style.display = "flex";
+					document.getElementById(`nav-admin`).style.display = "flex";
 				}
 			}
 			if (a[i].href == currentLocation) {

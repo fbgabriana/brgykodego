@@ -397,13 +397,15 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 									login.found = true;
 									auth.comparePassword(login.password, user.hash).then(comp => {
 										if (comp == true) {
+											referer = new URL(req.headers.referer);
+											let from = referer.search.slice(1);
 											if (user.auth >= 2) {
 												res.setHeader("Set-Cookie", [`isLoggedIn=${user.auth}`]);
-												res.writeHead(307, {"Location": `/admin`});
+												res.writeHead(307, {"Location": `${from || "/admin"}`});
 												return res.end();
 											} else if (user.auth >= 1) {
 												res.setHeader("Set-Cookie", [`isLoggedIn=${user.auth}`]);
-												res.writeHead(307, {"Location": `/logbook`});
+												res.writeHead(307, {"Location": `${from || "/logbook"}`});
 												return res.end();
 											} else {
 												res.writeHead(403);
