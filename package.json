@@ -8,7 +8,7 @@
 		"prestart": "node src/clearscr.js",
 		"start": "nodemon",
 		"setup": "npm install && node src/setup.js && npm run test",
-		"setup-heroku": "git all && src/sql/cleardb-mysql-setup.sh && heroku restart",
+		"setup-heroku": "git all && src/sql/cleardb-mysql-setup.sh && heroku restart && heroku logs",
 		"pages": "node src/pages.js",
 		"remove": "sh src/remove.sh",
 		"clean": "rm -rf node_modules package-lock.json",
