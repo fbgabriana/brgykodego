@@ -317,7 +317,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					).then(users => {
 						let json = [];
 						for (row of users) {
-							let arr = [`"username":"${row.username}","password":"[hidden]","auth level":"${row.auth}"`];
+							let arr = [`"username":"${row.username}","password (encrypted)":"${row.hash.slice(0,16)}...","auth level":"${row.auth}"`];
 							let cols = row.userinfo.replace(/(^{)|(}$)/g,"").split(/,/);
 							for (col of cols) {
 								arr.push(col)
@@ -413,7 +413,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				req.on("end", () => {
 					if (search) {
 						const login = querystring.parse(search);
-						if (!login.username || !login.password) {
+						if (!login.username) {
 							res.writeHead(401);
 							content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User has not supplied any login credentials.</p>`;
 							res.write(templateHTML.replace("<!-- content -->", content));
