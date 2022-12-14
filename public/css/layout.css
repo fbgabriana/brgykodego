@@ -148,6 +148,9 @@ footer>p {
 	padding: 20px;
 	font-size: 12px
 }
+.sidebar p {
+	margin: 0.9em 0;
+}
 .sidebar figure.qrcode {
 	margin: 0 auto;
 	width: 50%;
@@ -172,7 +175,6 @@ footer>p {
 .sidebar li {
 	margin: 0.5em 0;
 }
-
 
 /* Screen-specific Typography */
 

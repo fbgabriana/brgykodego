@@ -4,7 +4,7 @@
 
 _Barangay KodeGo_ is an interactive barangay **content management system** submitted as a Capstone Project for Batch 18 of KodeGo's full stack web development course (WD-18).
 
-It is written in pure NodeJS without any frameworks on a MySQL database. A port to the MEAN stack is planned, but not in the works.
+It is written in pure NodeJS without any frameworks on a MySQL database.
 
 * [View a working demo](http://brgykodego.herokuapp.com/){:target="_projectpage"}
 
