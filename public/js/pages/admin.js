@@ -1,8 +1,12 @@
 auth.require(2);
 
-const messages = {
+const tables = {
 	getMessages() {
-		jsonTable = new JSONTable("/get?messages", ".message-table");
+		jsonTable = new JSONTable("/get?messages", ".messages-table");
+		jsonTable.getData();
+	},
+	getUsers() {
+		jsonTable = new JSONTable("/get?users", ".users-table");
 		jsonTable.getData();
 	}
 }
@@ -141,6 +145,7 @@ window.history.replaceState(null,null,location.href);
 
 window.addEventListener("DOMContentLoaded", event => {
 	prefs.getColors(event);
-	messages.getMessages();
+	tables.getMessages();
+	tables.getUsers();
 });
 

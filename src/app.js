@@ -306,6 +306,34 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						res.end();
 					});
 					break;
+				case "users":
+					sql.query(`SELECT
+						username,
+						hash,
+						auth,
+						userinfo
+					FROM
+						users`
+					).then(users => {
+						let json = [];
+						for (row of users) {
+							let arr = [`"username":"${row.username}","password":"[hidden]","auth.level":"${row.auth}"`];
+							let cols = row.userinfo.replace(/(^{)|(}$)/g,"").split(/,/);
+							for (col of cols) {
+								arr.push(col)
+							}
+							str = arr.join(",");
+							json.push(`{${str}}`);
+						}
+						res.writeHead(200, {"Content-Type": "application/json"});
+						res.write(JSON.stringify(JSON.parse(`[${json}]`)));
+						res.end();
+					}).catch(err => {
+						res.writeHead(200, {"Content-Type": "application/json"});
+						res.write(`[]`);
+						res.end();
+					});
+					break;
 				default:
 					res.writeHead(200, {"Content-Type": "application/json"});
 					res.write(`[]`);

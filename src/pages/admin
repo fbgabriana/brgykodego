@@ -15,7 +15,10 @@
 	</form>
 
 	<h3>Messages</h3>
-	<div class="message-table"><p class="empty">There are currently no messages.</p></div>
+	<div class="messages-table"><p class="empty">There are currently no messages.</p></div>
+
+	<h3>Users</h3>
+	<div class="users-table"><p class="empty">There are currently no users.</p></div>
 
 </div>
 
