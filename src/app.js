@@ -317,7 +317,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					).then(users => {
 						let json = [];
 						for (row of users) {
-							let arr = [`"username":"${row.username}","password":"[hidden]","auth.level":"${row.auth}"`];
+							let arr = [`"username":"${row.username}","password":"[hidden]","auth level":"${row.auth}"`];
 							let cols = row.userinfo.replace(/(^{)|(}$)/g,"").split(/,/);
 							for (col of cols) {
 								arr.push(col)
@@ -407,6 +407,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						res.write(templateHTML.replace("<!-- content -->", content));
 						return res.end();
 					}
+					break;
 				}
 				req.on("data", chunk => {search += chunk});
 				req.on("end", () => {
