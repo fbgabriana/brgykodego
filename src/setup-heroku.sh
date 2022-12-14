@@ -1,6 +1,7 @@
 #!/bin/sh
+cd "src/sql"
 git all
-src/sql/cleardb-mysql-setup.sh
+cleardb-mysql-setup.sh
 heroku restart
 heroku logs --tail
 
