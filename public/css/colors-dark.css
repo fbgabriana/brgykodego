@@ -16,10 +16,6 @@ body>main {
 	background-color: inherit;
 	color: inherit;
 }
-body .sidebar {
-	background-color: hsl(0, 0%, 16%);
-	color: hsl(30, 24%, 55%);
-}
 
 header h1 {
 	color: hsl(%sql:brgy_hue:hue_primary%, 10.000%, 64.000%);
@@ -99,5 +95,10 @@ article blockquote {
 }
 img {
 	filter: brightness(66.6667%) hue-rotate(-15deg);
+}
+
+.sidebar {
+	background-color: hsl(0, 0%, 16%);
+	color: hsl(30, 24%, 55%);
 }
 

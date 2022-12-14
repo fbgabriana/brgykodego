@@ -175,4 +175,10 @@ article blockquote p {
 	text-indent: 2em;
 	margin: 0;
 }
+.sidebar a {
+	color: inherit;
+}
+.sidebar a:hover {
+	opacity: 0.75;
+}
 
