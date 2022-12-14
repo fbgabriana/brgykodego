@@ -395,19 +395,19 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				break;
 			case "auth":
 				if (req.method == "GET") {
-					if (req.headers.referer) {
-						referer = new URL(req.headers.referer);
+					if (req.headers.cookie && req.headers.cookie.includes("isLoggedIn=") && req.headers.referer) {
+						const referer = new URL(req.headers.referer);
+						req.url = `${referer.href.replace(referer.origin,"")}`
 						res.writeHead(403);
-						content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User has insufficient privileges to access ${referer.href.replace(referer.origin,"")}.</p>`;
+						content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User has insufficient privileges to access ${req.url}.</p>`;
 						res.write(templateHTML.replace("<!-- content -->", content));
 						return res.end();
 					} else {
-						res.writeHead(403);
-						content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User has insufficient privileges access ${req.url}.</p>`;
+						res.writeHead(400);
+						content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>The request sent to the server is invalid.</p>`;
 						res.write(templateHTML.replace("<!-- content -->", content));
 						return res.end();
 					}
-					break;
 				}
 				req.on("data", chunk => {search += chunk});
 				req.on("end", () => {
@@ -426,23 +426,12 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 									login.found = true;
 									auth.comparePassword(login.password, user.hash).then(comp => {
 										if (comp == true) {
-											referer = new URL(req.headers.referer);
-											let from = referer.search.slice(1);
-											if (user.auth >= 2) {
-												res.setHeader("Set-Cookie", [`isLoggedIn=${user.auth}`]);
-												res.writeHead(307, {"Location": `${from || "/admin"}`});
-												return res.end();
-											} else if (user.auth >= 1) {
-												res.setHeader("Set-Cookie", [`isLoggedIn=${user.auth}`]);
-												res.writeHead(307, {"Location": `${from || "/logbook"}`});
-												return res.end();
-											} else {
-												res.writeHead(403);
-												user.userinfo = JSON.parse(user.userinfo);
-												content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${user.userinfo.displayname || user.username}' is not allowed to access this content.</p>`;
-												res.write(templateHTML.replace("<!-- content -->", content));
-												return res.end();
-											}
+											// Login successfull
+											let from = new URL(req.headers.referer).search.slice(1);
+											let landing = (user.auth >= 2) ? "/admin" : (user.auth >= 1) ? "/logbook" : "/";
+											res.setHeader("Set-Cookie", [`isLoggedIn=${user.auth}`]);
+											res.writeHead(307, {"Location": `${from || landing}`});
+											return res.end();
 										} else {
 											res.writeHead(401);
 											user.userinfo = JSON.parse(user.userinfo);
