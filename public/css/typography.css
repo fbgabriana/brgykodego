@@ -41,9 +41,9 @@ article>p:first-of-type {
 	text-indent: 0;
 }
 article>p:first-of-type::first-letter {
-	float: left;
 	font-weight: bold;
 	opacity: 0.75;
+	line-height: 1.5em;
 }
 article>p:first-of-type>span:first-child {
 	font-variant: small-caps;
