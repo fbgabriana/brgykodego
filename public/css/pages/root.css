@@ -1,0 +1,47 @@
+article fieldset.flex {
+	display: flex;
+	flex-direction: column;
+	border-radius: 0.5em;
+	width: 50%;
+	margin: 0 auto;
+}
+article fieldset.flex select {
+	padding: 0.25em 2em;
+	width: 14em;
+}
+article fieldset.grid {
+	margin: 1em 0;
+	display: grid;
+	grid-template-columns: 10em 1fr;
+	grid-gap: 0.5em;
+	border-radius: 0.5em
+}
+article fieldset.grid select {
+	padding: 0.25em 2em;
+	width: 12em;
+}
+article fieldset.grid label {
+	text-align: right;
+	padding-top: 0.25em;
+}
+article fieldset.grid input {
+	min-height: 1.5em;
+}
+article fieldset#credentials {
+	padding-bottom: 2.5em;
+	margin-bottom: 0;
+}
+article fieldset.flex button {
+	padding: 0.25em 2em;
+}
+article fieldset.flex button#update-user {
+	float: right;
+}
+article fieldset.flex button#delete-user {
+	float: left;
+	display: none;
+}
+article fieldset input[disabled] {
+	background-color: rgba(128,128,128,0.25);
+}
+

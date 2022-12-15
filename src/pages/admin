@@ -23,6 +23,9 @@
 	<div class="messages-table"><p class="empty">There are currently no messages.</p></div>
 
 	<h3>Users</h3>
+	<form action="/root" id="manage-users" style="display:none">
+	<button type="submit" name="users">Manage Users</button>
+	</form>
 	<div class="users-table"><p class="empty">There are currently no users.</p></div>
 
 </div>

@@ -1,0 +1,40 @@
+<!-- admin -->
+<div class="admin">
+
+<form id="manage-users">
+	<fieldset class="flex">
+		<legend>Users</legend>
+		<select id="userselect">
+			<option value="" selected disabled>Select user</option>
+		</select>
+		<fieldset id="credentials" class="grid">
+			<legend>Credentials</legend>
+			<label for="username">Username:</label>
+			<input type="text" id="username" name="username" autofocus>
+			<label for="password">Password:</label>
+			<input type="password" id="password" name="password">
+			<label for="confirm-password">Confirm Password:</label>
+			<input type="password" id="confirm-password" name="confirm-password">
+			<label for="authlevel">Auth Level:</label>
+			<select id="authlevel" name="authlevel">
+				<option value="0">Guest user</option>
+				<option value="1" selected>Regular user</option>
+				<option value="2">Admin user</option>
+			</select>
+		</fieldset>
+		<fieldset id="userinfo" class="grid">
+			<legend>User Info</legend>
+			<label for="displayname">Display Name:</label>
+			<input type="text" id="displayname" name="displayname">
+			<label for="email">Email:</label>
+			<input type="email" id="email" name="email">
+		</fieldset>
+		<div class="button-holder">
+			<button type="button" id="delete-user">Delete User</button>
+			<button type="button" id="update-user">Create / Update User</button>
+		</div>
+	</fieldset>
+</form>
+
+</div>
+

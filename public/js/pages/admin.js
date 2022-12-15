@@ -147,5 +147,8 @@ window.addEventListener("DOMContentLoaded", event => {
 	prefs.getColors(event);
 	tables.getMessages();
 	tables.getUsers();
+	if (currentuser.level >= 3) {
+		document.getElementById("manage-users").style.display = "block";
+	}
 });
 
