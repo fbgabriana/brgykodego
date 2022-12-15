@@ -4,8 +4,8 @@ window.addEventListener("DOMContentLoaded", async event => {
 	const users = await fetch("/get?users").then(res => res.json());
 	const form = document.getElementById("manage-users");
 	const userselect = document.getElementById("userselect");
-	const updatebutton = document.getElementById("update-user");
-	const deletebutton = document.getElementById("delete-user");
+	const updateuser = document.getElementById("update-user");
+	const deleteuser = document.getElementById("delete-user");
 	form.reset();
 	userselect.appendChild(new Option("Create new user", ""));
 	for (user of users) {
@@ -23,13 +23,13 @@ window.addEventListener("DOMContentLoaded", async event => {
 					form.elements["email"].value = user.email;
 				}
 			}
-			updatebutton.innerText = "Update User"
-			deletebutton.style.display = "block";
+			updateuser.innerText = "Update User"
+			deleteuser.style.display = "block";
 		} else {
 			form.elements["username"].disabled = false;
 			form.elements["username"].select();
-			updatebutton.innerText = "Create User";
-			deletebutton.style.display = "none";
+			updateuser.innerText = "Create User";
+			deleteuser.style.display = "none";
 			form.reset();
 			userselect.selectedIndex = 1;
 		}
