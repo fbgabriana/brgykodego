@@ -137,7 +137,7 @@ INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness, rgb
 
 INSERT INTO users (username, hash, authlevel, userinfo) VALUES
 ('root', '$2b$10$UfEN6MZ/oWFdmsiodv93qOTUCfw/ap5ZSQB5gr7v0weV44h4bKERW', 3, '{"displayname":"Root Account","email":"root@localhost"}'),
-('admin', '$2b$10$B3LeBvcoujIKcShDT6yd7uGI/CUx/dBAv2waVNFhP64fp2MEF2eLq', 2, '{"displayname":"Admin","email":"brgykodego@gmail.com"}'),
+('admin', '$2b$10$B3LeBvcoujIKcShDT6yd7uGI/CUx/dBAv2waVNFhP64fp2MEF2eLq', 2, '{"displayname":"Admin","email":"admin@localhost"}'),
 ('user', '$2b$10$M6F27PFDbnxTEaEqfPb.vO5DlURn5cvJ4YQiZYAv4zcBoluf/bfC2', 1, '{"displayname":"User","email":"user@localhost"}'),
 ('guest', '$2b$10$I34AadPQmndpt9pNrzFBnueluep17E3phabKtvcI.lDZ6dASX9.Ei', 0, '{"displayname":"Guest","email":"guest@localhost"}'),
 ('bamm', '$2b$10$Q6qBGVNzqh9FAtIaFua/ueXG.wP2zubIG1RYBSJCnDsi.xodAFlOO', 1, '{"displayname":"Bamm Gabriana","email":"fbgabriana@gmail.com"}');
