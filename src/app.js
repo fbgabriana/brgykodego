@@ -458,6 +458,22 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					}
 				});
 				break;
+			case "admin":
+				req.on("data", chunk => {search += chunk});
+				req.on("end", () => {
+					switch (q) {
+					case "users":
+						switch (req.method) {
+						case "GET":
+							break;
+						case "POST":
+							const update = JSON.parse(search);
+							console.log(update);
+							break;
+						}
+					}
+				});
+				break;
 			case "env":
 				content = `<pre>\n${Object.keys(process.env).sort().map(key =>`${key}=${process.env[key]}`).join("\n")}\n</pre>`;
 				res.writeHead(200, {"Content-Type": "text/html"});

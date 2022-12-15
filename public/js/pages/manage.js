@@ -34,5 +34,24 @@ window.addEventListener("DOMContentLoaded", async event => {
 			userselect.selectedIndex = 1;
 		}
 	});
+	updateuser.addEventListener("click", event => {
+		form.elements["username"].disabled = false;
+		const formdata = new FormData(form);
+		const user = {
+			"username":formdata.get("username"),
+			"authlevel":formdata.get("authlevel"),
+			"password":formdata.get("password"),
+			"userinfo":{
+				"displayname":formdata.get("displayname"),
+				"email":formdata.get("email"),
+			}
+		};
+		if (user.username) form.elements["username"].disabled = true;
+		fetch("/admin?users", {
+			method:"POST",
+			headers:{"Content-Type": "application/json"},
+			body: JSON.stringify(user),
+		});
+	});
 });
 
