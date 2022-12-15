@@ -115,7 +115,11 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				<script>history.replaceState(null,null,location.href)</script>\n`;
 						} else {
 							if (userAuth) {
-								content += `				<h2>Welcome ${userAuth.displayname}</h2>`;
+								content += `				<h2 class="welcome user-auth${userAuth.auth}">Welcome ${userAuth.displayname}</h2>`;
+								if (userAuth.auth >= 2) {
+									content += `				<div class="admin-postbulletin"><button onclick="location='/?post'">Post an announcement</button></div>`;
+									content += `				<div class="admin-manage"><a href="/admin">[ Manage ]</a></div>`;
+								}
 							}
 						}
 							content += `				<!-- bulletin posts -->`;
@@ -148,10 +152,6 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						});
 							content += `
 				<!-- end bulletin posts -->`;
-						if (!(q&&q.includes("post="))) {
-							content += `
-				<div class="newpost-anchor"><a href="/?post">[ New post ]</a></div>`;
-						}
 						res.write(templateHTML.replace("<!-- content -->", content));
 						res.end();
 					});
@@ -432,9 +432,8 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 										if (comp == true) {
 											// Login successful
 											let from = new URL(req.headers.referer).search.slice(1);
-											let landing = (user.auth >= 2) ? "/admin" : (user.auth >= 1) ? "/logbook" : "/";
 											res.setHeader("Set-Cookie", [`userAuth={"user":"${user.username}","auth":"${user.auth}","displayname":"${JSON.parse(user.userinfo).displayname}"}`]);
-											res.writeHead(307, {"Location": `${from || landing}`});
+											res.writeHead(307, {"Location": `${from || "/"}`});
 											return res.end();
 										} else {
 											res.writeHead(401);

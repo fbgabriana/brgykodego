@@ -111,12 +111,6 @@ header nav li a.current-section,
 header nav li a.current-section:hover {
 	user-select: none;
 }
-header nav li a[href="/admin"] {
-	display: none;
-}
-header nav li a[href="/logout"] {
-	display: none;
-}
 
 /* The main content */
 main {
@@ -124,6 +118,7 @@ main {
 	height: calc(100vh - 40px - 110px);
 }
 main article {
+	position: relative;
 	padding: 20px;
 }
 

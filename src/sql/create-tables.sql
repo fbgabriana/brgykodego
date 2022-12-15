@@ -136,10 +136,11 @@ INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness, rgb
 ('1', '215.33566284', '66.66666412', '40.00000000', '#225baa');
 
 INSERT INTO users (username, hash, auth, userinfo) VALUES
+('root', '$2b$10$UfEN6MZ/oWFdmsiodv93qOTUCfw/ap5ZSQB5gr7v0weV44h4bKERW', 3, '{"displayname":"Root Account","email":"root@localhost"}'),
 ('admin', '$2b$10$B3LeBvcoujIKcShDT6yd7uGI/CUx/dBAv2waVNFhP64fp2MEF2eLq', 2, '{"displayname":"Admin","email":"brgykodego@gmail.com"}'),
 ('user', '$2b$10$M6F27PFDbnxTEaEqfPb.vO5DlURn5cvJ4YQiZYAv4zcBoluf/bfC2', 1, '{"displayname":"User","email":"user@localhost"}'),
 ('guest', '$2b$10$I34AadPQmndpt9pNrzFBnueluep17E3phabKtvcI.lDZ6dASX9.Ei', 0, '{"displayname":"Guest","email":"guest@localhost"}'),
-('bamm', '$2b$10$Q6qBGVNzqh9FAtIaFua/ueXG.wP2zubIG1RYBSJCnDsi.xodAFlOO', 1, '{"displayname":"Bamm","email":"fbgabriana@gmail.com"}');
+('bamm', '$2b$10$Q6qBGVNzqh9FAtIaFua/ueXG.wP2zubIG1RYBSJCnDsi.xodAFlOO', 1, '{"displayname":"Bamm Gabriana","email":"fbgabriana@gmail.com"}');
 
 DROP TABLE IF EXISTS brgy_authorized_user;
 DROP TABLE IF EXISTS brgy_hue;

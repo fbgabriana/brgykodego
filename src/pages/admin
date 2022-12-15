@@ -3,7 +3,12 @@
 
 	<h3>News Feed</h3>
 	<form action="/">
-	<button class="new-bulletin" type="submit" name="post">Add new bulletin</button>
+	<button class="new-bulletin" type="submit" name="post">New bulletin post</button>
+	</form>
+
+	<h3>Logbook</h3>
+	<form action="/logbook">
+	<button class="new-logbook" type="submit" name="post">New logbook post</button>
 	</form>
 
 	<h3>Color Theme</h3>

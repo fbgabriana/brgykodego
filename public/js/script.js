@@ -85,15 +85,13 @@ const setCurrentPage = () => {
 	for (i = 0; i < a.length; i++) {
 		if (a[i].origin == location.origin) {
 			if (auth.isLoggedIn) {
-				document.getElementById(`nav-login`).style.display = "none";
-				document.getElementById(`nav-logout`).style.display = "flex";
-				document.getElementById(`nav-logout`).addEventListener("click", event => {
+				const login = document.getElementById(`nav-login`);
+				login.innerText = "Logout";
+				login.href = "/logout";
+				login.addEventListener("click", event => {
 					event.preventDefault();
 					auth.logout("/login");
 				});
-				if (auth.authLevel() >= 2) {
-					document.getElementById(`nav-admin`).style.display = "flex";
-				}
 			}
 			if (a[i].href == currentLocation) {
 				a[i].classList.add("current-page");

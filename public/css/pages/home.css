@@ -96,10 +96,6 @@ article {
 .sample-post {
 	background-image: url("/content/bulletin/images/icons/icon-news-update.png");
 }
-.newpost-anchor {
-	font-size: smaller;
-	margin: 1em;
-}
 .new-bulletin-form {
 	max-width: 640px;
 	margin: 0 auto;
@@ -117,5 +113,25 @@ article {
 :root[data-colorscheme="dark"] .bulletin-post {
 	background-color: hsl(0, 0%, 15%);
 	border: 1px solid hsla(0, 0%, 50%, 0.5);
+}
+
+/* Admin */
+.admin-manage {
+	position: absolute;
+	top: 20px;
+	right: 50px;
+}
+.admin-postbulletin {
+	position: absolute;
+	top: 20px;
+	left: 50px;
+}
+.admin-postbulletin button {
+	font-size: 0.85rem;
+	line-height: 0.85rem;
+	padding: 0.375em 0.75em;
+}
+.user-auth3 {
+	color: red;
 }
 
