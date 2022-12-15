@@ -1,20 +1,12 @@
 // Barangay KodeGo
 
+const currentuser = JSON.parse(cookieStorage.getItem("currentuser"));
+
 const auth = {
-	isLoggedIn: cookieStorage.hasItem("userAuth"),
-	authLevel() {
-		if (this.isLoggedIn) {
-			return JSON.parse(cookieStorage.getItem("userAuth")).auth
-		}
-	},
-	username() {
-		if (this.isLoggedIn) {
-			return JSON.parse(cookieStorage.getItem("userAuth")).user
-		}
-	},
+	isLoggedIn: cookieStorage.hasItem("currentuser"),
 	require(requiredLevel) {
 		if (this.isLoggedIn) {
-			if (this.authLevel() < requiredLevel) {
+			if (currentuser.level < requiredLevel) {
 				location.href = `/auth`;
 			}
 		} else {
@@ -22,7 +14,7 @@ const auth = {
 		}
 	},
 	logout(redir) {
-		cookieStorage.removeItem("userAuth");
+		cookieStorage.removeItem("currentuser");
 		location.href = redir || "/";
 	}
 }

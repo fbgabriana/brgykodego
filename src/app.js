@@ -51,7 +51,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 		if (filename.indexOf(".") == -1) {
 			templateHTML = fs.existsSync(`public/css/pages/${filename}.css`) ? templateHTML.replace("%req:current-page%", filename) : templateHTML.replace(/^.*%req:current-page%.*$\n/mg, "");
 			templateHTML = fs.existsSync(`public/js/pages/${filename}.js`) ? templateHTML.replace("%req:current-page%", filename) : templateHTML.replace(/^.*%req:current-page%.*$\n/mg, "");
-			const userAuth = req.headers.cookie ? JSON.parse(querystring.parse(req.headers.cookie,";").userAuth) : null;
+			const currentuser = req.headers.cookie ? JSON.parse(querystring.parse(req.headers.cookie,";").currentuser) : null;
 			const now = new Date().toISOString().slice(0, 19).replace("T", " ");
 			let content = "";
 			switch (filename) {
@@ -114,9 +114,9 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				</div>
 				<script>history.replaceState(null,null,location.href)</script>\n`;
 						} else {
-							if (userAuth) {
-								content += `				<h2 class="welcome user-auth${userAuth.auth}">Welcome ${userAuth.displayname}</h2>`;
-								if (userAuth.auth >= 2) {
+							if (currentuser) {
+								content += `				<h2 class="welcome user-auth${currentuser.level}">Welcome ${currentuser.displayname}</h2>`;
+								if (currentuser.level >= 2) {
 									content += `				<div class="admin-postbulletin"><button onclick="location='/?post'">Post an announcement</button></div>`;
 									content += `				<div class="admin-manage"><a href="/admin">[ Manage ]</a></div>`;
 								}
@@ -315,17 +315,17 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					sql.query(`SELECT
 						username,
 						hash,
-						auth,
+						authlevel,
 						userinfo
 					FROM
 						users`
 					).then(users => {
 						let json = [];
 						for (row of users) {
-							let arr = [`"username":"${row.username}","password (encrypted)":"${row.hash.slice(0,16)}...","auth level":"${row.auth}"`];
+							let arr = [`"username":"${row.username}","password (encrypted)":"${row.hash.slice(0,16)}...","authlevel":"${row.authlevel}"`];
 							let cols = row.userinfo.replace(/(^{)|(}$)/g,"").split(/,/);
 							for (col of cols) {
-								arr.push(col)
+								arr.push(col);
 							}
 							str = arr.join(",");
 							json.push(`{${str}}`);
@@ -400,10 +400,10 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				break;
 			case "auth":
 				if (req.method == "GET") {
-					if (req.headers.cookie && req.headers.cookie.includes("userAuth=") && req.headers.referer) {
+					if (currentuser && req.headers.referer) {
 						const referer = new URL(req.headers.referer); referer.path = `${referer.href.replace(referer.origin,"")}`;
 						res.writeHead(403);
-						content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${userAuth.user}' has insufficient privileges to access ${referer.path}.</p>`;
+						content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${currentuser.username}' has insufficient privileges to access ${referer.path}.</p>`;
 						res.write(templateHTML.replace("<!-- content -->", content));
 						return res.end();
 					} else {
@@ -424,7 +424,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							return res.end();
 						}
 						const auth = require(`./auth.js`);
-						sql.query("SELECT username, hash, auth, userinfo FROM users").then(users => {
+						sql.query("SELECT username, hash, authlevel, userinfo FROM users").then(users => {
 							for (var user of users) {
 								if (user.username == login.username) {
 									login.found = true;
@@ -432,7 +432,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 										if (comp == true) {
 											// Login successful
 											let from = new URL(req.headers.referer).search.slice(1);
-											res.setHeader("Set-Cookie", [`userAuth={"user":"${user.username}","auth":"${user.auth}","displayname":"${JSON.parse(user.userinfo).displayname}"}`]);
+											res.setHeader("Set-Cookie", [`currentuser={"username":"${user.username}","level":"${user.authlevel}","displayname":"${JSON.parse(user.userinfo).displayname}"}`]);
 											res.writeHead(307, {"Location": `${from || "/"}`});
 											return res.end();
 										} else {

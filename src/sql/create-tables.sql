@@ -108,7 +108,7 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
 username VARCHAR(255),
 hash VARCHAR(255),
-auth INT,
+authlevel INT,
 userinfo VARCHAR(1023),
 PRIMARY KEY(username)
 );
@@ -135,7 +135,7 @@ INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness, rgb
 ('0', '215.00000000', '66.66666667', '40.00000000', '#225baa'),
 ('1', '215.33566284', '66.66666412', '40.00000000', '#225baa');
 
-INSERT INTO users (username, hash, auth, userinfo) VALUES
+INSERT INTO users (username, hash, authlevel, userinfo) VALUES
 ('root', '$2b$10$UfEN6MZ/oWFdmsiodv93qOTUCfw/ap5ZSQB5gr7v0weV44h4bKERW', 3, '{"displayname":"Root Account","email":"root@localhost"}'),
 ('admin', '$2b$10$B3LeBvcoujIKcShDT6yd7uGI/CUx/dBAv2waVNFhP64fp2MEF2eLq', 2, '{"displayname":"Admin","email":"brgykodego@gmail.com"}'),
 ('user', '$2b$10$M6F27PFDbnxTEaEqfPb.vO5DlURn5cvJ4YQiZYAv4zcBoluf/bfC2', 1, '{"displayname":"User","email":"user@localhost"}'),
