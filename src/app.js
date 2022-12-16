@@ -117,8 +117,8 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							if (currentuser) {
 								content += `				<h2 class="welcome user-auth${currentuser.level}">Welcome ${currentuser.displayname}</h2>`;
 								if (currentuser.level >= 2) {
-									content += `				<div class="admin-postbulletin"><button onclick="location='/?post'">Post an announcement</button></div>`;
-									content += `				<div class="admin-manage"><a href="/admin">[ Manage ]</a></div>`;
+									content += `				<div class="admin-post"><button onclick="location='/?post'">Post an announcement</button></div>`;
+									content += `				<div class="admin-dash"><a href="/dash">[ Manage ]</a></div>`;
 								}
 							}
 						}
