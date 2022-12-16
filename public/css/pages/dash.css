@@ -1,29 +1,32 @@
-
-.admin h3 {
+.controlpanel > div {
+	display: inline-block;
+	margin-right: 2em;
+}
+.controlpanel h3 {
 	font-size: 1.15em;
 	margin: 1em 0 0.35em 0;
 }
-.admin button {
+.controlpanel button {
 	font-size: 0.85rem;
 	line-height: 0.85rem;
 	padding: 0.375em 0.75em;
 	margin: 0.5em 0.15em;
 	vertical-align: middle;
 }
-.admin .colorcode {
+.controlpanel .colorcode {
 	font-family: monospace;
 	font-size: 1rem;
 	padding: 0.15em 0.4854em;
 	vertical-align: middle;
 }
-.admin .colorpicker {
+.controlpanel .colorpicker {
 	box-sizing: border-box;
 	font-size: 1.25em;
 	width: calc(1.618 * 2em);
 	height: 2em;
 	vertical-align: middle;
 }
-.admin .message-table .empty {
+.controlpanel .message-table .empty {
 	font-style: italic;
 }
 

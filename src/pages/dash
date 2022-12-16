@@ -1,32 +1,36 @@
-<!-- admin -->
-<div class="admin">
+<!-- dash -->
+<div class="controlpanel">
+	<div>
+		<h3>News Feed</h3>
+		<form action="/">
+		<button class="new-bulletin" type="submit" name="post">New bulletin post</button>
+		</form>
+	</div>
+	<div>
+		<h3>Logbook</h3>
+		<form action="/logbook">
+		<button class="new-logbook" type="submit" name="post">New logbook post</button>
+		</form>
+	</div>
+	<div>
+		<h3>Color Theme</h3>
+		<form id="colorhandler" class="colorhandler">
+		<label for="colorcode">Color Code: </label>
+		<input type="text" name="colorcode" id="colorcode" class="colorcode" maxlength="7" size="7" placeholder="#rrggbb">
+		<input type="color" id="colorpicker" class="colorpicker">
+		<button id="colorchanger" class="colorchanger">Apply</button>
+		</form>
+	</div>
+	<div class="tables">
 
-	<h3>News Feed</h3>
-	<form action="/">
-	<button class="new-bulletin" type="submit" name="post">New bulletin post</button>
-	</form>
+		<h3>Messages</h3>
+		<div class="messages-table"><p class="empty">There are currently no messages.</p></div>
 
-	<h3>Logbook</h3>
-	<form action="/logbook">
-	<button class="new-logbook" type="submit" name="post">New logbook post</button>
-	</form>
-
-	<h3>Color Theme</h3>
-	<form id="colorhandler" class="colorhandler">
-	<label for="colorcode">Color Code: </label>
-	<input type="text" name="colorcode" id="colorcode" class="colorcode" maxlength="7" size="7" placeholder="#rrggbb">
-	<input type="color" id="colorpicker" class="colorpicker">
-	<button id="colorchanger" class="colorchanger">Apply</button>
-	</form>
-
-	<h3>Messages</h3>
-	<div class="messages-table"><p class="empty">There are currently no messages.</p></div>
-
-	<h3>Users</h3>
-	<form action="/manage" id="manage-users" style="display:none">
-	<button type="submit" name="users">Manage Users</button>
-	</form>
-	<div class="users-table"><p class="empty">There are currently no users.</p></div>
-
+		<h3>Users</h3>
+		<form action="/users" id="manage-users" style="display:none">
+		<button type="submit" name="id">Manage Users</button>
+		</form>
+		<div class="users-table"><p class="empty">There are currently no users.</p></div>
+	</div>
 </div>
 

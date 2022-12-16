@@ -5,11 +5,7 @@ const util = require("util");
 const mime = require("mime-types");
 const querystring = require("querystring");
 
-const host = {
-	hostname: "0.0.0.0",
-	port: process.env.PORT || 9000
-};
-
+const auth = require(`./auth.js`);
 const dbconfig = require("./db.config.js");
 
 const sql = mysql.createPool({
@@ -22,7 +18,12 @@ const sql = mysql.createPool({
 sql.query = util.promisify(sql.query).bind(sql);
 fs.readFile = util.promisify(fs.readFile).bind(fs);
 
-const app_ver = `${process.env.npm_package_name}-${process.env.npm_package_version}`;
+const host = {
+	hostname: "0.0.0.0",
+	port: process.env.PORT || 9000
+};
+
+const app_version = `${process.env.npm_package_name}-${process.env.npm_package_version}`;
 const app_homepage = process.env.HOME == "/app" ? require(process.env.npm_package_json).homepage : `http://${process.env.npm_package_name}.localhost:${host.port}`;
 
 const publicpath = "./public";
@@ -345,7 +346,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					res.end();
 				}
 				break;
-			case "prefs":
+			case "manage":
 				req.on("data", chunk => {search += chunk});
 				req.on("end", async () => {
 					switch (q) {
@@ -391,10 +392,72 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							break;
 						}
 						break;
+					case "users":
+						switch (req.method) {
+						case "GET":
+							sql.query("SELECT username, hash, authlevel, userinfo FROM users").then(async users => {
+								users.map(user => { user.userinfo = JSON.parse(user.userinfo); return user });
+								res.writeHead(200, {"Content-Type": "application/json"});
+								res.write(JSON.stringify(users));
+								res.end();
+							});
+							break;
+						case "POST":
+							const update = JSON.parse(search);
+							if (update.userinfo) {
+								sql.query("SELECT username, hash, authlevel, userinfo FROM users").then(async users => {
+									for (var user of users) {
+										if (user.username == update.username) {
+											update.hash = user.hash;
+											break;
+										}
+									}
+									if (update.password) {
+										await auth.hashPassword(update.password).then(hash => update.hash = hash);
+									}
+									delete update.password;
+									update.userinfo = JSON.stringify(update.userinfo);
+									sql.query(`REPLACE INTO users (
+										username,
+										hash,
+										authlevel,
+										userinfo
+									) VALUES (
+										'${update.username}',
+										'${update.hash}',
+										'${update.authlevel}',
+										'${update.userinfo}'
+									)`);
+									// to see what changed:
+									// console.log(user)
+									// console.log(update);
+									return update
+								}).then(update => {
+									res.writeHead(200, {"Content-Type": "application/json"});
+									res.write(JSON.stringify(update));
+									res.end();
+								}).catch(err => {
+									console.log(err.message);
+								});
+							} else {
+								sql.query(`DELETE FROM users WHERE username='${update.username}'`).then(packet => {
+									return packet;
+								}).then(update => {
+									res.writeHead(200, {"Content-Type": "application/json"});
+									res.write(JSON.stringify(update));
+									res.end();
+								}).catch(err => {
+									console.log(err.message);
+								});
+							}
+							break;
+						}
+						break;
 					default:
 						res.writeHead(200, {"Content-Type": "application/json"});
 						res.write(`[]`);
 						res.end();
+						console.log("Hello");
 					}
 				});
 				break;
@@ -423,7 +486,6 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							res.write(templateHTML.replace("<!-- content -->", content));
 							return res.end();
 						}
-						const auth = require(`./auth.js`);
 						sql.query("SELECT username, hash, authlevel, userinfo FROM users").then(users => {
 							for (var user of users) {
 								if (user.username == login.username) {
@@ -455,22 +517,6 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					} else {
 						res.writeHead(307, {"Location": req.headers.referer || req.headers.origin});
 						return res.end();
-					}
-				});
-				break;
-			case "admin":
-				req.on("data", chunk => {search += chunk});
-				req.on("end", () => {
-					switch (q) {
-					case "users":
-						switch (req.method) {
-						case "GET":
-							break;
-						case "POST":
-							const update = JSON.parse(search);
-							console.log(update);
-							break;
-						}
 					}
 				});
 				break;
@@ -542,7 +588,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 		process.exit(0);
 	}).on("listening", () => {
 		const socketAddress = server.address();
-		console.log("\x1b[36m%s\x1b[0m",`[app] ${app_ver}`, "\x1b[0m");
+		console.log("\x1b[36m%s\x1b[0m",`[app] ${app_version}`, "\x1b[0m");
 		console.log("\x1b[36m%s\x1b[0m",`[app] Development server started ${new Date()}`, "\x1b[0m");
 		console.log("\x1b[36m%s\x1b[0m",`[app] Running at ${socketAddress.address} over ${socketAddress.port}...`, "\x1b[0m");
 		console.log("\x1b[34m%s\x1b[0m",`[app] ${app_homepage}\x1b[0m`, "\x1b[0m");

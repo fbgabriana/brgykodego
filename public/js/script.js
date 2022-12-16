@@ -21,6 +21,7 @@ const auth = {
 
 const querystring = {
 	parse : (str="", sep="&", eq="=") => {
+		if (str[0] === "?") str = str.slice(1);
 		let query = Object.create(null);
 		let pairs = str ? str.split(sep) : [];
 		for (let i = 0; i < pairs.length; i++) {
@@ -29,6 +30,14 @@ const querystring = {
 		}
 		return query;
 	}
+}
+
+const validator = {
+	email : /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+	password : /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+	length(N) {
+		return new RegExp(`(.+){${N}}`);
+	},
 }
 
 const toggleMenuBar = () => {
@@ -153,6 +162,7 @@ const addColorSwitcher = (selector) => {
 	}
 }
 
+document.out = document.write;
 document.write = function(markup) {
 	const scripts = document.getElementsByTagName("script");
 	scripts[scripts.length - 1].insertAdjacentHTML("afterend", markup);
