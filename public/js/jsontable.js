@@ -46,7 +46,7 @@ class JSONTable {
 						case "tel":
 							let tel = document.createElement("a");
 							tel.innerText = tablerow[tabledata];
-							tel.href = "tel:"+tel.innerText.replace(/\w|-|(|)/g,"");
+							tel.href = "tel:"+tel.innerText.replace(/\s|-|(|)/g,"");
 							td.appendChild(tel);
 							break;
 						default:
