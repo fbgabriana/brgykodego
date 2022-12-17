@@ -32,4 +32,7 @@
 .controlpanel .messages-table .col-timestamp {
 	white-space: nowrap;
 }
+.controlpanel .messages-table .col-tel {
+	white-space: nowrap;
+}
 
