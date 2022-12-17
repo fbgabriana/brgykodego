@@ -44,7 +44,7 @@ const truncate = (obj, n) => {
 	return typeof obj === "string" ? (obj.length > n) ? obj.slice(0, n) + "…" : obj : obj;
 };
 
-const tzoffset = async () => {
+const getTZOffset = async () => {
 	return await fetch("/query?tzoffset").then(res => res.text());
 };
 

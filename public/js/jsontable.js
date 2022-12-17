@@ -10,7 +10,7 @@ class JSONTable {
 		fetch(this.url, {
 			method:"GET",
 			headers:{"Content-Type": "application/json"}
-		}).then(res => res.json()).then(rows => {
+		}).then(res => res.json()).then(async rows => {
 			if (rows.length) {
 				let table = document.createElement("table");
 				let tr = document.createElement("tr");
@@ -32,8 +32,9 @@ class JSONTable {
 						td.classList.add("col-"+tabledata);
 						switch(tabledata) {
 						case "timestamp":
+							let tzoffset = await getTZOffset();
 							let utcdate = new Date(tablerow[tabledata]);
-							let localtime = new Date(utcdate + tzoffset);
+							let localtime = new Date(parseInt(utcdate.getTime()) + parseInt(tzoffset));
 							td.innerText = localtime.toLocaleString();
 							break;
 						case "email":
