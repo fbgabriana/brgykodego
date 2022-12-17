@@ -357,7 +357,6 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						case "GET":
 							sql.query("SELECT username, hash, authlevel, userinfo FROM users").then(async users => {
 								users.map(user => { user.userinfo = JSON.parse(user.userinfo) });
-								users = users.map(user => flatten(user));
 								res.writeHead(200, {"Content-Type": "application/json"});
 								res.write(JSON.stringify(users));
 								res.end();

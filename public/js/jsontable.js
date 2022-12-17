@@ -6,11 +6,14 @@ class JSONTable {
 		this.selector = selector;
 	}
 
+	// Arr is an array of columns to include
 	getData(Arr) {
 		fetch(this.url, {
 			method:"GET",
 			headers:{"Content-Type": "application/json"}
-		}).then(res => res.json()).then(async rows => {
+		}).then(res => res.json()).then(rows => {
+			return rows.map(row => this.flatten(row));
+		}).then(async rows => {
 			if (rows.length) {
 				let table = document.createElement("table");
 				let tr = document.createElement("tr");
@@ -31,12 +34,6 @@ class JSONTable {
 						let td = document.createElement("td");
 						td.classList.add("col-"+tabledata);
 						switch(tabledata) {
-						case "timestamp":
-							let tzoffset = await getTZOffset();
-							let utcdate = new Date(tablerow[tabledata]);
-							let localtime = new Date(parseInt(utcdate.getTime()) + parseInt(tzoffset));
-							td.innerText = localtime.toLocaleString();
-							break;
 						case "email":
 							let mailto = document.createElement("a");
 							mailto.innerText = tablerow[tabledata];
@@ -50,7 +47,14 @@ class JSONTable {
 							td.appendChild(tel);
 							break;
 						default:
-							td.innerText = tablerow[tabledata];
+							let timestamp = Date.parse(tablerow[tabledata]);
+							if (timestamp) {
+								let tzoffset = await this.getTZOffset();
+								let localtime = new Date(parseInt(timestamp) + parseInt(tzoffset));
+								td.innerText = localtime.toLocaleString();
+							} else {
+								td.innerText = tablerow[tabledata];
+							}
 						}
 						tr.appendChild(td);
 					}
@@ -66,5 +70,21 @@ class JSONTable {
 
 		});
 	}
+
+	// No nested tables
+	flatten (obj = [], path = "") {
+		if (typeof obj === "object") {
+			return Object.keys(obj).reduce((output, key) => {
+				return {...output, ...this.flatten(obj[key], key)};
+			}, {});
+		} else {
+			return { [path] : obj };
+		}
+	}
+
+	async getTZOffset () {
+		return await fetch("/query?tzoffset").then(res => res.text());
+	};
+
 }
 

@@ -35,6 +35,7 @@ const querystring = {
 const validator = {
 	email : /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
 	password : /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+	tel : /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/,
 	length(N) {
 		return new RegExp(`(.+){${N}}`);
 	},
@@ -42,10 +43,6 @@ const validator = {
 
 const truncate = (obj, n) => {
 	return typeof obj === "string" ? (obj.length > n) ? obj.slice(0, n) + "…" : obj : obj;
-};
-
-const getTZOffset = async () => {
-	return await fetch("/query?tzoffset").then(res => res.text());
 };
 
 const toggleMenuBar = () => {
