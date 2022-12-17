@@ -415,7 +415,14 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						break;
 					case "env":
 						res.writeHead(200, {"Content-Type": "application/json"});
-						res.write( `[${Object.keys(process.env).sort().map(key =>`{"Name":"${key}","Value":"${process.env[key]}"}`).toString()}]` );
+						res.write(`[${Object.keys(process.env).sort().map(key =>`{"Name":"${key}","Value":"${process.env[key]}"}`).toString()}]` );
+						res.end();
+						break;
+					case "tzoffset":
+						let utcdate = new Date();
+						let tzoffset = 1000 * 60 * utcdate.getTimezoneOffset();
+						res.writeHead(200, {"Content-Type": "text/plain"});
+						res.write(tzoffset)
 						res.end();
 						break;
 					default:
