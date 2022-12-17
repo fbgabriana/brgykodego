@@ -420,9 +420,9 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						break;
 					case "tzoffset":
 						let utcdate = new Date();
-						let tzoffset = 1000 * 60 * utcdate.getTimezoneOffset();
+						let tzoffset = 0 - 1000 * 60 * utcdate.getTimezoneOffset();
 						res.writeHead(200, {"Content-Type": "text/plain"});
-						res.write(tzoffset)
+						res.write(tzoffset.toString());
 						res.end();
 						break;
 					default:
