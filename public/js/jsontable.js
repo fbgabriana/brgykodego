@@ -34,7 +34,7 @@ class JSONTable {
 						case "timestamp":
 							let utcdate = new Date(tablerow[tabledata]);
 							let offset = 1000 * 60 * utcdate.getTimezoneOffset();
-							let localtime = new Date(utcdate - offset);
+							let localtime = new Date(utcdate);
 							td.innerText = localtime.toLocaleString();
 							break;
 						case "email":
