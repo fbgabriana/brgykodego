@@ -11,7 +11,7 @@ const manage = {
 		colorcode.value = colortheme;
 		colorpicker.value = colortheme;
 
-		fetch("/manage?colortheme", {
+		fetch("/query?colortheme", {
 			method:"GET",
 			headers:{"Content-Type": "application/json"},
 		}).then(res => res.json()).then(brgy_colors_hsl => {
@@ -69,7 +69,7 @@ const manage = {
 			setTimeout(() => {
 				document.body.style.cursor = colorchanger.style.cursor = "progress";
 			}, 10);
-			fetch("/manage?colortheme", {
+			fetch("/query?colortheme", {
 				method:"POST",
 				headers:{"Content-Type": "application/json"},
 				body:`{"hue_id":"${id}","hsl_hue":"${hsl.h}","hsl_saturation":"${hsl.s}","hsl_lightness":"${hsl.l}","rgb_hex":"${colorcode.value}"}`
@@ -79,13 +79,13 @@ const manage = {
 			});
 		}
 	},
-	getMessages() {
-		jsonTable = new JSONTable("/get?messages", ".messages-table");
-		jsonTable.getData();
+	getMessages(Arr) {
+		jsonTable = new JSONTable("/query?messages", ".messages-table");
+		jsonTable.getData(Arr);
 	},
-	getUsers() {
-		jsonTable = new JSONTable("/get?users", ".users-table");
-		jsonTable.getData();
+	getUsers(Arr) {
+		jsonTable = new JSONTable("/query?users", ".users-table");
+		jsonTable.getData(Arr);
 	},
 }
 
@@ -145,7 +145,7 @@ window.history.replaceState(null,null,location.href);
 window.addEventListener("DOMContentLoaded", event => {
 	manage.getColors(event);
 	manage.getMessages();
-	manage.getUsers();
+	manage.getUsers(["username","authlevel","displayname","email"]);
 	if (currentuser.level >= 3) {
 		document.getElementById("manage-users").style.display = "block";
 	}

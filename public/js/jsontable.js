@@ -6,7 +6,7 @@ class JSONTable {
 		this.selector = selector;
 	}
 
-	getData() {
+	getData(Arr) {
 		fetch(this.url, {
 			method:"GET",
 			headers:{"Content-Type": "application/json"}
@@ -14,17 +14,44 @@ class JSONTable {
 			if (rows.length) {
 				let table = document.createElement("table");
 				let tr = document.createElement("tr");
+				tr.classList.add("row-0");
 				for (var tableheader in rows[0]) {
+					if (Arr && !Arr.includes(tableheader)) continue;
 					let th = document.createElement("th");
+					th.classList.add("col-"+tableheader);
 					th.innerText = tableheader;
 					tr.appendChild(th);
 				}
 				table.appendChild(tr)
 				for (var tablerow of rows) {
 					let tr = document.createElement("tr");
+					tr.classList.add("row-"+rows.indexOf(tablerow));
 					for (var tabledata in tablerow) {
+						if (Arr && !Arr.includes(tabledata)) continue;
 						let td = document.createElement("td");
-						td.innerText = tablerow[tabledata];
+						td.classList.add("col-"+tabledata);
+						switch(tabledata) {
+						case "timestamp":
+							let utcdate = new Date(tablerow[tabledata]);
+							let offset = 1000 * 60 * utcdate.getTimezoneOffset();
+							let localtime = new Date(utcdate - offset);
+							td.innerText = localtime.toLocaleString();
+							break;
+						case "email":
+							let mailto = document.createElement("a");
+							mailto.innerText = tablerow[tabledata];
+							mailto.href = "mailto:"+mailto.innerText;
+							td.appendChild(mailto);
+							break;
+						case "tel":
+							let tel = document.createElement("a");
+							tel.innerText = tablerow[tabledata];
+							tel.href = "tel:"+tel.innerText;
+							td.appendChild(tel);
+							break;
+						default:
+							td.innerText = tablerow[tabledata];
+						}
 						tr.appendChild(td);
 					}
 					table.appendChild(tr)

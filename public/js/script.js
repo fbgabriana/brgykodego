@@ -40,6 +40,10 @@ const validator = {
 	},
 }
 
+const truncate = (obj, n) => {
+	return typeof obj === "string" ? (obj.length > n) ? obj.slice(0, n) + "…" : obj : obj;
+};
+
 const toggleMenuBar = () => {
 	let menubar = document.getElementById("menubar");
 	menubar.style.display = menubar.style.display == "none" ? "block" : "none";

@@ -26,7 +26,10 @@
 	height: 2em;
 	vertical-align: middle;
 }
-.controlpanel .message-table .empty {
+.controlpanel .empty {
 	font-style: italic;
+}
+.controlpanel .messages-table .col-timestamp {
+	white-space: nowrap;
 }
 

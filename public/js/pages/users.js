@@ -1,7 +1,7 @@
 auth.require(3);
 
 const ManageUsers = async () => {
-	const users = await fetch("/manage?users").then(res => res.json());
+	const users = await fetch("/query?users").then(res => res.json());
 	const form = document.getElementById("manage-users");
 	const userselect = document.getElementById("userselect");
 	const updateuser = document.getElementById("update-user");
@@ -103,7 +103,7 @@ const ManageUsers = async () => {
 		default:
 			return;
 		}
-		fetch("/manage?users", {
+		fetch("/query?users", {
 			method:"POST",
 			headers:{"Content-Type": "application/json"},
 			body: JSON.stringify(update),

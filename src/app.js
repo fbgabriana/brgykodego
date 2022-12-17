@@ -7,6 +7,7 @@ const querystring = require("querystring");
 
 const auth = require(`./auth.js`);
 const dbconfig = require("./db.config.js");
+const flatten = require("./flatten");
 
 const sql = mysql.createPool({
 	user: dbconfig.user,
@@ -275,78 +276,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					});
 				});
 				break;
-			case "get":
-				switch (q) {
-				case "env":
-					res.writeHead(200, {"Content-Type": "application/json"});
-					res.write( `[${Object.keys(process.env).sort().map(key =>`{"Name":"${key}","Value":"${process.env[key]}"}`).toString()}]` );
-					res.end();
-					break;
-				case "messages":
-					sql.query(`SELECT
-						formdata_datetime_utc,
-						formdata_query
-					FROM
-						formdata
-					WHERE
-						formdata_referer = '/contact'`
-					).then(formdata => {
-						let json = [];
-						for (row of formdata.reverse()) {
-							let datetime = row.formdata_datetime_utc.toLocaleString();
-							let arr = [`"timestamp":"${datetime}"`];
-							let cols = row.formdata_query.replace(/,$/,"").split(/,\n/);
-							for (col of cols) {
-								let entries = col.split(": ");
-								arr.push(`"${entries[0]}":"${entries[1]}"`);
-							}
-							str = arr.join(",");
-							json.push(`{${str}}`);
-						}
-						res.writeHead(200, {"Content-Type": "application/json"});
-						res.write(JSON.stringify(JSON.parse(`[${json}]`)));
-						res.end();
-					}).catch(err => {
-						res.writeHead(200, {"Content-Type": "application/json"});
-						res.write(`[]`);
-						res.end();
-					});
-					break;
-				case "users":
-					sql.query(`SELECT
-						username,
-						hash,
-						authlevel,
-						userinfo
-					FROM
-						users`
-					).then(users => {
-						let json = [];
-						for (row of users) {
-							let arr = [`"username":"${row.username}","password (encrypted)":"${row.hash.slice(0,16)}...","authlevel":"${row.authlevel}"`];
-							let cols = row.userinfo.replace(/(^{)|(}$)/g,"").split(/,/);
-							for (col of cols) {
-								arr.push(col);
-							}
-							str = arr.join(",");
-							json.push(`{${str}}`);
-						}
-						res.writeHead(200, {"Content-Type": "application/json"});
-						res.write(JSON.stringify(JSON.parse(`[${json}]`)));
-						res.end();
-					}).catch(err => {
-						res.writeHead(200, {"Content-Type": "application/json"});
-						res.write(`[]`);
-						res.end();
-					});
-					break;
-				default:
-					res.writeHead(200, {"Content-Type": "application/json"});
-					res.write(`[]`);
-					res.end();
-				}
-				break;
-			case "manage":
+			case "query":
 				req.on("data", chunk => {search += chunk});
 				req.on("end", async () => {
 					switch (q) {
@@ -392,11 +322,42 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							break;
 						}
 						break;
+					case "messages":
+						sql.query(`SELECT
+							formdata_datetime_utc,
+							formdata_query
+						FROM
+							formdata
+						WHERE
+							formdata_referer = '/contact'`
+						).then(async formdata => {
+							let json = [];
+							for (row of formdata.reverse()) {
+								let datetime = row.formdata_datetime_utc;
+								let arr = [`"timestamp":"${datetime}"`];
+								let cols = row.formdata_query.replace(/,$/,"").split(/,\n/);
+								for (col of cols) {
+									let entries = col.split(": ");
+									arr.push(`"${entries[0]}":"${entries[1]}"`);
+								}
+								str = arr.join(",");
+								json.push(`{${str}}`);
+							}
+							res.writeHead(200, {"Content-Type": "application/json"});
+							res.write(JSON.stringify(JSON.parse(`[${json}]`)));
+							res.end();
+						}).catch(err => {
+							res.writeHead(200, {"Content-Type": "application/json"});
+							res.write(`[]`);
+							res.end();
+						});
+						break;
 					case "users":
 						switch (req.method) {
 						case "GET":
 							sql.query("SELECT username, hash, authlevel, userinfo FROM users").then(async users => {
-								users.map(user => { user.userinfo = JSON.parse(user.userinfo); return user });
+								users.map(user => { user.userinfo = JSON.parse(user.userinfo) });
+								users = users.map(user => flatten(user));
 								res.writeHead(200, {"Content-Type": "application/json"});
 								res.write(JSON.stringify(users));
 								res.end();
@@ -428,7 +389,6 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 										'${update.authlevel}',
 										'${update.userinfo}'
 									)`);
-									// to see what changed:
 									// console.log(user)
 									// console.log(update);
 									return update
@@ -452,6 +412,11 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							}
 							break;
 						}
+						break;
+					case "env":
+						res.writeHead(200, {"Content-Type": "application/json"});
+						res.write( `[${Object.keys(process.env).sort().map(key =>`{"Name":"${key}","Value":"${process.env[key]}"}`).toString()}]` );
+						res.end();
 						break;
 					default:
 						res.writeHead(200, {"Content-Type": "application/json"});
