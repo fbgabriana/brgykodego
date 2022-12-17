@@ -35,22 +35,22 @@ class JSONTable {
 						td.classList.add("col-"+tabledata);
 						switch(tabledata) {
 						case "email":
-							let mailto = document.createElement("a");
+							const mailto = document.createElement("a");
 							mailto.innerText = tablerow[tabledata];
 							mailto.href = "mailto:"+mailto.innerText;
 							td.appendChild(mailto);
 							break;
 						case "tel":
-							let tel = document.createElement("a");
+							const tel = document.createElement("a");
 							tel.innerText = tablerow[tabledata];
 							tel.href = "tel:"+tel.innerText.replace(/\s|-|\(|\)/g,"");
 							td.appendChild(tel);
 							break;
 						default:
-							let timestamp = Date.parse(tablerow[tabledata]);
+							const timestamp = Date.parse(tablerow[tabledata]);
 							if (timestamp) {
-								let tzoffset = await this.getTZOffset();
-								let localtime = new Date(parseInt(timestamp) + parseInt(tzoffset));
+								const tzoffset = await this.getTZOffset();
+								const localtime = new Date(parseInt(timestamp) + parseInt(tzoffset));
 								td.innerText = localtime.toLocaleString();
 							} else {
 								td.innerText = tablerow[tabledata];
@@ -83,7 +83,7 @@ class JSONTable {
 	}
 
 	async getTZOffset () {
-		return await fetch("/query?tzoffset").then(res => res.text());
+		return await fetch("/query?tzinfo").then(res => res.json()).then(tz => tz.tzoffset);
 	};
 
 }

@@ -417,11 +417,17 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						res.write(`[${Object.keys(process.env).sort().map(key =>`{"Name":"${key}","Value":"${process.env[key]}"}`).toString()}]` );
 						res.end();
 						break;
-					case "tzoffset":
-						let utcdate = new Date();
-						let tzoffset = 0 - 1000 * 60 * utcdate.getTimezoneOffset();
-						res.writeHead(200, {"Content-Type": "text/plain"});
-						res.write(tzoffset.toString());
+					case "tzinfo":
+						let utctime = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
+						let localtime = new Date();
+						let tz = Object.create(null);
+						tz.tzoffset  = 0 - 1000 * 60 * parseInt(utctime.getTimezoneOffset());
+						tz.GMTOffset = utctime.toLocaleDateString(undefined,{day:"2-digit",timeZoneName:"long"}).slice(4);
+						tz.UTCOffset = tz.GMTOffset.replace("GMT","UTC");
+						tz.LongName  = localtime.toLocaleDateString(undefined,{day:"2-digit",timeZoneName:"long"}).slice(4);
+						tz.abbr = tz.LongName.split(" ").map(s => s[0]).join("");
+						res.writeHead(200, {"Content-Type": "application/json"});
+						res.write(JSON.stringify(tz));
 						res.end();
 						break;
 					default:
