@@ -7,6 +7,7 @@ const ManageUsers = async () => {
 	const updateuser = document.getElementById("update-user");
 	const deleteuser = document.getElementById("delete-user");
 	const usernameid = document.getElementById("username");
+	const closebutton = document.getElementById("closebutton");
 	userselect.appendChild(new Option("Create new user", ""));
 	for (user of users) {
 		if (user.username === "root") continue;
@@ -16,27 +17,35 @@ const ManageUsers = async () => {
 	form.refresh = event => {
 		if (userselect.selectedIndex > 1) {
 			for (user of users) {
-				if (userselect.value == user.username) {
-					form.elements["username"].disabled = true;
-					form.elements["username"].value = user.username;
-					form.elements["password"].value = "";
-					form.elements["confirm-password"].value = "";
-					form.elements["authlevel"].value = user.authlevel;
-					form.elements["displayname"].value = user.userinfo.displayname;
-					form.elements["email"].value = user.userinfo.email;
-				}
+				if (userselect.value == user.username) break;
 			}
+			form.elements["username"].disabled = true;
+			form.elements["username"].value = user.username;
+			form.elements["password"].value = "";
+			form.elements["confirm-password"].value = "";
+			form.elements["authlevel"].value = user.authlevel;
+			form.elements["displayname"].value = user.userinfo.displayname;
+			form.elements["email"].value = user.userinfo.email;
+			updateuser.disabled = false;
+			deleteuser.disabled = false;
 			updateuser.innerText = "Update User"
 			deleteuser.style.display = "block";
 			location.hash = userselect.value;
-		} else {
-			form.elements["username"].disabled = false;
-			form.elements["username"].select();
-			updateuser.innerText = "Create User";
-			deleteuser.style.display = "none";
+		} else if (userselect.selectedIndex == 1) {
 			form.reset();
 			userselect.selectedIndex = 1;
+			form.elements["username"].disabled = false;
+			form.elements["username"].select();
+			updateuser.disabled = false;
+			deleteuser.disabled = false;
+			updateuser.innerText = "Create User";
+			deleteuser.style.display = "none";
 			location.hash = "";
+		} else {
+			form.reset();
+			form.elements["username"].disabled = true;
+			updateuser.disabled = true;
+			deleteuser.disabled = true;
 		}
 	}
 	form.changed = event => {
@@ -111,11 +120,15 @@ const ManageUsers = async () => {
 			location.reload();
 		});
 	}
+	form.close = event => {
+		location.href = "/dash";
+	}
 	form.refresh();
 	userselect.addEventListener("change", form.refresh);
 	usernameid.addEventListener("change", form.changed);
 	updateuser.addEventListener("click", form.submit);
 	deleteuser.addEventListener("click", form.submit);
+	closebutton.addEventListener("click", form.close);
 }
 
 window.addEventListener("DOMContentLoaded", ManageUsers);

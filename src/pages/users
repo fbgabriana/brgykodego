@@ -9,7 +9,7 @@
 		<fieldset class="grid">
 			<legend>User Details</legend>
 			<label for="username">User Name:</label>
-			<input type="text" id="username" name="username" required autofocus>
+			<input type="text" id="username" name="username" disabled required>
 			<label for="displayname">Display Name:</label>
 			<input type="text" id="displayname" name="displayname">
 			<label for="email">Email:</label>
@@ -33,5 +33,6 @@
 			<button type="submit" id="update-user">Update User</button>
 		</div>
 	</fieldset>
+	<button type="button" id="closebutton">Done</button>
 </form>
 

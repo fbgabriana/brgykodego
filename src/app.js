@@ -7,7 +7,6 @@ const querystring = require("querystring");
 
 const auth = require(`./auth.js`);
 const dbconfig = require("./db.config.js");
-const flatten = require("./flatten");
 
 const sql = mysql.createPool({
 	user: dbconfig.user,

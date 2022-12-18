@@ -3,7 +3,6 @@ article fieldset.flex {
 	flex-direction: column;
 	position: relative;
 	border-radius: 0.5em;
-	width: 50%;
 	margin: 0 auto;
 }
 article fieldset.flex select {
@@ -32,16 +31,6 @@ article fieldset>fieldset:first-of-type {
 	padding-bottom: 2.5em;
 	margin-bottom: 0;
 }
-article fieldset.flex button {
-	padding: 0.25em 2em;
-}
-article fieldset.flex button#update-user {
-	float: right;
-}
-article fieldset.flex button#delete-user {
-	float: left;
-	display: none;
-}
 article fieldset input[disabled] {
 	background-color: rgba(128,128,128,0.25);
 }
@@ -50,5 +39,24 @@ article fieldset.flex #backtodash {
 	right: 1em;
 	top: 0.5em;
 	font-size: 0.9rem;
+	display: none;
 }
-
+article form button {
+	padding: 0.25em 2em;
+}
+article form button#delete-user {
+	float: left;
+	display: none;
+}
+article form button#update-user {
+	float: right;
+}
+article form button#closebutton {
+	width: 8em;
+	margin: 1em;
+}
+article form {
+	width: 52%;
+	margin: 0 auto;
+	text-align: end;
+}
