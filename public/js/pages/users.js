@@ -5,6 +5,7 @@ const ManageUsers = async () => {
 	const form = document.getElementById("manage-users");
 	const userselect = document.getElementById("userselect");
 	const updateuser = document.getElementById("update-user");
+	const resetusers = document.getElementById("reset-users");
 	const deleteuser = document.getElementById("delete-user");
 	const usernameid = document.getElementById("username");
 	const closebutton = document.getElementById("closebutton");
@@ -110,6 +111,7 @@ const ManageUsers = async () => {
 			};
 			break;
 		default:
+			form.refresh();
 			return;
 		}
 		fetch("/query?users", {
@@ -124,6 +126,7 @@ const ManageUsers = async () => {
 		location.href = "/dash";
 	}
 	form.refresh();
+	resetusers.addEventListener("click", form.refresh);
 	userselect.addEventListener("change", form.refresh);
 	usernameid.addEventListener("change", form.changed);
 	updateuser.addEventListener("click", form.submit);

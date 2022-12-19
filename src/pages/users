@@ -30,10 +30,10 @@
 		</fieldset>
 		<div class="button-holder">
 			<button type="button" id="delete-user">Delete User</button>
-			<button type="reset" id="reset-user">Reset</button>
+			<button type="button" id="reset-users">Reset</button>
 			<button type="submit" id="update-user">Update User</button>
 		</div>
 	</fieldset>
-	<button type="button" id="closebutton">Done</button>
+	<button type="button" id="closebutton">All Done</button>
 </form>
 
