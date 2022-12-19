@@ -411,11 +411,6 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							break;
 						}
 						break;
-					case "env":
-						res.writeHead(200, {"Content-Type": "application/json"});
-						res.write(`[${Object.keys(process.env).sort().map(key =>`{"Name":"${key}","Value":"${process.env[key]}"}`).toString()}]` );
-						res.end();
-						break;
 					case "tzinfo":
 						let utctime = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
 						let localtime = new Date();
@@ -427,6 +422,11 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						tz.abbr = tz.LongName.split(" ").map(s => s[0]).join("");
 						res.writeHead(200, {"Content-Type": "application/json"});
 						res.write(JSON.stringify(tz));
+						res.end();
+						break;
+					case "env":
+						res.writeHead(200, {"Content-Type": "application/json"});
+						res.write(`[${Object.keys(process.env).sort().map(key =>`{"Name":"${key}","Value":"${process.env[key]}"}`).toString()}]` );
 						res.end();
 						break;
 					default:
