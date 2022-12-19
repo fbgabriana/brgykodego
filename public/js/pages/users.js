@@ -100,7 +100,7 @@ const ManageUsers = async () => {
 				"authlevel":form.elements["authlevel"].value,
 				"password":form.elements["password"].value,
 				"userinfo":{
-					"displayname":form.elements["displayname"].value,
+					"displayname":form.elements["displayname"].value || form.elements["username"].value,
 					"email":form.elements["email"].value,
 				}
 			};
