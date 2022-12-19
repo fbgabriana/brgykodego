@@ -5,8 +5,8 @@ const ManageUsers = async () => {
 	const form = document.getElementById("manage-users");
 	const userselect = document.getElementById("userselect");
 	const updateuser = document.getElementById("update-user");
-	const resetusers = document.getElementById("reset-users");
 	const deleteuser = document.getElementById("delete-user");
+	const resetusers = document.getElementById("reset-users");
 	const usernameid = document.getElementById("username");
 	const closebutton = document.getElementById("closebutton");
 	userselect.appendChild(new Option("Create new user", ""));
@@ -29,6 +29,7 @@ const ManageUsers = async () => {
 			form.elements["email"].value = user.userinfo.email;
 			updateuser.disabled = false;
 			deleteuser.disabled = false;
+			resetusers.disabled = false;
 			updateuser.innerText = "Update User"
 			deleteuser.style.display = "block";
 			location.hash = userselect.value;
@@ -39,6 +40,7 @@ const ManageUsers = async () => {
 			form.elements["username"].select();
 			updateuser.disabled = false;
 			deleteuser.disabled = false;
+			resetusers.disabled = false;
 			updateuser.innerText = "Create User";
 			deleteuser.style.display = "none";
 			location.hash = "";
@@ -47,6 +49,7 @@ const ManageUsers = async () => {
 			form.elements["username"].disabled = true;
 			updateuser.disabled = true;
 			deleteuser.disabled = true;
+			resetusers.disabled = true;
 		}
 	}
 	form.changed = event => {

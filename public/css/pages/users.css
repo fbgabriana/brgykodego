@@ -49,6 +49,9 @@ article form button#delete-user {
 	float: left;
 	display: none;
 }
+article form button#update-user {
+	min-width: 10em;
+}
 article form button#closebutton {
 	min-width: 8.5em;
 	margin: 1em;
