@@ -6,6 +6,7 @@ const mime = require("mime-types");
 const querystring = require("querystring");
 
 const auth = require(`./auth.js`);
+const cipher = require(`./cipher.js`);
 const dbconfig = require("./db.config.js");
 
 const sql = mysql.createPool({
@@ -17,6 +18,7 @@ const sql = mysql.createPool({
 
 sql.query = util.promisify(sql.query).bind(sql);
 fs.readFile = util.promisify(fs.readFile).bind(fs);
+cipher.salt = process.env.npm_package_name;
 
 const host = {
 	hostname: "0.0.0.0",
@@ -52,7 +54,22 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 		if (filename.indexOf(".") == -1) {
 			templateHTML = fs.existsSync(`public/css/pages/${filename}.css`) ? templateHTML.replace("%req:current-page%", filename) : templateHTML.replace(/^.*%req:current-page%.*$\n/mg, "");
 			templateHTML = fs.existsSync(`public/js/pages/${filename}.js`) ? templateHTML.replace("%req:current-page%", filename) : templateHTML.replace(/^.*%req:current-page%.*$\n/mg, "");
-			const currentuser = req.headers.cookie ? JSON.parse(querystring.parse(req.headers.cookie,";").currentuser) : null;
+
+			let userAuth = req.headers.cookie ? querystring.parse(req.headers.cookie,";").userAuth : null;
+			sql.query("SELECT username, hash, authlevel, userinfo FROM users").then(users => {
+				users.map(user => { user.userinfo = JSON.parse(user.userinfo) });
+				return users;
+			}).then(users => {
+
+			let currentuser = null;
+			if (userAuth) {
+				for (user of users) {
+					if (user.username === cipher.decrypt(userAuth.slice(1))) {
+						currentuser = user;
+					}
+				}
+			}
+
 			const now = new Date().toISOString().slice(0, 19).replace("T", " ");
 			let content = "";
 			switch (filename) {
@@ -116,8 +133,8 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				<script>history.replaceState(null,null,location.href)</script>\n`;
 						} else {
 							if (currentuser) {
-								content += `				<h2 class="welcome user-auth${currentuser.level}">Welcome ${currentuser.displayname}</h2>`;
-								if (currentuser.level >= 2) {
+								content += `				<h2 class="welcome user-auth${currentuser.authlevel}">Welcome ${currentuser.userinfo.displayname}</h2>`;
+								if (currentuser.authlevel >= 2) {
 									content += `				<div class="admin-post"><button onclick="location='/?post'">Post an announcement</button></div>`;
 									content += `				<div class="admin-dash"><a href="/dash">[ Manage ]</a></div>`;
 								}
@@ -354,58 +371,49 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					case "users":
 						switch (req.method) {
 						case "GET":
-							sql.query("SELECT username, hash, authlevel, userinfo FROM users").then(async users => {
-								users.map(user => { user.userinfo = JSON.parse(user.userinfo) });
-								res.writeHead(200, {"Content-Type": "application/json"});
+							res.writeHead(200, {"Content-Type": "application/json"});
+							if (currentuser.authlevel >= 2) {
 								res.write(JSON.stringify(users));
-								res.end();
-							});
+							} else {
+								res.write("[]");
+							}
+							res.end();
 							break;
 						case "POST":
 							const update = JSON.parse(search);
 							if (update.userinfo) {
-								sql.query("SELECT username, hash, authlevel, userinfo FROM users").then(async users => {
-									for (var user of users) {
-										if (user.username == update.username) {
-											update.hash = user.hash;
-											break;
-										}
+								for (var user of users) {
+									if (user.username == update.username) {
+										update.hash = user.hash;
+										break;
 									}
-									if (update.password) {
-										await auth.hashPassword(update.password).then(hash => update.hash = hash);
-									}
-									delete update.password;
-									update.userinfo = JSON.stringify(update.userinfo);
-									sql.query(`REPLACE INTO users (
-										username,
-										hash,
-										authlevel,
-										userinfo
-									) VALUES (
-										'${update.username}',
-										'${update.hash}',
-										'${update.authlevel}',
-										'${update.userinfo}'
-									)`);
-									// console.log(user)
-									// console.log(update);
-									return update
-								}).then(update => {
-									res.writeHead(200, {"Content-Type": "application/json"});
-									res.write(JSON.stringify(update));
-									res.end();
-								}).catch(err => {
-									console.log(err.message);
-								});
+								}
+								if (update.password) {
+									await auth.hashPassword(update.password).then(hash => update.hash = hash);
+								}
+								delete update.password;
+								update.userinfo = JSON.stringify(update.userinfo);
+								sql.query(`REPLACE INTO users (
+									username,
+									hash,
+									authlevel,
+									userinfo
+								) VALUES (
+									'${update.username}',
+									'${update.hash}',
+									'${update.authlevel}',
+									'${update.userinfo}'
+								)`);
+								// console.log(user)
+								// console.log(update);
+								res.writeHead(200, {"Content-Type": "application/json"});
+								res.write(JSON.stringify(update));
+								res.end();
 							} else {
-								sql.query(`DELETE FROM users WHERE username='${update.username}'`).then(packet => {
-									return packet;
-								}).then(update => {
-									res.writeHead(200, {"Content-Type": "application/json"});
-									res.write(JSON.stringify(update));
-									res.end();
-								}).catch(err => {
-									console.log(err.message);
+								sql.query(`DELETE FROM users WHERE username='${update.username}'`).then(update => {
+								res.writeHead(200, {"Content-Type": "application/json"});
+								res.write(JSON.stringify(update));
+								res.end();
 								});
 							}
 							break;
@@ -433,7 +441,6 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						res.writeHead(200, {"Content-Type": "application/json"});
 						res.write(`[]`);
 						res.end();
-						console.log("Hello");
 					}
 				});
 				break;
@@ -442,7 +449,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					if (currentuser && req.headers.referer) {
 						const referer = new URL(req.headers.referer); referer.path = `${referer.href.replace(referer.origin,"")}`;
 						res.writeHead(403);
-						content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${currentuser.username}' has insufficient privileges to access ${referer.path}.</p>`;
+						content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${currentuser.userinfo.displayname}' has insufficient privileges to access ${referer.path}.</p>`;
 						res.write(templateHTML.replace("<!-- content -->", content));
 						return res.end();
 					} else {
@@ -462,34 +469,33 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							res.write(templateHTML.replace("<!-- content -->", content));
 							return res.end();
 						}
-						sql.query("SELECT username, hash, authlevel, userinfo FROM users").then(users => {
-							for (var user of users) {
-								if (user.username == login.username) {
-									login.found = true;
-									auth.comparePassword(login.password, user.hash).then(comp => {
-										if (comp == true) {
-											// Login successful
-											let from = new URL(req.headers.referer).search.slice(1);
-											res.setHeader("Set-Cookie", [`currentuser={"username":"${user.username}","level":"${user.authlevel}","displayname":"${JSON.parse(user.userinfo).displayname}"}`]);
-											res.writeHead(307, {"Location": `${from || "/"}`});
-											return res.end();
-										} else {
-											res.writeHead(401);
-											content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${JSON.parse(user.userinfo).displayname || user.username}' supplied incorrect login credentials.</p>`;
-											res.write(templateHTML.replace("<!-- content -->", content));
-											return res.end();
-										}
-									});
-									break;
-								}
+						for (var user of users) {
+							if (user.username == login.username) {
+								login.found = true;
+								auth.comparePassword(login.password, user.hash).then(comp => {
+									if (comp == true) {
+										// Login successful
+										let from = new URL(req.headers.referer).search.slice(1);
+										token = `${user.authlevel}${cipher.encrypt(user.username)}`;
+										userAuth = `{"u":"${token}"}`;
+										res.writeHead(307, {"Set-Cookie": `userAuth=${token}`, "Location": `${from || "/"}`});
+										return res.end();
+									} else {
+										res.writeHead(401);
+										content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${user.username}' supplied incorrect login credentials.</p>`;
+										res.write(templateHTML.replace("<!-- content -->", content));
+										return res.end();
+									}
+								});
+								break;
 							}
-							if (!login.found) {
-								res.writeHead(401);
-								content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${login.username}' does not exist in our system.</p>`;
-								res.write(templateHTML.replace("<!-- content -->", content));
-								return res.end();
-							}
-						});
+						}
+						if (!login.found) {
+							res.writeHead(401);
+							content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${login.username}' does not exist in our system.</p>`;
+							res.write(templateHTML.replace("<!-- content -->", content));
+							return res.end();
+						}
 					} else {
 						res.writeHead(307, {"Location": req.headers.referer || req.headers.origin});
 						return res.end();
@@ -522,7 +528,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						console.log(err.message);
 					}
 				});
-			}
+			}});
 		} else {
 			fs.readFile(`${publicpath}/${filename}`).then(content => {
 				let mimetype = mime.lookup(filename);

@@ -87,6 +87,9 @@ const manage = {
 		jsonTable = new JSONTable("/query?users", ".users-table");
 		jsonTable.getData(Arr);
 	},
+	showManager() {
+		document.getElementById("manage-users").style.display = (userAuth[0] >= 3) ? "block" : "none";
+	},
 }
 
 const ColorConvert = {
@@ -146,8 +149,6 @@ window.addEventListener("DOMContentLoaded", event => {
 	manage.getColors(event);
 	manage.getMessages();
 	manage.getUsers(["username","authlevel","displayname","email"]);
-	if (currentuser.level >= 3) {
-		document.getElementById("manage-users").style.display = "block";
-	}
+	manage.showManager();
 });
 
