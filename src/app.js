@@ -18,7 +18,7 @@ const sql = mysql.createPool({
 
 sql.query = util.promisify(sql.query).bind(sql);
 fs.readFile = util.promisify(fs.readFile).bind(fs);
-cipher.salt = process.env.npm_package_name;
+cipher.salt = dbconfig.user;
 
 const host = {
 	hostname: "0.0.0.0",

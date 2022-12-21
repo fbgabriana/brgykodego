@@ -3,9 +3,9 @@ class Cipher {
 	constructor(salt) {
 		this.salt = salt || this.randomString();
 		this.applySaltTo = num => this.textToChars(this.salt).reduce((a, b) => a ^ b, num);
-		this.textToChars = str => str.split("").map(c => c.charCodeAt(0));
-		this.charsToText = num => String.fromCharCode(num);
-		this.intToHexTri = int => ("0" + Number(int).toString(36)).substr(-2);
+		this.textToChars = str => str.split("").map(c => c.charCodeAt(0) * 5);
+		this.charsToText = num => String.fromCharCode(num / 5);
+		this.intToHexTri = int => ("0" + Number(int).toString(36)).slice(-2);
 		this.hexTriToInt = hex => parseInt(hex, 36);
 	}
 
@@ -15,11 +15,13 @@ class Cipher {
 		.map(this.textToChars)
 		.map(this.applySaltTo)
 		.map(this.intToHexTri)
-		.join("");
+		.join("")
+		.split("").reverse().join("");
 	}
 
 	decrypt(encoded) {
 		return encoded
+		.split("").reverse().join("")
 		.match(/.{1,2}/g)
 		.map(this.hexTriToInt)
 		.map(this.applySaltTo)
@@ -36,7 +38,7 @@ class Cipher {
 	}
 
 	randomString() {
-		return Math.random().toString(36).substr(2);
+		return Math.random().toString(36).slice(2);
 	}
 }
 
