@@ -1,12 +1,10 @@
 // Barangay KodeGo
 
-const userAuth = cookieStorage.getItem("userAuth");
-
 const auth = {
-	isLoggedIn: cookieStorage.hasItem("userAuth"),
+	token: cookieStorage.getItem("u"),
 	require(requiredLevel) {
-		if (this.isLoggedIn) {
-			if (userAuth[0] < requiredLevel) {
+		if (this.token) {
+			if (this.token[0] < requiredLevel) {
 				location.href = "/auth";
 			}
 		} else {
@@ -14,20 +12,22 @@ const auth = {
 		}
 	},
 	logout(redir) {
-		cookieStorage.removeItem("userAuth");
+		cookieStorage.removeItem("u");
 		location.href = redir || "/";
 	}
 }
 
 const querystring = {
 	parse : (str="", sep="&", eq="=") => {
-		if (str[0] === "?") str = str.slice(1);
 		let query = Object.create(null);
-		let pairs = str ? str.split(sep) : [];
-		for (let i = 0; i < pairs.length; i++) {
-			let pair = pairs[i].split(eq);
-			query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
-		}
+		if (str != null && str.constructor === String) {
+			if (str[0] === "?") str = str.slice(1);
+			let pairs = str ? str.split(sep) : [];
+			for (let i = 0; i < pairs.length; i++) {
+				let pair = pairs[i].split(eq);
+				query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
+			}
+		} else return str;
 		return query;
 	}
 }
@@ -40,10 +40,6 @@ const validator = {
 		return new RegExp(`(.+){${N}}`);
 	},
 }
-
-const truncate = (obj, n) => {
-	return typeof obj === "string" ? (obj.length > n) ? obj.slice(0, n) + "…" : obj : obj;
-};
 
 const toggleMenuBar = () => {
 	let menubar = document.getElementById("menubar");
@@ -90,7 +86,7 @@ const setCurrentPage = () => {
 	let currentLocation = location.href.replace("index.html","");
 	for (i = 0; i < a.length; i++) {
 		if (a[i].origin == location.origin) {
-			if (auth.isLoggedIn) {
+			if (auth.token) {
 				const login = document.getElementById(`nav-login`);
 				login.innerText = "Logout";
 				login.href = "/logout";
@@ -112,6 +108,7 @@ const setCurrentPage = () => {
 		}
 	}
 }
+
 const addColorSwitcher = (selector) => {
 	if (! window.matchMedia ) return;
 	if (! (CSS && CSS.supports("color-scheme", "light")) ) return;

@@ -79,16 +79,16 @@ const manage = {
 			});
 		}
 	},
-	getMessages(Arr) {
+	getMessages() {
 		jsonTable = new JSONTable("/query?messages", ".messages-table");
-		jsonTable.getData(Arr);
+		jsonTable.getData();
 	},
-	getUsers(Arr) {
+	getUsers() {
 		jsonTable = new JSONTable("/query?users", ".users-table");
-		jsonTable.getData(Arr);
+		jsonTable.getData(["username","hash","authlevel","displayname","email"], ["hash"], 11);
 	},
 	showManager() {
-		document.getElementById("manage-users").style.display = (userAuth[0] >= 3) ? "block" : "none";
+		document.getElementById("manage-users").style.display = (auth.token && auth.token[0] >= 3) ? "block" : "none";
 	},
 }
 
@@ -148,7 +148,7 @@ window.history.replaceState(null,null,location.href);
 window.addEventListener("DOMContentLoaded", event => {
 	manage.getColors(event);
 	manage.getMessages();
-	manage.getUsers(["username","authlevel","displayname","email"]);
+	manage.getUsers();
 	manage.showManager();
 });
 

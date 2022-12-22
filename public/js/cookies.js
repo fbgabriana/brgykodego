@@ -1,11 +1,11 @@
-// Cookie Jar
+// cookieStorage
 
 var cookieStorage = {
 	getItem (sKey) {
 		return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
 	},
-	setItem (sKey, sValue, vEnd, sPath, sDomain, sSameSite, bSecure) {
-		if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
+	setItem (sKey="", sValue="", vEnd, sPath, sDomain="", sSame="Lax", bSecure=false) {
+		if (!sKey || /^(?:expires|max\-age|path|domain|SameSite|secure)$/i.test(sKey)) return;
 		let sExpires = ``;
 		if (vEnd) {
 			switch (vEnd.constructor) {
@@ -18,20 +18,27 @@ var cookieStorage = {
 			case Date:
 				sExpires = `; expires=${vEnd.toUTCString()}`;
 				break;
+			default:
 			}
 		}
-		if (sSameSite && (sSameSite.toLowerCase() == `none`)) bSecure = true;
-		sDomain = sDomain ? `; domain=${sDomain}` : ``;
+		if (sSame.toLowerCase() == `none`) bSecure = true;
+		sKey    = `${encodeURIComponent(sKey)}=`;
+		sValue  = `${encodeURIComponent(sValue)}`;
 		sPath   = sPath   ? `; path=${sPath}` : ``;
+		sDomain = sDomain ? `; domain=${sDomain}` : ``;
+		sSame   = sSame   ? `; SameSite=${sSame}` : ``;
 		bSecure = bSecure ? `; secure` : ``;
-		document.cookie = `${encodeURIComponent(sKey)}=${encodeURIComponent(sValue)}${sExpires}${sDomain}${sPath}; SameSite=${sSameSite || "Lax"}${bSecure}`;
-		return sKey;
+		return document.cookie = `${sKey}${sValue}${sExpires}${sDomain}${sPath}${sSame}${bSecure}`;
 	},
-	removeItem (sKey, sPath, sDomain) {
+	removeItem (sKey, sPath, sDomain, sSame="Lax", bSecure=false) {
 		if (!sKey || !this.hasItem(sKey)) return;
-		sDomain = sDomain ? `; domain=${sDomain}` : ``;
+		let sExpires = `; expires=${new Date(0).toUTCString()}`;
+		if (sSame.toLowerCase() == `none`) bSecure = true;
+		sKey    = `${encodeURIComponent(sKey)}=`;
 		sPath   = sPath   ? `; path=${sPath}` : ``;
-		document.cookie = `${encodeURIComponent(sKey)}=; expires=${new Date(0).toUTCString()}${sDomain}${sPath}; SameSite=Lax`;
+		sDomain = sDomain ? `; domain=${sDomain}` : ``;
+		sSame   = sSame   ? `; SameSite=${sSame}` : ``;
+		document.cookie = `${sKey}${sExpires}${sDomain}${sPath}${sSame}`;
 		return;
 	},
 	hasItem (sKey) {

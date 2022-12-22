@@ -38,7 +38,7 @@ if (search) {
 		<div class="form-container">
 			<div class="header">Send us a message!</div>
 			<form class="contact" action="post" method="post">
-			   <input type="hidden" name="redirect" value="contact">
+				<input type="hidden" id="redirect" name="redirect" value="contact">
 				<div class="field-group">
 				   <input type="text" name="firstname" id="firstname" class="input-field" placeholder="Enter First Name" autocomplete="off" required>
 				   <label for="firstname" class="input-label">First Name</label>

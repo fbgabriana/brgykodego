@@ -6,8 +6,9 @@ class JSONTable {
 		this.selector = selector;
 	}
 
-	// Arr is an array of columns to include
-	getData(Arr) {
+	// arrIncl is an array of columns to include
+	// arrTrunc is an array of columns to truncate
+	getData(arrIncl, arrTrunc, N) {
 		fetch(this.url, {
 			method:"GET",
 			headers:{"Content-Type": "application/json"}
@@ -19,7 +20,7 @@ class JSONTable {
 				let tr = document.createElement("tr");
 				tr.classList.add("row-0");
 				for (var tableheader in rows[0]) {
-					if (Arr && !Arr.includes(tableheader)) continue;
+					if (arrIncl && !arrIncl.includes(tableheader)) continue;
 					let th = document.createElement("th");
 					th.classList.add("col-"+tableheader);
 					th.innerText = tableheader;
@@ -30,7 +31,7 @@ class JSONTable {
 					let tr = document.createElement("tr");
 					tr.classList.add("row-"+rows.indexOf(tablerow));
 					for (var tabledata in tablerow) {
-						if (Arr && !Arr.includes(tabledata)) continue;
+						if (arrIncl && !arrIncl.includes(tabledata)) continue;
 						let td = document.createElement("td");
 						td.classList.add("col-"+tabledata);
 						switch(tabledata) {
@@ -53,7 +54,12 @@ class JSONTable {
 								const localtime = new Date(parseInt(timestamp) + parseInt(tzoffset));
 								td.innerText = localtime.toLocaleString();
 							} else {
-								td.innerText = tablerow[tabledata];
+								if (arrTrunc && arrTrunc.includes(tabledata)) {
+									td.title = tablerow[tabledata];
+									td.innerText = this.truncate(tablerow[tabledata], N);
+								} else {
+									td.innerText = tablerow[tabledata];
+								}
 							}
 						}
 						tr.appendChild(td);
@@ -80,6 +86,10 @@ class JSONTable {
 		} else {
 			return { [path] : obj };
 		}
+	}
+
+	truncate (str, n=16) {
+		return typeof str === "string" ? (str.length > n) ? str.slice(0, n - 1) + "…" : str : str;
 	}
 
 	async getTZOffset () {

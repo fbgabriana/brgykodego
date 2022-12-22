@@ -3,10 +3,10 @@ const http = require("http");
 const fs = require("fs");
 const util = require("util");
 const mime = require("mime-types");
-const querystring = require("querystring");
 
 const auth = require(`./auth.js`);
 const cipher = require(`./cipher.js`);
+const querystring = require("querystring");
 const dbconfig = require("./db.config.js");
 
 const sql = mysql.createPool({
@@ -55,7 +55,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 			templateHTML = fs.existsSync(`public/css/pages/${filename}.css`) ? templateHTML.replace("%req:current-page%", filename) : templateHTML.replace(/^.*%req:current-page%.*$\n/mg, "");
 			templateHTML = fs.existsSync(`public/js/pages/${filename}.js`) ? templateHTML.replace("%req:current-page%", filename) : templateHTML.replace(/^.*%req:current-page%.*$\n/mg, "");
 
-			let userAuth = req.headers.cookie ? querystring.parse(req.headers.cookie,";").userAuth : null;
+			let userAuth = req.headers.cookie ? querystring.parse(req.headers.cookie,"; ").u : null;
 			sql.query("SELECT username, hash, authlevel, userinfo FROM users").then(users => {
 				users.map(user => { user.userinfo = JSON.parse(user.userinfo) });
 				return users;
@@ -372,7 +372,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						switch (req.method) {
 						case "GET":
 							res.writeHead(200, {"Content-Type": "application/json"});
-							if (currentuser.authlevel >= 2) {
+							if (currentuser && currentuser.authlevel >= 2) {
 								res.write(JSON.stringify(users));
 							} else {
 								res.write("[]");
@@ -477,8 +477,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 										// Login successful
 										let from = new URL(req.headers.referer).search.slice(1);
 										token = `${user.authlevel}${cipher.encrypt(user.username)}`;
-										userAuth = `{"u":"${token}"}`;
-										res.writeHead(307, {"Set-Cookie": `userAuth=${token}`, "Location": `${from || "/"}`});
+										res.writeHead(307, {"Set-Cookie": `u=${token}; c=299792458`, "Location": `${from || "/"}`});
 										return res.end();
 									} else {
 										res.writeHead(401);
