@@ -164,8 +164,7 @@ const addColorSwitcher = (selector) => {
 	}
 }
 
-document.out = document.write;
-document.write = function(markup) {
+document.insertHTML = function(markup) {
 	const scripts = document.getElementsByTagName("script");
 	scripts[scripts.length - 1].insertAdjacentHTML("afterend", markup);
 }

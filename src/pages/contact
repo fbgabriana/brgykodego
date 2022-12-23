@@ -15,7 +15,7 @@ if (search) {
 	content += `<div><p>The information has been saved in our database.</p></div>\\n`;
 	content += `<div><p><a class="goback" href="${document.referrer}" onclick="history.back()">[ Back to Previous Page ]</a></p></div>`;
 
-	document.write(`\\n<div class="row"><div class="col">\\n${content}\\n</div></div>\\n`);
+	document.insertHTML(`\\n<div class="row"><div class="col">\\n${content}\\n</div></div>\\n`);
 }
 </script>
 <div class="row">
@@ -40,23 +40,23 @@ if (search) {
 			<form class="contact" action="post" method="post">
 				<input type="hidden" id="redirect" name="redirect" value="contact">
 				<div class="field-group">
-				   <input type="text" name="firstname" id="firstname" class="input-field" placeholder="Enter First Name" autocomplete="off" required>
+				   <input type="text" name="firstname" id="firstname" class="input-field" placeholder="Enter First Name" data-label="First Name" autocomplete="off" required>
 				   <label for="firstname" class="input-label">First Name</label>
 				</div>
 				<div class="field-group">
-				   <input type="text" name="lastname" id="lastname" class="input-field" placeholder="Enter Last Name" autocomplete="off" required>
+				   <input type="text" name="lastname" id="lastname" class="input-field" placeholder="Enter Last Name" data-label="Last Name" autocomplete="off" required>
 				   <label for="lastname" class="input-label">Last Name</label>
 				</div>
 				<div class="field-group">
-				   <input type="email" name="email" id="email" class="input-field" placeholder="Enter Email" autocomplete="off" required>
+				   <input type="email" name="email" id="email" class="input-field" placeholder="Enter Email" autocomplete="off" data-label="Email Address" required>
 				   <label for="email" class="input-label">Email Address</label>
 				</div>
 				<div class="field-group">
-				   <input type="tel" name="tel" id="tel" class="input-field" placeholder="Enter Contact Number" autocomplete="off" required>
+				   <input type="tel" name="tel" id="tel" class="input-field" placeholder="Enter Contact Number" autocomplete="off" data-label="Contact no." required>
 				   <label for="tel" class="input-label">Contact no.</label>
 				</div>
 				<div class="field-group">
-				   <input type="text" name="message" id="message" class="input-field" placeholder="Please send us a message" autocomplete="off" required>
+				   <input type="text" name="message" id="message" class="input-field" placeholder="Please send us a message" data-label="Message" autocomplete="off" required>
 				   <label for="message" class="input-label">Message:</label>
 				</div>
 				<button type="submit">Confirm</button>

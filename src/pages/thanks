@@ -15,7 +15,7 @@ if (search) {
 	content += `<div><p>The information has been saved in our database.</p></div>\\n`;
 	content += `<div><p><a class="goback" href="${document.referrer}" onclick="history.back()">[ Back to Previous Page ]</a></p></div>`;
 
-	document.write(`\\n${content}\\n`);
+	document.insertHTML(`\\n${content}\\n`);
 }
 </script>
 

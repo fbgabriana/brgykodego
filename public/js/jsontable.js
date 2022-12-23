@@ -66,7 +66,7 @@ class JSONTable {
 					}
 					table.appendChild(tr)
 				}
-				table.classList.add("sortable");
+				table.classList.add("jsontable");
 				return table
 			}
 		}).then(table => {

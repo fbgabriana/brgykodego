@@ -128,6 +128,9 @@ article table tr:first-child th {
 	font-weight: bold;
 	font-style: normal;
 }
+article table.jsontable th {
+	text-transform: capitalize;
+}
 article div.table-container {
 	display: flex;
 	flex-direction: column;

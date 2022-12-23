@@ -27,7 +27,7 @@
 		<div class="messages-table"><p class="empty">There are currently no messages.</p></div>
 
 		<h3>Users</h3>
-		<form action="/users" id="manage-users" style="display:none">
+		<form action="/manage-users" id="manage-users" style="display:none">
 		<button type="submit" name="id">Manage Users</button>
 		</form>
 		<div class="users-table"><p class="empty">There are currently no users.</p></div>

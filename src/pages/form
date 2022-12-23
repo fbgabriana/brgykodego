@@ -5,9 +5,9 @@
 <input type="hidden" id="recipient" name="recipient" value="recipient@brgykodego.test">
 <input type="hidden" id="redirect" name="redirect" value="thanks">
 <label for="fullname">Name:</label>
-<input type="text" id="fullname" name="fullname" required="">
+<input type="text" id="fullname" name="fullname" data-label="Name" required="">
 <label for="message">Message:</label>
-<textarea rows="5" id="message" name="message" required=""></textarea>
+<textarea rows="5" id="message" name="message" data-label="Message" required=""></textarea>
 <label></label>
 <div><button type="submit">Send</button> <button type="reset">Clear</button></div>
 </form>
