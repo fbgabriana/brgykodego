@@ -434,7 +434,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						break;
 					case "env":
 						res.writeHead(200, {"Content-Type": "application/json"});
-						res.write(`[${Object.keys(process.env).sort().map(key =>`{"Name":"${key}","Value":"${process.env[key]}"}`).toString()}]` );
+						res.write("[" + Object.keys(process.env).sort().map(key =>`{"Name":"${key}","Value":"${process.env[key]}"}`).toString() + "]");
 						res.end();
 						break;
 					default:
@@ -502,7 +502,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				});
 				break;
 			case "env":
-				content = `<pre>\n${Object.keys(process.env).sort().map(key =>`${key}=${process.env[key]}`).join("\n")}\n</pre>`;
+				content = "<pre>\n" + Object.keys(process.env).sort().map(key =>`${key}=${process.env[key]}`).join("\n") + "\n</pre>";
 				res.writeHead(200, {"Content-Type": "text/html"});
 				res.write(templateHTML.replace("<!-- content -->", content));
 				return res.end();
