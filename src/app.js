@@ -46,7 +46,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 	});
 }).then(content => {
 
-	const app = (req, res) => {
+	const server = http.createServer((req, res) => {
 		const pathArr = req.url.slice(1).split("?");
 		let [ filename, q, search ] = [ pathArr[0] || "home", pathArr[1], "" ];
 		let templateHTML = content;
@@ -562,9 +562,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				res.end();
 			});
 		}
-	}
-
-	const server = http.createServer(app).listen(host.port, host.hostname).on("error", err => {
+	}).listen(host.port, host.hostname).on("error", err => {
 		console.log(`\x1b[31m${err.message}\x1b[0m`);
 		process.exit(0);
 	}).on("listening", () => {
