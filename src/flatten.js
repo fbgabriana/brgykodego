@@ -9,4 +9,3 @@ const flatten = (obj = [], path = "") => {
 }
 
 module.exports = flatten;
-
