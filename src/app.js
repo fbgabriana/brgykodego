@@ -55,16 +55,16 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 			templateHTML = fs.existsSync(`public/css/pages/${filename}.css`) ? templateHTML.replace("%req:current-page%", filename) : templateHTML.replace(/^.*%req:current-page%.*$\n/mg, "");
 			templateHTML = fs.existsSync(`public/js/pages/${filename}.js`) ? templateHTML.replace("%req:current-page%", filename) : templateHTML.replace(/^.*%req:current-page%.*$\n/mg, "");
 
-			let userAuth = req.headers.cookie ? querystring.parse(req.headers.cookie,"; ").u : null;
+			auth.token = req.headers.cookie ? querystring.parse(req.headers.cookie,"; ").u : null;
 			sql.query("SELECT username, hash, authlevel, userinfo FROM users").then(users => {
 				users.map(user => { user.userinfo = JSON.parse(user.userinfo) });
 				return users;
 			}).then(users => {
 
 			let currentuser = null;
-			if (userAuth) {
+			if (auth.token) {
 				for (let user of users) {
-					if (user.username === cipher.decrypt(userAuth.slice(1))) {
+					if (cipher.encrypt(user.username) === auth.token.slice(1)) {
 						currentuser = user;
 					}
 				}
