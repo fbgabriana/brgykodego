@@ -61,9 +61,9 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				return users;
 			}).then(users => {
 
-			let user, currentuser = null;
+			let currentuser = null;
 			if (userAuth) {
-				for (user of users) {
+				for (let user of users) {
 					if (user.username === cipher.decrypt(userAuth.slice(1))) {
 						currentuser = user;
 					}
