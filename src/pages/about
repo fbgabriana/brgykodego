@@ -1,6 +1,6 @@
 <!-- about -->
 <p>Here we should include the following content:</p>
-<ul>
+<ul class="checkmarked">
 <li>Information about the barangay</li>
 <li>Barangay mission and vision</li>
 <li>Organizational structure</li>

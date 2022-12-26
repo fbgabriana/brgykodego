@@ -178,6 +178,11 @@ article blockquote p {
 	text-indent: 2em;
 	margin: 0;
 }
+article ul.checkmarked li {
+	list-style-type: "✓";
+	padding: 0 0.5em;
+}
+
 .sidebar a {
 	color: inherit;
 }
