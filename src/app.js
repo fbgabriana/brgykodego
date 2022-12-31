@@ -71,6 +71,10 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					}
 				}
 			}
+			
+			auth.require = requiredLevel => {
+				return (auth.token && auth.token[0] >= requiredLevel)
+			}
 
 			const now = new Date().toISOString().slice(0, 19).replace("T", " ");
 			let content = "";
@@ -298,6 +302,43 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				req.on("data", chunk => {search += chunk});
 				req.on("end", async () => {
 					switch (q) {
+					case "pages":
+						switch (req.method) {
+						case "GET":
+							sql.query(`SELECT
+								id,
+								title,
+								content
+							FROM pages`).then(rows => {
+								res.writeHead(200, {"Content-Type": "application/json"});
+								res.write(JSON.stringify(rows));
+								res.end();
+							});
+							break;
+						case "POST":
+							const page = JSON.parse(search);
+							sql.query(`REPLACE INTO pages (
+								id,
+								title,
+								content
+							) VALUES (
+								'${page["id"]}',
+								'${page["title"]}',
+								'${page["content"]}'
+							)`).then(packet => {
+								res.writeHead(200, {"Content-Type": "application/json"});
+								res.write(JSON.stringify(page));
+								res.end();
+							});
+							break;
+						default:
+							res.writeHead(405);
+							content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>The request method '${req.method}' is not supported by the target resource '${req.url}'.</p>`;
+							res.write(templateHTML.replace("<!-- content -->", content));
+							return res.end();
+							break;
+						}
+						break;
 					case "colortheme":
 						switch (req.method) {
 						case "GET":
@@ -513,7 +554,12 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				sql.query(`SELECT title, content FROM pages WHERE id = '${filename}'`, (err, result, packet) => {
 					if (row = result[0]) {
 						res.writeHead(200, {"Content-Type": "text/html"});
-						content = `<h1>${row.title}</h1>\n${row.content}`;
+						content = `<h1 id="page-title">${row.title}</h1>\n${row.content}`;
+						if (auth.require(2)) {
+							if (["about", "services"].includes(filename)) {
+								content += `<form action="/edit"><button type="submit" name="id" value="${filename}" id="edit-page">Edit Page</button></form>\n`;
+							}
+						}
 						res.write(templateHTML.replace("<!-- content -->", content));
 						res.end();
 					} else if (field = packet[0]) {

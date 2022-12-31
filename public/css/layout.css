@@ -192,6 +192,10 @@ article a:active {
 article hr.page-break {
 	display: none;
 }
+article form button#edit-page {
+	padding: 0.25em 2em;
+	margin: 1em 0;
+}
 
 @media screen and (max-width: 500px) {
 	header h1 {
