@@ -11,4 +11,7 @@
 </div>
 </form>
 </div>
+<div class="login-form">
+<p>If you do not have an account, you can login as guest with no password.</p>
+</div>
 
