@@ -11,8 +11,11 @@ main {
 .col {
 	display: inline-block;
 	max-width: 500px;
-	margin: 20px 5px;
+	margin: 0px 5px;
 	vertical-align: text-top;
+}
+.form-results {
+	margin: 20px auto;
 }
 .office-info {
 	margin: 10px auto;
