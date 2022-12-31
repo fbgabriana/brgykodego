@@ -1,8 +1,8 @@
 <!-- edit -->
 <form id="edit-page">
 	<textarea name="content"></textarea>
-	<button type="submit" id="savechanges">Save Changes</button>
-	<button type="submit" id="saveandexit">Save and Exit</button>
-	<small id="status">No changes yet.</small>
+	<button type="submit" id="savechanges" disabled>Save Changes</button>
+	<button type="submit" id="saveandexit" disabled>Save and Exit</button>
+	<small id="status"><noscript style="color: red;">JavaScript is required.</noscript></small>
 </form>
 
