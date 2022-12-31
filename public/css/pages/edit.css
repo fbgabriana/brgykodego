@@ -8,6 +8,9 @@ article form textarea {
 	margin-bottom: 8px;
 	border: 1px solid rgba(128, 128, 128, 0.5);
 	font: inherit;
+	white-space: pre;
+	overflow-wrap: normal;
+	overflow-x: scroll;
 }
 article form textarea:focus {
 	outline: 1px solid rgba(128, 128, 128, 0.25);
