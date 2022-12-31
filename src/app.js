@@ -208,7 +208,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							}
 						}
 						sql.query("SELECT logbook_displayname, logbook_message, logbook_datetime_utc FROM logbook").then(result => {
-							content = `				<script>auth.require(1);</script>
+							content = `				<script>auth.require(0);</script>
 				<!-- begin logbook -->
 				<h1>Leave a Message</h1>
 				<p>Hello mga kabarangay. This is our online logbook. Feel free to leave a note to us.</p>

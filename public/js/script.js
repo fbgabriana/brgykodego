@@ -6,9 +6,13 @@ const auth = {
 		if (this.token) {
 			if (this.token[0] < requiredLevel) {
 				location.href = "/auth";
+				return false;
+			} else {
+				return true;
 			}
 		} else {
 			location.href = `/login?${location.href.replace(location.origin,"")}`;
+			return false;
 		}
 	},
 	logout(redir) {
