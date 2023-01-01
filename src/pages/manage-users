@@ -5,7 +5,6 @@
 		<select id="userselect">
 			<option value="" selected disabled>Select user</option>
 		</select>
-		<div id="backtodash"><a href="/dash">[ Back to Dashboard ]</a></div>
 		<fieldset class="grid">
 			<legend>User Details</legend>
 			<label for="username">User Name:</label>

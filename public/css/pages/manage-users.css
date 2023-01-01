@@ -34,13 +34,6 @@ article fieldset>fieldset:first-of-type {
 article fieldset input[disabled] {
 	background-color: rgba(128,128,128,0.25);
 }
-article fieldset.flex #backtodash {
-	position: absolute;
-	right: 1em;
-	top: 0.5em;
-	font-size: 0.9rem;
-	display: none;
-}
 article form button {
 	padding: 0.25em 2em;
 	margin: 0 2px;
