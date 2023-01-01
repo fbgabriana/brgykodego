@@ -142,7 +142,11 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				<script>history.replaceState(null,null,location.href)</script>\n`;
 						} else {
 							if (currentuser) {
-								content += `				<h2 class="welcome user-auth${currentuser.authlevel}">Welcome ${currentuser.userinfo.displayname}</h2>`;
+								if (currentuser.authlevel) {
+									content += `				<h2 class="welcome user-auth${currentuser.authlevel}">Welcome <a href="/profile">${currentuser.userinfo.displayname}</a></h2>`;
+								} else {
+									content += `				<h2 class="welcome user-auth${currentuser.authlevel}">Welcome ${currentuser.userinfo.displayname}</h2>`;
+								}
 								if (currentuser.authlevel >= 2) {
 									content += `				<div class="admin-post"><button onclick="location='/?post'">Post an announcement</button></div>`;
 									content += `				<div class="admin-dash"><a href="/dash">[ Manage ]</a></div>`;
@@ -460,6 +464,20 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 								res.end();
 								});
 							}
+							break;
+						}
+						break;
+					case "currentuser":
+						switch (req.method) {
+						case "GET":
+							res.writeHead(200, {"Content-Type": "application/json"});
+							console.log(currentuser);
+							if (referer.origin === app.homepage) {
+								res.write(JSON.stringify(currentuser));
+							} else {
+								res.write("[]");
+							}
+							res.end();
 							break;
 						}
 						break;

@@ -26,11 +26,15 @@ article fieldset>fieldset:first-of-type {
 article fieldset input[disabled] {
 	background-color: rgba(128,128,128,0.25);
 }
+article form small#status {
+	float: left;
+	color: green;
+}
 article form button {
 	padding: 0.25em 2em;
 	margin: 0 2px;
 }
-article form button#create-user {
+article form button#update-user {
 	min-width: 10em;
 }
 article form {

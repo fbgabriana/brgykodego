@@ -1,0 +1,29 @@
+<!-- update-profile -->
+<form id="update-profile">
+	<fieldset class="flex">
+		<legend>Edit Profile</legend>
+		<fieldset class="grid">
+			<legend>User Details</legend>
+			<label for="username">User Name:</label>
+			<input type="text" id="username" name="username" disabled>
+			<label for="displayname">Display Name:</label>
+			<input type="text" id="displayname" name="displayname">
+			<label for="email">Email:</label>
+			<input type="email" id="email" name="email">
+			<input type="hidden" id="authlevel" name="authlevel" value="1">
+		</fieldset>
+		<fieldset class="grid">
+			<legend>Change Password</legend>
+			<label for="password">Password:</label>
+			<input type="password" id="password" name="password">
+			<label for="confirm-password">Confirm Password:</label>
+			<input type="password" id="confirm-password" name="confirm-password">
+		</fieldset>
+		<div class="button-holder">
+			<small id="status"><noscript style="color: red;">JavaScript is required.</noscript></small>
+			<button type="button" id="reset-users">Reset</button>
+			<button type="submit" id="update-user">Update</button>
+		</div>
+	</fieldset>
+</form>
+
