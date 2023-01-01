@@ -77,14 +77,17 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 			}
 
 			const now = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+			const referer = req.headers.referer ? new URL(req.headers.referer) : Object.create(null);
+			referer.path = req.headers.referer ? `${referer.href.replace(referer.origin,"")}` : "";
+
 			let content = "";
 			switch (filename) {
 			case "home":
 				req.on("data", chunk => {search += chunk});
 				req.on("end", async () => {
 					if (search) {
-						referer = new URL(req.headers.referer);
-						if (referer.href.replace(referer.origin,"") === req.url) {
+						if (referer.path === req.url) {
 							const formpost = querystring.parse(search);
 							formpost["bulletin_date_created"] = now;
 							formpost["bulletin_classification_icon"] = ["project-update","news-update","waterservice","calamity"][formpost["bulletin_classification_id"] - 1];
@@ -192,8 +195,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					req.on("data", chunk => {search += chunk});
 					req.on("end", async () => {
 						if (search) {
-							referer = new URL(req.headers.referer);
-							if (referer.href.replace(referer.origin,"") === req.url) {
+							if (referer.path === req.url) {
 								const formpost = querystring.parse(search);
 								formpost["logbook_datetime_utc"] = now;
 								await sql.query(`INSERT INTO logbook (
@@ -252,7 +254,6 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				).then(() => {
 					req.on("data", chunk => {search += chunk});
 					req.on("end", () => {
-						referer = req.headers.referer ? req.headers.referer.replace(`${req.headers.origin}`,"") : "";
 						search = search || q;
 						if (search) {
 							let displayresultText = q = "";
@@ -275,7 +276,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 								formdata_datetime_utc,
 								formdata_query
 							) VALUES (
-								'${referer}',
+								'${referer.path}',
 								'${formpost["posted"]}',
 								'${displayresultText}'
 							)`);
@@ -290,7 +291,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 								res.writeHead(307, {"Location": `${redirect}?${q}`});
 								return res.end();
 							}
-							content += `<div><p><a class="goback" href="${referer}" onclick="history.back()">[ Back to Previous Page ]</a></p></div>`;
+							content += `<div><p><a class="goback" href="${referer.path}" onclick="history.back()">[ Back to Previous Page ]</a></p></div>`;
 						}
 						res.writeHead(200, {"Content-Type": "text/html"});
 						res.write(templateHTML.replace("<!-- content -->", content));
@@ -369,7 +370,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 								'${parseFloat(pref["hsl_lightness"])}',
 								'${pref["rgb_hex"]}'
 							)`).then(packet => {
-								res.writeHead(307, {"Location": `${req.headers.referer}`});
+								res.writeHead(307, {"Location": `${referer.path}`});
 								return res.end();
 							});
 							break;
@@ -414,7 +415,6 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					case "users":
 						switch (req.method) {
 						case "GET":
-							const referer = req.headers.referer ? new URL(req.headers.referer) : Object.create(null);
 							res.writeHead(200, {"Content-Type": "application/json"});
 							if (referer.origin === app.homepage) {
 								res.write(JSON.stringify(users));
@@ -464,17 +464,25 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						}
 						break;
 					case "tzinfo":
-						let utctime = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
-						let localtime = new Date();
-						let tz = Object.create(null);
-						tz.tzoffset  = 0 - 1000 * 60 * parseInt(utctime.getTimezoneOffset());
-						tz.GMTOffset = utctime.toLocaleDateString(undefined,{day:"2-digit",timeZoneName:"long"}).slice(4);
-						tz.UTCOffset = tz.GMTOffset.replace("GMT","UTC");
-						tz.LongName  = localtime.toLocaleDateString(undefined,{day:"2-digit",timeZoneName:"long"}).slice(4);
-						tz.abbr = tz.LongName.split(" ").map(s => s[0]).join("");
-						res.writeHead(200, {"Content-Type": "application/json"});
-						res.write(JSON.stringify(tz));
-						res.end();
+						switch (req.method) {
+						case "GET":
+							res.writeHead(200, {"Content-Type": "application/json"});
+							if (referer.origin === app.homepage) {
+								let utctime = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
+								let localtime = new Date();
+								let tz = Object.create(null);
+								tz.tzoffset  = 0 - 1000 * 60 * parseInt(utctime.getTimezoneOffset());
+								tz.GMTOffset = utctime.toLocaleDateString(undefined,{day:"2-digit",timeZoneName:"long"}).slice(4);
+								tz.UTCOffset = tz.GMTOffset.replace("GMT","UTC");
+								tz.LongName  = localtime.toLocaleDateString(undefined,{day:"2-digit",timeZoneName:"long"}).slice(4);
+								tz.abbr = tz.LongName.split(" ").map(s => s[0]).join("");
+								res.write(JSON.stringify(tz));
+							} else {
+								res.write("[]");
+							}
+							res.end();
+							break;
+						}
 						break;
 					case "env":
 						res.writeHead(200, {"Content-Type": "application/json"});
@@ -490,8 +498,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				break;
 			case "auth":
 				if (req.method == "GET") {
-					if (currentuser && req.headers.referer) {
-						const referer = new URL(req.headers.referer); referer.path = `${referer.href.replace(referer.origin,"")}`;
+					if (currentuser && referer) {
 						res.writeHead(403);
 						content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${currentuser.userinfo.displayname}' has insufficient privileges to access ${referer.path}.</p>`;
 						res.write(templateHTML.replace("<!-- content -->", content));
@@ -519,7 +526,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 								auth.comparePassword(login.password, user.hash).then(comp => {
 									if (comp == true) {
 										// Login successful
-										let from = new URL(req.headers.referer).search.slice(1);
+										let from = referer.search.slice(1);
 										token = `${user.authlevel}${cipher.encrypt(user.username)}`;
 										res.writeHead(307, {"Set-Cookie": `u=${token}; c=299792458`, "Location": `${from || "/"}`});
 										return res.end();
