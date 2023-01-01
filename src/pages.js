@@ -26,7 +26,7 @@ const pagespath = "./src/pages";
 
 for (let [id, title] of Object.entries(pages)) {
 	console.log(`Creating ${title}...`);
-	let content = fs.readFileSync(`${pagespath}/${id}`).toString();
+	let content = fs.readFileSync(`${pagespath}/${id}`).toString().replace(/'/g,"\\'");
 	sql.query(`REPLACE INTO pages (id, title, content) VALUES ('${id}','${title}','${content}')`, callback);
 }
 

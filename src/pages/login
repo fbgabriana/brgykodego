@@ -1,5 +1,8 @@
 <!-- login -->
-<div class="login-form">
+<div class="login-page">
+<p id="signup-complete" style="display:none;">Signup is complete. You may now login with your account.</p>
+</div>
+<div class="login-page">
 <form action="/auth" class="post" method="post">
 <label for="username">User Name</label>
 <input id="username" name="username" type="text" required autofocus>
@@ -11,7 +14,7 @@
 </div>
 </form>
 </div>
-<div class="login-form">
-<p>If you do not have an account, you can login as guest with no password.</p>
+<div class="login-page">
+<p id="signup-notice" class="note">If you do not have an account, you can <a href="/signup">Sign Up</a> or login as 'guest' with no password.</p>
 </div>
 

@@ -1,0 +1,27 @@
+<!-- users -->
+<form id="signup">
+	<fieldset class="flex">
+		<legend>Sign Up</legend>
+		<fieldset class="grid">
+			<legend>User Details</legend>
+			<label for="username">User Name:</label>
+			<input type="text" id="username" name="username" required>
+			<label for="displayname">Display Name:</label>
+			<input type="text" id="displayname" name="displayname">
+			<label for="email">Email:</label>
+			<input type="email" id="email" name="email">
+			<input type="hidden" id="authlevel" name="authlevel" value="1">
+		</fieldset>
+		<fieldset class="grid">
+			<legend>Create Password</legend>
+			<label for="password">Password:</label>
+			<input type="password" id="password" name="password">
+			<label for="confirm-password">Confirm Password:</label>
+			<input type="password" id="confirm-password" name="confirm-password">
+		</fieldset>
+		<div class="button-holder">
+			<button type="submit" id="create-user">Sign Up</button>
+		</div>
+	</fieldset>
+</form>
+

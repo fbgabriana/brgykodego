@@ -56,6 +56,14 @@ const ManageUsers = async () => {
 		location.hash = usernameid.value;
 	}
 	form.validate = event => {
+		if (userselect.value === "") {
+			for (user of users) {
+				if (form.elements["username"].value === user.username) {
+					alert(`Username "${user.username}" already exists on our system`);
+					return false;
+				}
+			}
+		}
 		if (form.elements["username"].value === "") {
 			alert("Username cannot be empty");
 			return false;

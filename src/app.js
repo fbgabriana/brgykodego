@@ -414,8 +414,9 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					case "users":
 						switch (req.method) {
 						case "GET":
+							const referer = req.headers.referer ? new URL(req.headers.referer) : Object.create(null);
 							res.writeHead(200, {"Content-Type": "application/json"});
-							if (currentuser && currentuser.authlevel >= 2) {
+							if (referer.origin === app.homepage) {
 								res.write(JSON.stringify(users));
 							} else {
 								res.write("[]");
