@@ -4,3 +4,4 @@ alias ls='ls --color=auto'
 alias ll='ls -l'
 alias path='echo $PATH'
 alias ver='lsb_release -idrc'
+
