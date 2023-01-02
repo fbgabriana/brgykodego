@@ -10,7 +10,7 @@
 			<input type="text" id="displayname" name="displayname">
 			<label for="email">Email:</label>
 			<input type="email" id="email" name="email">
-			<input type="hidden" id="authlevel" name="authlevel" value="1">
+			<input type="hidden" id="authlevel" name="authlevel">
 		</fieldset>
 		<fieldset class="grid">
 			<legend>Change Password</legend>
@@ -20,10 +20,14 @@
 			<input type="password" id="confirm-password" name="confirm-password">
 		</fieldset>
 		<div class="button-holder">
-			<small id="status"><noscript style="color: red;">JavaScript is required.</noscript></small>
+			<button type="button" id="delete-user">Delete Account</button>
+			<input type="checkbox" id="show-delete"><label for="show-delete">Show Delete</label>
 			<button type="button" id="reset-users">Reset</button>
 			<button type="submit" id="update-user">Update</button>
 		</div>
 	</fieldset>
+	<div class="statusbar">
+		<small id="status"><noscript style="color: red;">JavaScript is required.</noscript></small>
+	</div>
 </form>
 

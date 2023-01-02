@@ -73,7 +73,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 			}
 			
 			auth.require = requiredLevel => {
-				return (auth.token && auth.token[0] >= requiredLevel)
+				return (auth.token && auth.token[0] >= (requiredLevel ?? 0))
 			}
 
 			const now = new Date().toISOString().slice(0, 19).replace("T", " ");
@@ -142,7 +142,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 				<script>history.replaceState(null,null,location.href)</script>\n`;
 						} else {
 							if (currentuser) {
-								if (currentuser.authlevel) {
+								if (currentuser.authlevel && currentuser.authlevel <= 2) {
 									content += `				<h2 class="welcome user-auth${currentuser.authlevel}">Welcome <a href="/profile">${currentuser.userinfo.displayname}</a></h2>`;
 								} else {
 									content += `				<h2 class="welcome user-auth${currentuser.authlevel}">Welcome ${currentuser.userinfo.displayname}</h2>`;
@@ -310,31 +310,39 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					case "pages":
 						switch (req.method) {
 						case "GET":
-							sql.query(`SELECT
-								id,
-								title,
-								content
-							FROM pages`).then(rows => {
-								res.writeHead(200, {"Content-Type": "application/json"});
-								res.write(JSON.stringify(rows));
-								res.end();
-							});
+							res.writeHead(200, {"Content-Type": "application/json"});
+							if (referer.origin === app.homepage) {
+								await sql.query(`SELECT
+									id,
+									title,
+									content
+								FROM pages`).then(rows => {
+									res.write(JSON.stringify(rows));
+								});
+							} else {
+								res.write("[]");
+							}
+							res.end();
 							break;
 						case "POST":
-							const page = JSON.parse(search);
-							sql.query(`REPLACE INTO pages (
-								id,
-								title,
-								content
-							) VALUES (
-								'${page["id"]}',
-								'${page["title"]}',
-								'${page["content"]}'
-							)`).then(packet => {
-								res.writeHead(200, {"Content-Type": "application/json"});
-								res.write(JSON.stringify(page));
-								res.end();
-							});
+							res.writeHead(200, {"Content-Type": "application/json"});
+							if (referer.origin === app.homepage) {
+								const page = JSON.parse(search);
+								await sql.query(`REPLACE INTO pages (
+									id,
+									title,
+									content
+								) VALUES (
+									'${page["id"]}',
+									'${page["title"]}',
+									'${page["content"]}'
+								)`).then(packet => {
+									res.write(JSON.stringify(page));
+								});
+							} else {
+								res.write("[]");
+							}
+							res.end();
 							break;
 						default:
 							res.writeHead(405);
@@ -347,36 +355,45 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					case "colortheme":
 						switch (req.method) {
 						case "GET":
-							sql.query(`SELECT
-								hsl_id,
-								hsl_hue,
-								hsl_saturation,
-								hsl_lightness,
-								rgb_hex
-							FROM brgy_colors_hsl`).then(row => {
-								res.writeHead(200, {"Content-Type": "application/json"});
-								res.write(JSON.stringify(row[1]));
-								res.end();
-							});
+							res.writeHead(200, {"Content-Type": "application/json"});
+							if (referer.origin === app.homepage) {
+								await sql.query(`SELECT
+									hsl_id,
+									hsl_hue,
+									hsl_saturation,
+									hsl_lightness,
+									rgb_hex
+								FROM brgy_colors_hsl`).then(row => {
+									res.write(JSON.stringify(row[1]));
+								});
+							} else {
+								res.write("[]");
+							}
+							res.end();
 							break;
 						case "POST":
-							const pref = JSON.parse(search);
-							sql.query(`REPLACE INTO brgy_colors_hsl (
-								hsl_id,
-								hsl_hue,
-								hsl_saturation,
-								hsl_lightness,
-								rgb_hex
-							) VALUES (
-								'${parseInt(pref["hue_id"])}',
-								'${parseFloat(pref["hsl_hue"])}',
-								'${parseFloat(pref["hsl_saturation"])}',
-								'${parseFloat(pref["hsl_lightness"])}',
-								'${pref["rgb_hex"]}'
-							)`).then(packet => {
-								res.writeHead(307, {"Location": `${referer.path}`});
-								return res.end();
-							});
+							res.writeHead(200, {"Content-Type": "application/json"});
+							if (referer.origin === app.homepage) {
+								const row = JSON.parse(search);
+								await sql.query(`REPLACE INTO brgy_colors_hsl (
+									hsl_id,
+									hsl_hue,
+									hsl_saturation,
+									hsl_lightness,
+									rgb_hex
+								) VALUES (
+									'${parseInt(row["hue_id"])}',
+									'${parseFloat(row["hsl_hue"])}',
+									'${parseFloat(row["hsl_saturation"])}',
+									'${parseFloat(row["hsl_lightness"])}',
+									'${row["rgb_hex"]}'
+								)`).then(packet => {
+									res.write(JSON.stringify(row));
+								});
+							} else {
+								res.write("[]");
+							}
+							res.end();
 							break;
 						default:
 							res.writeHead(405);
@@ -387,34 +404,46 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						}
 						break;
 					case "messages":
-						sql.query(`SELECT
-							formdata_datetime_utc,
-							formdata_query
-						FROM
-							formdata
-						WHERE
-							formdata_referer = '/contact'`
-						).then(async formdata => {
-							let json = [];
-							for (row of formdata.reverse()) {
-								let datetime = row.formdata_datetime_utc;
-								let arr = [`"timestamp":"${datetime}"`];
-								let cols = row.formdata_query.replace(/,$/,"").split(/,\n/);
-								for (col of cols) {
-									let entries = col.split(": ");
-									arr.push(`"${entries[0]}":"${entries[1]}"`);
-								}
-								str = arr.join(",");
-								json.push(`{${str}}`);
+						switch (req.method) {
+						case "GET":
+							res.writeHead(200, {"Content-Type": "application/json"});
+							if (referer.origin === app.homepage) {
+								await sql.query(`SELECT
+									formdata_datetime_utc,
+									formdata_query
+								FROM
+									formdata
+								WHERE
+									formdata_referer = '/contact'`
+								).then(formdata => {
+									let json = [];
+									for (row of formdata.reverse()) {
+										let datetime = row.formdata_datetime_utc;
+										let arr = [`"timestamp":"${datetime}"`];
+										let cols = row.formdata_query.replace(/,$/,"").split(/,\n/);
+										for (col of cols) {
+											let entries = col.split(": ");
+											arr.push(`"${entries[0]}":"${entries[1]}"`);
+										}
+										str = arr.join(",");
+										json.push(`{${str}}`);
+									}
+									res.write(JSON.stringify(JSON.parse(`[${json}]`)));
+								}).catch(err => {
+									res.write(`[]`);
+								});
+							} else {
+								res.write("[]");
 							}
-							res.writeHead(200, {"Content-Type": "application/json"});
-							res.write(JSON.stringify(JSON.parse(`[${json}]`)));
 							res.end();
-						}).catch(err => {
-							res.writeHead(200, {"Content-Type": "application/json"});
-							res.write(`[]`);
-							res.end();
-						});
+							break;
+						default:
+							res.writeHead(405);
+							content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>The request method '${req.method}' is not supported by the target resource '${req.url}'.</p>`;
+							res.write(templateHTML.replace("<!-- content -->", content));
+							return res.end();
+							break;
+						}
 						break;
 					case "users":
 						switch (req.method) {
@@ -428,42 +457,48 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							res.end();
 							break;
 						case "POST":
-							const update = JSON.parse(search);
-							if (update.userinfo) {
-								for (var user of users) {
-									if (user.username == update.username) {
-										update.hash = user.hash;
-										break;
+							res.writeHead(200, {"Content-Type": "application/json"});
+							if (referer.origin === app.homepage) {
+								const update = JSON.parse(search);
+								if (update.userinfo) {
+									for (var user of users) {
+										if (user.username == update.username) {
+											update.hash = user.hash;
+											break;
+										}
 									}
+									if (update.password) {
+										await auth.hashPassword(update.password).then(hash => update.hash = hash);
+									}
+									delete update.password;
+									update.userinfo = JSON.stringify(update.userinfo);
+									await sql.query(`REPLACE INTO users (
+										username,
+										hash,
+										authlevel,
+										userinfo
+									) VALUES (
+										'${update.username}',
+										'${update.hash}',
+										'${update.authlevel}',
+										'${update.userinfo}'
+									)`);
+									res.write(JSON.stringify(update));
+								} else {
+									await sql.query(`DELETE FROM users WHERE username='${update.username}'`).then(update => {
+									res.write(JSON.stringify(update));
+									});
 								}
-								if (update.password) {
-									await auth.hashPassword(update.password).then(hash => update.hash = hash);
-								}
-								delete update.password;
-								update.userinfo = JSON.stringify(update.userinfo);
-								sql.query(`REPLACE INTO users (
-									username,
-									hash,
-									authlevel,
-									userinfo
-								) VALUES (
-									'${update.username}',
-									'${update.hash}',
-									'${update.authlevel}',
-									'${update.userinfo}'
-								)`);
-								// console.log(user)
-								// console.log(update);
-								res.writeHead(200, {"Content-Type": "application/json"});
-								res.write(JSON.stringify(update));
-								res.end();
 							} else {
-								sql.query(`DELETE FROM users WHERE username='${update.username}'`).then(update => {
-								res.writeHead(200, {"Content-Type": "application/json"});
-								res.write(JSON.stringify(update));
-								res.end();
-								});
+								res.write("[]");
 							}
+							res.end();
+							break;
+						default:
+							res.writeHead(405);
+							content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>The request method '${req.method}' is not supported by the target resource '${req.url}'.</p>`;
+							res.write(templateHTML.replace("<!-- content -->", content));
+							return res.end();
 							break;
 						}
 						break;
@@ -471,13 +506,18 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						switch (req.method) {
 						case "GET":
 							res.writeHead(200, {"Content-Type": "application/json"});
-							console.log(currentuser);
 							if (referer.origin === app.homepage) {
 								res.write(JSON.stringify(currentuser));
 							} else {
 								res.write("[]");
 							}
 							res.end();
+							break;
+						default:
+							res.writeHead(405);
+							content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>The request method '${req.method}' is not supported by the target resource '${req.url}'.</p>`;
+							res.write(templateHTML.replace("<!-- content -->", content));
+							return res.end();
 							break;
 						}
 						break;
@@ -500,12 +540,32 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							}
 							res.end();
 							break;
+						default:
+							res.writeHead(405);
+							content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>The request method '${req.method}' is not supported by the target resource '${req.url}'.</p>`;
+							res.write(templateHTML.replace("<!-- content -->", content));
+							return res.end();
+							break;
 						}
 						break;
 					case "env":
-						res.writeHead(200, {"Content-Type": "application/json"});
-						res.write("[" + Object.keys(process.env).sort().map(key =>`{"Name":"${key}","Value":"${process.env[key]}"}`).toString() + "]");
-						res.end();
+						switch (req.method) {
+						case "GET":
+							res.writeHead(200, {"Content-Type": "application/json"});
+							if (auth.require(0)) {
+								res.write("[" + Object.keys(process.env).sort().map(key =>`{"Name":"${key}","Value":"${process.env[key]}"}`).toString() + "]");
+							} else {
+								res.write(`[]`);
+							}
+							res.end();
+							break;
+						default:
+							res.writeHead(405);
+							content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>The request method '${req.method}' is not supported by the target resource '${req.url}'.</p>`;
+							res.write(templateHTML.replace("<!-- content -->", content));
+							return res.end();
+							break;
+						}
 						break;
 					default:
 						res.writeHead(200, {"Content-Type": "application/json"});
@@ -560,7 +620,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						}
 						if (!login.found) {
 							res.writeHead(401);
-							content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${login.username}' does not exist in our system.</p>`;
+							content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${login.username}' does not exist in this system.</p>`;
 							res.write(templateHTML.replace("<!-- content -->", content));
 							return res.end();
 						}

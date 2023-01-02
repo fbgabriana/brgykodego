@@ -1,6 +1,7 @@
 auth.require(2);
 
 const EditPage = async () => {
+	const pages = await fetch("/query?pages").then(res => res.json());
 	const pageid = querystring.parse(location.search).id;
 	const form = document.getElementById("edit-page");
 	const pagetitle = document.getElementById("page-title");
@@ -12,7 +13,6 @@ const EditPage = async () => {
 	savechanges.disabled = true;
 	saveandexit.disabled = true;
 
-	const pages = await fetch("/query?pages").then(res => res.json());
 	let pagelist = [];
 	for (page of pages) {
 		pagelist.push(page.id);
