@@ -3,7 +3,7 @@
 <p id="signup-complete" style="display:none;">Signup is complete. You may now login with your account.</p>
 </div>
 <div class="login-page">
-<form action="/auth" class="post" method="post">
+<form id="login-form" action="/auth" class="post" method="post">
 <label for="username">User Name</label>
 <input id="username" name="username" type="text" required autofocus>
 <label for="password">Password</label>

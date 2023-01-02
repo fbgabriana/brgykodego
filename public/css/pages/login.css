@@ -3,7 +3,10 @@
 	align-items: center;
 	justify-content: center;
 }
-.post {
+.login-page input[disabled] {
+	background-color: rgba(128,128,128,0.25);
+}
+.login-page .post {
 	width: 100%;
 	padding-right: 5em;
 }

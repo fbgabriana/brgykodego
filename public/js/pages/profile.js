@@ -72,7 +72,6 @@ const UpdateProfile = async () => {
 			update = {
 				"username":form.elements["username"].value,
 			};
-			auth.logout();
 			break;
 		default:
 			form.refresh();
@@ -83,9 +82,16 @@ const UpdateProfile = async () => {
 			headers:{"Content-Type": "application/json"},
 			body: JSON.stringify(update),
 		}).then(res => res.json()).then(user => {
-			if (update.password) sessionStorage.setItem("status", "Profile updated. Password has changed.")
-			else sessionStorage.setItem("status", "Profile updated.")
-			location.reload();
+			if (user.username) {
+				if (update.password) {
+					sessionStorage.setItem("status", "Profile updated. Password has changed.")
+				} else {
+					sessionStorage.setItem("status", "Profile updated.")
+				}
+				location.reload();
+			} else {
+				auth.logout();
+			}
 		});
 	}
 	form.showdelete = event => {
