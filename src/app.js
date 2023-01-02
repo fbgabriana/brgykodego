@@ -620,7 +620,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						}
 						if (!login.found) {
 							res.writeHead(401);
-							content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${login.username}' does not exist in this system.</p>`;
+							content = `<h1>${res.statusCode.toString()} ${res.statusMessage.toString()}</h1><p>User '${login.username}' does not exist in this system. Do you wish to <a href="/signup?username=${login.username}">sign up</a>?</p>`;
 							res.write(templateHTML.replace("<!-- content -->", content));
 							return res.end();
 						}

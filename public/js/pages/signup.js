@@ -1,11 +1,16 @@
 const CreateNewUser = async () => {
 	const users = await fetch("/query?users").then(res => res.json());
+	const q = querystring.parse(location.search);
 	const form = document.getElementById("signup");
 	const createuser = document.getElementById("create-user");
 	const usernameid = document.getElementById("username");
 	form.refresh = event => {
 		form.reset();
-		form.elements["username"].select();
+		if (q.username) {
+			form.elements["username"].value = q.username;
+		} else {
+			form.elements["username"].select();
+		}
 	}
 	form.validate = event => {
 		for (user of users) {
