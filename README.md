@@ -1,4 +1,4 @@
-## [fbgabriana.github.io](/ "Bamm's KodeGo Repository") / [brgykodego](/brgykodego/)
+## [https://fbgabriana.github.io/](/ "Bamm's KodeGo Repository") / [brgykodego](/brgykodego/)
 
 # Barangay KodeGo
 
