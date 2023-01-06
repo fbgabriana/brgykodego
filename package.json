@@ -2,7 +2,7 @@
 	"name": "brgykodego",
 	"version": "0.4.8.6",
 	"description": "",
-	"homepage": "https://brgykodego.herokuapp.com/",
+	"homepage": "https://brgykodego.herokuapp.com",
 	"main": "src/app.js",
 	"scripts": {
 		"prestart": "node src/clearscr.js",
