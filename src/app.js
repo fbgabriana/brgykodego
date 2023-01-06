@@ -356,6 +356,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 						switch (req.method) {
 						case "GET":
 							res.writeHead(200, {"Content-Type": "application/json"});
+							console.log(referer.origin, app.homepage)
 							if (referer.origin === app.homepage) {
 								await sql.query(`SELECT
 									hsl_id,
