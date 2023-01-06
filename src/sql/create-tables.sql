@@ -133,7 +133,7 @@ PRIMARY KEY(hsl_id)
 
 INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness, rgb_hex) VALUES
 ('0', '215.00000000', '66.66666667', '40.00000000', '#225baa'),
-('1', '215.33566284', '66.66666412', '40.00000000', '#225baa');
+('1', '200.00000000', '66.66666667', '40.00000000', '#227daa');
 
 INSERT INTO users (username, hash, authlevel, userinfo) VALUES
 ('root', '$2b$10$UfEN6MZ/oWFdmsiodv93qOTUCfw/ap5ZSQB5gr7v0weV44h4bKERW', 3, '{"displayname":"Root Account","email":"root@localhost"}'),
