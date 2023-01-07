@@ -17,4 +17,7 @@
 <div class="login-page">
 <p id="signup-notice" class="note">If you do not have an account, you can <a href="/signup">Sign Up</a> or login as 'guest' with no password.</p>
 </div>
+<div class="login-page">
+<p id="testers" class="testers">For testers:<br><br>You can test the features by signing in as <code>admin</code> with password <code>password</code>.</p>
+</div>
 

@@ -80,6 +80,12 @@ article table.table-row-striped tr:nth-child(even) td {
 article table.table-row-striped tr:nth-child(odd) td {
 	background: hsl(%sql:brgy_hue:hue_primary%, 0.000%, 100%);
 }
+article form button {
+	color: hsl(%sql:brgy_hue:hue_primary%, 0%, 12.5%);
+}
+article form button:disabled {
+	color: hsl(%sql:brgy_hue:hue_primary%, 0%, 40%);
+}
 article form input,
 article form textarea {
 	background-color: hsl(0, 0%, 100%);

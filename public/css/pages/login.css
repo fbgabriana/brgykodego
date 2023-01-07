@@ -10,4 +10,18 @@
 	width: 100%;
 	padding-right: 5em;
 }
+.login-page .testers {
+	display: block;
+	border: 1px solid gray;
+	margin: 1em;
+	padding: 2em;
+	font-weight: bold;
+}
+.login-page .testers code {
+	display: inline-block;
+	font-weight: normal;
+	border: 1px solid gray;
+	padding: 2px 4px;
+	margin: 0px 2px;
+}
 
