@@ -7,7 +7,7 @@ class JSONTable {
 	}
 
 	// arrIncl is an array of columns to include
-	// arrTrunc is an array of columns to truncate
+	// arrTrunc is an array of columns to truncate at N
 	getData(arrIncl, arrTrunc, N) {
 		fetch(this.url, {
 			method:"GET",
