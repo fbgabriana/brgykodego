@@ -35,4 +35,3 @@ localhost	127.0.0.1
 1. Use a remote MySQL server such as ClearDB instead of your localhost's SQL server.
 1. If on Heroku, you can additionally install the `heroku` command line for remote debugging.
 1. Restart the remote server. The application should show up online now.
-
