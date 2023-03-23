@@ -14,7 +14,7 @@ It is written in vanilla NodeJS without any frameworks on a MySQL database.
 
 ## Setup instructions:
 
-✓ To set up _brgykodego_ as a local server application:
+✓ *To set up _brgykodego_ as a local server application:*
 
 1. Download and extract the source.
 1. Make sure the commands `npm` and `mysql` are in your path.
@@ -27,7 +27,7 @@ localhost	127.0.0.1
 *.localhost	127.0.0.1
 ```
 
-✓ To set up a custom _brgykodego_ as a remote server application:
+✓ *To set up a custom _brgykodego_ as a remote server application:*
 
 1. Clone this project on GitHub and fork it to your own GitHub repository.
 1. Create a remote project on a host that allows running web applications, e.g., Heroku.
