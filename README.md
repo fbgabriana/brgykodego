@@ -33,5 +33,5 @@ localhost	127.0.0.1
 1. Create a remote project on a host that allows running web applications, e.g., Heroku.
 1. Associate your remote project to your GitHub repository and set up automatic sync.
 1. Use a remote MySQL server such as ClearDB instead of your localhost's SQL server.
-1. If on Heroku, you can additionally install the `heroku` command line for remote debugging.
+1. If on Heroku, you can optionally install the `heroku` command line for remote debugging.
 1. Restart the remote server. The application should show up online now.
