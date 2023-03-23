@@ -21,7 +21,7 @@ const auth = {
 	}
 }
 
-const authlevel = auth.token[0];
+const authlevel = auth.token ? auth.token[0] : 0;
 
 const querystring = {
 	parse : (str="", sep="&", eq="=") => {
