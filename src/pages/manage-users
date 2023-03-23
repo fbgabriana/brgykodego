@@ -18,6 +18,8 @@
 				<option value="0">Guest user</option>
 				<option value="1" selected>Regular user</option>
 				<option value="2">Admin user</option>
+				<option value="3" disabled>Superadmin User</option>
+				<option value="4" disabled>Root user</option>
 			</select>
 		</fieldset>
 		<fieldset class="grid">

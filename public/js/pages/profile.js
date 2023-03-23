@@ -105,15 +105,21 @@ const UpdateProfile = async () => {
 }
 
 const LoadProfile = () => {
+	const updateuser = document.getElementById("update-user");
+	const deleteuser = document.getElementById("delete-user");
 	const showdelete = document.getElementById("show-delete");
 	const showdeletelabel = document.querySelector("label[for='show-delete']");
 	showdelete.checked = false;
-	if (auth.token[0] <= 2) {
+	if (authlevel <= 2) {
 		showdelete.style.display = "inline-block";
 		showdeletelabel.style.display = "inline-block";
 	} else {
 		showdelete.style.display = "none";
 		showdeletelabel.style.display = "none";
+	}
+	if (authlevel >= 3) {
+		updateuser.disabled = true;
+		deleteuser.disabled = true;
 	}
 }
 

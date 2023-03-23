@@ -21,6 +21,8 @@ const auth = {
 	}
 }
 
+const authlevel = auth.token[0];
+
 const querystring = {
 	parse : (str="", sep="&", eq="=") => {
 		let query = Object.create(null);

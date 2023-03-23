@@ -132,6 +132,9 @@ article {
 	padding: 0.375em 0.75em;
 }
 .user-auth3 {
+	color: green;
+}
+.user-auth4 {
 	color: red;
 }
 

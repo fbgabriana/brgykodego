@@ -12,6 +12,7 @@ const ManageUsers = async () => {
 	userselect.appendChild(new Option("Create new user", ""));
 	for (user of users) {
 		if (user.username === "root") continue;
+		if (user.authlevel > authlevel) continue;
 		userselect.appendChild(new Option(user.userinfo.displayname, user.username));
 	}
 	userselect.value = location.hash.slice(1);
@@ -27,9 +28,13 @@ const ManageUsers = async () => {
 			form.elements["authlevel"].value = user.authlevel;
 			form.elements["displayname"].value = user.userinfo.displayname;
 			form.elements["email"].value = user.userinfo.email;
+			resetusers.disabled = false;
 			updateuser.disabled = false;
 			deleteuser.disabled = false;
-			resetusers.disabled = false;
+			if (user.authlevel >= authlevel) {
+				updateuser.disabled = true;
+				deleteuser.disabled = true;
+			}
 			updateuser.innerText = "Update User"
 			deleteuser.style.display = "block";
 			location.hash = userselect.value;
@@ -86,7 +91,7 @@ const ManageUsers = async () => {
 			return false;
 		}
 		if (form.elements["authlevel"].value < 0
-		||  form.elements["authlevel"].value > 2) {
+		||  form.elements["authlevel"].value > 3) {
 			alert("Invalid authlevel");
 			return false;
 		}

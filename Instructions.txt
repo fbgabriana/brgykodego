@@ -1,0 +1,2 @@
+To set up, run "npm run setup"
+To remove, run "npm run remove"

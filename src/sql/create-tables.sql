@@ -136,7 +136,8 @@ INSERT INTO brgy_colors_hsl (hsl_id, hsl_hue, hsl_saturation, hsl_lightness, rgb
 ('1', '200.00000000', '66.66666667', '40.00000000', '#227daa');
 
 INSERT INTO users (username, hash, authlevel, userinfo) VALUES
-('root', '$2b$10$UfEN6MZ/oWFdmsiodv93qOTUCfw/ap5ZSQB5gr7v0weV44h4bKERW', 3, '{"displayname":"Root Account","email":"root@localhost"}'),
+('root', '$2b$10$UfEN6MZ/oWFdmsiodv93qOTUCfw/ap5ZSQB5gr7v0weV44h4bKERW', 4, '{"displayname":"Root Account","email":"root@localhost"}'),
+('owner', '$2b$10$8nA651c9Ae6KBVB7x2kTGOg6jv9eo6Pm.F4mYfddbd5elAJ.3cgpO', 3, '{"displayname":"Site Owner","email":"owner@localhost"}'),
 ('admin', '$2b$10$B3LeBvcoujIKcShDT6yd7uGI/CUx/dBAv2waVNFhP64fp2MEF2eLq', 2, '{"displayname":"Administrator","email":"admin@localhost"}'),
 ('user', '$2b$10$M6F27PFDbnxTEaEqfPb.vO5DlURn5cvJ4YQiZYAv4zcBoluf/bfC2', 1, '{"displayname":"User","email":"user@localhost"}'),
 ('guest', '$2b$10$I34AadPQmndpt9pNrzFBnueluep17E3phabKtvcI.lDZ6dASX9.Ei', 0, '{"displayname":"Guest","email":"guest@localhost"}'),

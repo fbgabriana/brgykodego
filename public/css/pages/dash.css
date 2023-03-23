@@ -29,6 +29,9 @@
 .controlpanel .empty {
 	font-style: italic;
 }
+.controlpanel > .tables {
+	display: block;
+}
 .controlpanel .messages-table .col-timestamp {
 	white-space: nowrap;
 }

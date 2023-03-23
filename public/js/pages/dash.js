@@ -85,7 +85,11 @@ const manage = {
 	},
 	getUsers() {
 		jsonTable = new JSONTable("/query?users", ".users-table");
-		jsonTable.getData(["username","hash","authlevel","displayname","email"], ["hash"], 11);
+		if (authlevel < 4) {
+			jsonTable.getData(["username","hash","authlevel","displayname","email"], ["hash"], 11);
+		} else {
+			jsonTable.getData(["username","hash","authlevel","displayname","email"]);
+		}
 	},
 	showManager() {
 		document.getElementById("manage-users").style.display = (auth.token && auth.token[0] >= 3) ? "block" : "none";
