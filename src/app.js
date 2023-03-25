@@ -456,39 +456,45 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 							}
 							res.end();
 							break;
-						case "POST":
+						case "PUT":
 							res.writeHead(200, {"Content-Type": "application/json"});
 							if (referer.origin === app.homepage) {
 								const update = JSON.parse(search);
-								if (update.userinfo) {
-									for (var user of users) {
-										if (user.username == update.username) {
-											update.hash = user.hash;
-											break;
-										}
+								for (var user of users) {
+									if (user.username == update.username) {
+										update.hash = user.hash;
+										break;
 									}
-									if (update.password) {
-										await auth.hashPassword(update.password).then(hash => update.hash = hash);
-									}
-									delete update.password;
-									update.userinfo = JSON.stringify(update.userinfo);
-									await sql.query(`REPLACE INTO users (
-										username,
-										hash,
-										authlevel,
-										userinfo
-									) VALUES (
-										'${update.username}',
-										'${update.hash}',
-										'${update.authlevel}',
-										'${update.userinfo}'
-									)`);
-									res.write(JSON.stringify(update));
-								} else {
-									await sql.query(`DELETE FROM users WHERE username='${update.username}'`).then(update => {
-									res.write(JSON.stringify(update));
-									});
 								}
+								if (update.password) {
+									await auth.hashPassword(update.password).then(hash => update.hash = hash);
+								}
+								delete update.password;
+								update.userinfo = JSON.stringify(update.userinfo);
+								await sql.query(`REPLACE INTO users (
+									username,
+									hash,
+									authlevel,
+									userinfo
+								) VALUES (
+									'${update.username}',
+									'${update.hash}',
+									'${update.authlevel}',
+									'${update.userinfo}'
+								)`);
+								res.write(JSON.stringify(update));
+							} else {
+								res.write("[]");
+							}
+							res.end();
+							break;
+						case "DELETE":
+							res.writeHead(200, {"Content-Type": "application/json"});
+							if (referer.origin === app.homepage) {
+								const update = JSON.parse(search);
+								await sql.query(`DELETE FROM users WHERE username='${update.username}'`).then(update => {
+								res.write(JSON.stringify(update));
+								});
 							} else {
 								res.write("[]");
 							}

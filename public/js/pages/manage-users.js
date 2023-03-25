@@ -118,6 +118,13 @@ const ManageUsers = async () => {
 				}
 			};
 			if (update.username) form.elements["username"].disabled = true;
+			fetch("/query?users", {
+				method:"PUT",
+				headers:{"Content-Type": "application/json"},
+				body: JSON.stringify(update),
+			}).then(res => res.json()).then(users => {
+				location.reload();
+			});
 			break;
 		case "delete-user":
 			let confirmDelete = confirm(`Warning! This cannot be undone. Do you really wish to delete\n\nthe user account of '${userselect.options[userselect.selectedIndex].text}'? OK or Cancel.`);
@@ -125,18 +132,18 @@ const ManageUsers = async () => {
 			update = {
 				"username":form.elements["username"].value,
 			};
+			fetch("/query?users", {
+				method:"DELETE",
+				headers:{"Content-Type": "application/json"},
+				body: JSON.stringify(update),
+			}).then(res => res.json()).then(users => {
+				location.reload();
+			});
 			break;
 		default:
 			form.refresh();
 			return;
 		}
-		fetch("/query?users", {
-			method:"POST",
-			headers:{"Content-Type": "application/json"},
-			body: JSON.stringify(update),
-		}).then(res => res.json()).then(users => {
-			location.reload();
-		});
 	}
 	form.close = event => {
 		location.href = "/dash";
