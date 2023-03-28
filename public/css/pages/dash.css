@@ -31,7 +31,6 @@
 }
 .controlpanel > .tables {
 	display: block;
-	overflow-x: auto;
 }
 .controlpanel > .tables td {
 	white-space: nowrap;
@@ -41,5 +40,8 @@
 }
 .controlpanel .messages-table .col-tel {
 	white-space: nowrap;
+}
+.controlpanel .users-table {
+	overflow-x: auto;
 }
 
