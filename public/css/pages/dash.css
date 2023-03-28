@@ -32,6 +32,9 @@
 .controlpanel > .tables {
 	display: block;
 }
+.controlpanel > .tables td {
+	white-space: nowrap;
+}
 .controlpanel .messages-table .col-timestamp {
 	white-space: nowrap;
 }
