@@ -31,6 +31,7 @@
 }
 .controlpanel > .tables {
 	display: block;
+	overflow-x: auto;
 }
 .controlpanel > .tables td {
 	white-space: nowrap;
