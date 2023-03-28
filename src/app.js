@@ -71,7 +71,7 @@ fs.readFile(`${publicpath}/template.html`, "utf8").then(content => {
 					}
 				}
 			}
-			
+
 			auth.require = requiredLevel => {
 				return (auth.token && auth.token[0] >= (requiredLevel ?? 0))
 			}
