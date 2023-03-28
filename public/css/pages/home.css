@@ -119,12 +119,12 @@ article {
 .admin-dash {
 	position: absolute;
 	top: 20px;
-	right: 30px;
+	right: 22px;
 }
 .admin-post {
 	position: absolute;
 	top: 20px;
-	left: 24px;
+	left: 22px;
 }
 .admin-post button {
 	font-size: 0.85rem;
