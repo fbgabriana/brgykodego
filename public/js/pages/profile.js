@@ -60,11 +60,23 @@ const UpdateProfile = async () => {
 					"email":form.elements["email"].value,
 				}
 			};
+			fetch("/query?users", {
+				method:"PUT",
+				headers:{"Content-Type": "application/json"},
+				body: JSON.stringify(update),
+			}).then(res => res.json()).then(user => {
+				if (update.password) {
+					sessionStorage.setItem("status", "Profile updated. Password has changed.");
+				} else {
+					sessionStorage.setItem("status", "Profile updated.");
+				}
+				location.reload();
+			});
 			break;
 		case "delete-user":
 			let confirmDelete = confirm(`Warning! This cannot be undone. Do you really wish to DELETE your OWN user account?\n\nThis will also log you out and you will not be able to login again. OK or Cancel.`);
 			if (confirmDelete === false) return;
-			if (currentuser.authlevel === 3) {
+			if (currentuser.authlevel >= 4) {
 				alert("DELETE FAILED\n\nError: A root account cannot be deleted.");
 				form.refresh();
 				return;
@@ -72,27 +84,18 @@ const UpdateProfile = async () => {
 			update = {
 				"username":form.elements["username"].value,
 			};
+			fetch("/query?users", {
+				method:"DELETE",
+				headers:{"Content-Type": "application/json"},
+				body: JSON.stringify(update),
+			}).then(res => res.json()).then(user => {
+				auth.logout();
+			});
 			break;
 		default:
 			form.refresh();
 			return;
 		}
-		fetch("/query?users", {
-			method:"POST",
-			headers:{"Content-Type": "application/json"},
-			body: JSON.stringify(update),
-		}).then(res => res.json()).then(user => {
-			if (user.username) {
-				if (update.password) {
-					sessionStorage.setItem("status", "Profile updated. Password has changed.")
-				} else {
-					sessionStorage.setItem("status", "Profile updated.")
-				}
-				location.reload();
-			} else {
-				auth.logout();
-			}
-		});
 	}
 	form.showdelete = event => {
 		deleteuser.style.display = showdelete.checked ? "block" : "none";

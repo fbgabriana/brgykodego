@@ -61,19 +61,19 @@ const CreateNewUser = async () => {
 					"email":form.elements["email"].value,
 				}
 			};
+			fetch("/query?users", {
+				method:"PUT",
+				headers:{"Content-Type": "application/json"},
+				body: JSON.stringify(update),
+			}).then(res => res.json()).then(user => {
+				sessionStorage.setItem("username",`${user.username}`)
+				location.href = `/login`;
+			});
 			break;
 		default:
 			form.refresh();
 			return;
 		}
-		fetch("/query?users", {
-			method:"POST",
-			headers:{"Content-Type": "application/json"},
-			body: JSON.stringify(update),
-		}).then(res => res.json()).then(user => {
-			sessionStorage.setItem("username",`${user.username}`)
-			location.href = `/login`;
-		});
 	}
 	form.refresh();
 	createuser.addEventListener("click", form.submit);
