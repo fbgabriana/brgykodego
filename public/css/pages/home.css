@@ -124,7 +124,7 @@ article {
 .admin-post {
 	position: absolute;
 	top: 20px;
-	left: 50px;
+	left: 30px;
 }
 .admin-post button {
 	font-size: 0.85rem;
@@ -138,3 +138,8 @@ article {
 	color: red;
 }
 
+@media screen and (max-width: 640px) {
+	.user-auth2,.user-auth3,.user-auth4 {
+		margin-top: 2em;
+	}
+}
