@@ -1,4 +1,6 @@
-Steps to get it running
+Steps to get `brgykodego` server running (Linux):
+
+0. Make sure that `node` and `npm` are installed.
 
 1. Install MySQL and MySQL Workbench:
 	a. Install package mysql-apt-config from https://dev.mysql.com/downloads/repo/apt/ and run `sudo apt update`
@@ -7,9 +9,31 @@ Steps to get it running
 	d. Install package mysql-shell (optional)
 
 2. Configure MySQL:
-	a. run `sudo mysql`
+	a. Run `sudo mysql`
+		- to see current user list:
+			mysql> SELECT user,host,plugin,authentication_string FROM mysql.user;
+		- to create a user named 'user':
+			mysql> CREATE USER 'user'@'localhost';
+		- to delete a user:
+			mysql> DROP USER 'user'@'localhost';
+	b. To enable running `mysql -u root`, change the plugin of 'root'@'localhost' from 'auth_socket' to either 'mysql_native_password' or 'caching_sha2_password':
+		- to change the plugin:
+			mysql> UPDATE mysql.user SET plugin = 'caching_sha2_password' WHERE user = 'root';
+			mysql> FLUSH PRIVILEGES;
+		  OR:
+			mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY '';
+			mysql> FLUSH PRIVILEGES;
+		- to restore the original plugin:
+			mysql> UPDATE mysql.user SET plugin = 'auth_socket' WHERE user = 'root';
+			mysql> FLUSH PRIVILEGES;
+		  OR:
+			mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH auth_socket;
+			mysql> FLUSH PRIVILEGES;
 
-
-$ npm run setup
-$ npm start
+3. Configure `brgykodego`:
+	a. to setup and start `brgykodego`:
+		$ npm run setup
+		$ npm start
+	b. to unsetup `brgykodego` to package default:
+		$ npm run remove
 
