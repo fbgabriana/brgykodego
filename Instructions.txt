@@ -1,0 +1,15 @@
+Steps to get it running
+
+1. Install MySQL and MySQL Workbench:
+	a. Install package mysql-apt-config from https://dev.mysql.com/downloads/repo/apt/ and run `sudo apt update`
+	b. Install package mysql-server (which is just an alias to package mysql-community-server)
+	c. Install package mysql-workbench-community
+	d. Install package mysql-shell (optional)
+
+2. Configure MySQL:
+	a. run `sudo mysql`
+
+
+$ npm run setup
+$ npm start
+
